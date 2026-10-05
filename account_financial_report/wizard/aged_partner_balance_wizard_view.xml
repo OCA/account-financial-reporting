@@ -21,6 +21,10 @@
                     <group name="other_filters">
                         <field name="target_move" widget="radio" />
                         <field name="show_move_line_details" />
+                        <field
+                            name="show_analytic_distribution"
+                            invisible="not show_move_line_details"
+                        />
                     </group>
                 </group>
                 <group name="partner_filter" col="1">

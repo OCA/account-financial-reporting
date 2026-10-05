@@ -59,6 +59,64 @@ class OpenItemsReport(models.AbstractModel):
             credit_amount_currency,
         )
 
+    def _get_group_info(self, move_line, grouped_by):
+        if move_line.get("partner_id"):
+            partner = self.env["res.partner"].browse(move_line["partner_id"][0])
+        else:
+            partner = self.env["res.partner"]
+
+        if grouped_by == "salesperson":
+            user = partner.user_id
+            group_id = user.id or 0
+            group_name = user.name or _("Missing Salesperson")
+        elif grouped_by:
+            group_id = partner.id or 0
+            group_name = partner.name or _("Missing Partner")
+        else:
+            group_id = 0
+            group_name = ""
+        return partner, group_id, group_name
+
+    def _prepare_move_line_data(self, move_line, partner, analytic_data):
+        if not float_is_zero(move_line["credit"], precision_digits=2):
+            original = move_line["credit"] * (-1)
+        else:
+            original = move_line["debit"]
+
+        if move_line["ref"] == move_line["name"]:
+            ref_label = move_line["ref"] or ""
+        elif not move_line["ref"]:
+            ref_label = move_line["name"]
+        elif not move_line["name"]:
+            ref_label = move_line["ref"]
+        else:
+            ref_label = move_line["ref"] + " - " + move_line["name"]
+
+        move_line.update(
+            {
+                "date": move_line["date"],
+                "date_maturity": move_line["date_maturity"]
+                and move_line["date_maturity"].strftime("%d/%m/%Y"),
+                "original": original,
+                "partner_id": partner.id or 0,
+                "partner_name": partner.name or "",
+                "ref_label": ref_label,
+                "journal_id": move_line["journal_id"][0],
+                "move_name": move_line["move_name"],
+                "entry_id": move_line["move_id"][0],
+                "currency_id": move_line["currency_id"][0]
+                if move_line["currency_id"]
+                else False,
+                "currency_name": move_line["currency_id"][1]
+                if move_line["currency_id"]
+                else False,
+                # Pre-formatted string; avoids template-level ID lookups
+                "analytic_display": self._build_analytic_str(
+                    move_line.get("analytic_distribution") or {}, analytic_data
+                ),
+            }
+        )
+
     def _get_data(
         self,
         account_ids,
@@ -116,71 +174,31 @@ class OpenItemsReport(models.AbstractModel):
             and not float_is_zero(move_line["amount_residual"], precision_digits=2)
         ]
 
+        # Collect analytic IDs from the final set of lines — done here rather than
+        # before _recalculate_move_lines so that any extra lines it
+        # fetches are included.
+        analytic_ids = set()
+        for ml in move_lines:
+            for key in (ml.get("analytic_distribution") or {}).keys():
+                for aid in key.split(","):
+                    analytic_ids.add(int(aid))
+        analytic_data = self._get_analytic_data(list(analytic_ids))
+
         open_items_move_lines_data = {}
         for move_line in move_lines:
             journals_ids.add(move_line["journal_id"][0])
             acc_id = move_line["account_id"][0]
-            # Partners data
-            partner = self.env["res.partner"]
-            if move_line.get("partner_id"):
-                partner = self.env["res.partner"].browse(move_line["partner_id"][0])
-            if grouped_by == "salesperson":
-                user = partner.user_id
-                group_id = user.id or 0
-                group_name = user.name or _("Missing Salesperson")
-            elif grouped_by:
-                group_id = partner.id or 0
-                group_name = partner.name or _("Missing Partner")
-            else:
-                group_id = 0
-                group_name = ""
+            partner, group_id, group_name = self._get_group_info(move_line, grouped_by)
             if group_id not in group_ids:
-                partners_data.update({group_id: {"id": group_id, "name": group_name}})
+                partners_data[group_id] = {"id": group_id, "name": group_name}
                 group_ids.add(group_id)
-            # Move line update
-            if not float_is_zero(move_line["credit"], precision_digits=2):
-                original = move_line["credit"] * (-1)
-            else:
-                original = move_line["debit"]
 
-            if move_line["ref"] == move_line["name"]:
-                ref_label = move_line["ref"] or ""
-            elif not move_line["ref"]:
-                ref_label = move_line["name"]
-            elif not move_line["name"]:
-                ref_label = move_line["ref"]
-            else:
-                ref_label = move_line["ref"] + " - " + move_line["name"]
-
-            move_line.update(
-                {
-                    "date": move_line["date"],
-                    "date_maturity": move_line["date_maturity"]
-                    and move_line["date_maturity"].strftime("%d/%m/%Y"),
-                    "original": original,
-                    "partner_id": partner.id or 0,
-                    "partner_name": partner.name or "",
-                    "ref_label": ref_label,
-                    "journal_id": move_line["journal_id"][0],
-                    "move_name": move_line["move_name"],
-                    "entry_id": move_line["move_id"][0],
-                    "currency_id": move_line["currency_id"][0]
-                    if move_line["currency_id"]
-                    else False,
-                    "currency_name": move_line["currency_id"][1]
-                    if move_line["currency_id"]
-                    else False,
-                }
-            )
+            self._prepare_move_line_data(move_line, partner, analytic_data)
 
             # Open Items Move Lines Data
-            if acc_id not in open_items_move_lines_data.keys():
-                open_items_move_lines_data[acc_id] = {group_id: [move_line]}
-            else:
-                if group_id not in open_items_move_lines_data[acc_id].keys():
-                    open_items_move_lines_data[acc_id][group_id] = [move_line]
-                else:
-                    open_items_move_lines_data[acc_id][group_id].append(move_line)
+            open_items_move_lines_data.setdefault(acc_id, {}).setdefault(
+                group_id, []
+            ).append(move_line)
         journals_data = self._get_journals_data(list(journals_ids))
         accounts_data = self._get_accounts_data(open_items_move_lines_data.keys())
         return (
@@ -189,6 +207,7 @@ class OpenItemsReport(models.AbstractModel):
             journals_data,
             accounts_data,
             open_items_move_lines_data,
+            analytic_data,
         )
 
     @api.model
@@ -264,6 +283,7 @@ class OpenItemsReport(models.AbstractModel):
             journals_data,
             accounts_data,
             open_items_move_lines_data,
+            analytic_data,
         ) = self._get_data(
             account_ids,
             partner_ids,
@@ -281,6 +301,14 @@ class OpenItemsReport(models.AbstractModel):
             partners_data,
             accounts_data,
         )
+        # Each optional column deducts its own width from the Ref-Label budget.
+        # cumul_right_label is the totals-row label cell that spans the same
+        # columns, so it shrinks by the same amount.
+        ref_label_budget = 24.5
+        cumul_right_label = 28.66
+        if data.get("show_analytic_distribution"):
+            ref_label_budget -= 6.0
+            cumul_right_label -= 6.0
         res.update(
             {
                 "doc_ids": [wizard_id],
@@ -299,6 +327,10 @@ class OpenItemsReport(models.AbstractModel):
                 "total_amount": total_amount,
                 "Open_Items": open_items_move_lines_data,
                 "grouped_by": grouped_by,
+                "show_analytic_distribution": data["show_analytic_distribution"],
+                "analytic_data": analytic_data,
+                "ref_label_style": f"width: {round(ref_label_budget, 2)}%;",
+                "ref_label_cumul_style": f"width: {round(cumul_right_label, 2)}%;",
             }
         )
         return res
@@ -314,4 +346,5 @@ class OpenItemsReport(models.AbstractModel):
             "debit",
             "amount_currency",
             "move_name",
+            "analytic_distribution",
         ]
