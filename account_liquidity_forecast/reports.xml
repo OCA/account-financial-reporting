@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- PDF REPORTS : paperformat -->
+    <record id="report_qweb_paperformat" model="report.paperformat">
+        <field name="name">Liquidity Forecast report qweb paperformat</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">10</field>
+        <field name="dpi">110</field>
+    </record>
+
+    <record id="action_report_liquidity_forecast_qweb" model="ir.actions.report">
+        <field name="name">Liquidity Forecast</field>
+        <field name="model">liquidity.forecast.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account_liquidity_forecast.liquidity_forecast</field>
+        <field name="report_file">account_liquidity_forecast.liquidity_forecast</field>
+        <field name="paperformat_id" ref="report_qweb_paperformat" />
+    </record>
+    <record id="action_report_liquidity_forecast_html" model="ir.actions.report">
+        <field name="name">Liquidity Forecast</field>
+        <field name="model">liquidity.forecast.report.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">account_liquidity_forecast.liquidity_forecast</field>
+        <field name="report_file">account_liquidity_forecast.liquidity_forecast</field>
+    </record>
+    <record id="report_liquidity_forecast_xlsx" model="ir.actions.report">
+        <field name="name">Liquidity Forecast</field>
+        <field name="model">account.liquidity.forecast.report.wizard</field>
+        <field name="report_name">report_liquidity_forecast_xlsx</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_file">report_liquidity_forecast</field>
+    </record>
+</odoo>
