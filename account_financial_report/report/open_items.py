@@ -4,9 +4,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import operator
-from datetime import date, datetime
 
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.tools import float_is_zero
 
 
@@ -79,7 +78,7 @@ class OpenItemsReport(models.AbstractModel):
         journals_ids = set()
         group_ids = set()
         partners_data = {}
-        if date_at_object < date.today():
+        if date_at_object < fields.Date.context_today(self):
             (
                 acc_partial_rec,
                 debit_amount,
@@ -177,7 +176,7 @@ class OpenItemsReport(models.AbstractModel):
             if acc_id not in open_items_move_lines_data:
                 open_items_move_lines_data[acc_id] = {group_id: [move_line]}
             else:
-                if group_id not in open_items_move_lines_data[acc_id].keys():
+                if group_id not in open_items_move_lines_data[acc_id]:
                     open_items_move_lines_data[acc_id][group_id] = [move_line]
                 else:
                     open_items_move_lines_data[acc_id][group_id].append(move_line)
@@ -194,10 +193,10 @@ class OpenItemsReport(models.AbstractModel):
     @api.model
     def _calculate_amounts(self, open_items_move_lines_data):
         total_amount = {}
-        for account_id in open_items_move_lines_data.keys():
+        for account_id in open_items_move_lines_data:
             total_amount[account_id] = {}
             total_amount[account_id]["residual"] = 0.0
-            for partner_id in open_items_move_lines_data[account_id].keys():
+            for partner_id in open_items_move_lines_data[account_id]:
                 total_amount[account_id][partner_id] = {}
                 total_amount[account_id][partner_id]["residual"] = 0.0
                 for move_line in open_items_move_lines_data[account_id][partner_id]:
@@ -253,13 +252,13 @@ class OpenItemsReport(models.AbstractModel):
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
         date_at = data["date_at"]
-        date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
+        date_at_object = fields.Date.to_date(date_at)
         date_from = data["date_from"]
         only_posted_moves = data["only_posted_moves"]
         show_partner_details = data["show_partner_details"]
         grouped_by = data["grouped_by"]
         (
-            move_lines_data,
+            _move_lines_data,
             partners_data,
             journals_data,
             accounts_data,

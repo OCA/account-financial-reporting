@@ -55,7 +55,10 @@
                                 t-att-res-model="res_model"
                                 view-type="form"
                             >
-                                <t t-att-style="style" t-out="tag_or_group['code']" />
+                                <span
+                                    t-att-style="style"
+                                    t-out="tag_or_group['code']"
+                                />
                             </span>
                         </div>
                         <div
@@ -67,7 +70,10 @@
                                 t-att-res-model="res_model"
                                 view-type="form"
                             >
-                                <t t-att-style="style" t-out="tag_or_group['name']" />
+                                <span
+                                    t-att-style="style"
+                                    t-out="tag_or_group['name']"
+                                />
                             </span>
                         </div>
                         <div class="act_as_cell amount" style="width: 15%;">
@@ -98,7 +104,7 @@
                                         t-att-res-model="res_model"
                                         view-type="form"
                                     >
-                                        <t t-att-style="style" t-out="tax['name']" />
+                                        <span t-att-style="style" t-out="tax['name']" />
                                     </span>
                                 </div>
                                 <div class="act_as_cell amount" style="width: 15%;">
@@ -106,7 +112,7 @@
                                         t-set="domain"
                                         t-value="[('tax_ids', 'in', tax['id']),
                                                 ('date', '&gt;=', date_from),
-                                                ('date', '&lt;=', date_to)]+request.env['account.move.line']._get_tax_exigible_domain()"
+                                                ('date', '&lt;=', date_to)]+user.env['account.move.line']._get_tax_exigible_domain()"
                                     />
                                     <span
                                         t-att-domain="domain"
@@ -124,7 +130,7 @@
                                         t-set="domain"
                                         t-value="[('tax_line_id', '=', tax['id']),
                                                 ('date', '&gt;=', date_from),
-                                                ('date', '&lt;=', date_to)]+request.env['account.move.line']._get_tax_exigible_domain()"
+                                                ('date', '&lt;=', date_to)]+user.env['account.move.line']._get_tax_exigible_domain()"
                                     />
                                     <span
                                         t-att-domain="domain"

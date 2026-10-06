@@ -24,7 +24,6 @@
         <field name="model">general.ledger.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.general_ledger</field>
-        <field name="report_file">account_financial_report.general_ledger</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record id="action_print_report_general_ledger_html" model="ir.actions.report">
@@ -32,7 +31,6 @@
         <field name="model">general.ledger.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.general_ledger</field>
-        <field name="report_file">account_financial_report.general_ledger</field>
     </record>
     <!-- Journal Ledger -->
     <record id="action_print_journal_ledger_wizard_qweb" model="ir.actions.report">
@@ -40,7 +38,6 @@
         <field name="model">journal.ledger.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.journal_ledger</field>
-        <field name="report_file">account_financial_report.journal_ledger</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record id="action_print_journal_ledger_wizard_html" model="ir.actions.report">
@@ -48,7 +45,6 @@
         <field name="model">journal.ledger.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.journal_ledger</field>
-        <field name="report_file">account_financial_report.journal_ledger</field>
     </record>
     <!-- Trial Balance -->
     <record id="action_report_trial_balance_qweb" model="ir.actions.report">
@@ -56,7 +52,6 @@
         <field name="model">trial.balance.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.trial_balance</field>
-        <field name="report_file">account_financial_report.trial_balance</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record id="action_report_trial_balance_html" model="ir.actions.report">
@@ -64,7 +59,6 @@
         <field name="model">trial.balance.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.trial_balance</field>
-        <field name="report_file">account_financial_report.trial_balance</field>
     </record>
     <!-- Open Items -->
     <record id="action_print_report_open_items_qweb" model="ir.actions.report">
@@ -72,7 +66,6 @@
         <field name="model">open.items.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.open_items</field>
-        <field name="report_file">account_financial_report.open_items</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record id="action_print_report_open_items_html" model="ir.actions.report">
@@ -80,7 +73,6 @@
         <field name="model">open.items.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.open_items</field>
-        <field name="report_file">account_financial_report.open_items</field>
     </record>
     <!-- Aged Partner Balance -->
     <record
@@ -91,7 +83,6 @@
         <field name="model">aged.partner.balance.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.aged_partner_balance</field>
-        <field name="report_file">account_financial_report.aged_partner_balance</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record
@@ -102,7 +93,6 @@
         <field name="model">aged.partner.balance.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.aged_partner_balance</field>
-        <field name="report_file">account_financial_report.aged_partner_balance</field>
     </record>
     <!-- VAT Report -->
     <record id="action_print_report_vat_report_qweb" model="ir.actions.report">
@@ -110,7 +100,6 @@
         <field name="model">vat.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">account_financial_report.vat_report</field>
-        <field name="report_file">account_financial_report.vat_report</field>
         <field name="paperformat_id" ref="report_qweb_paperformat" />
     </record>
     <record id="action_print_report_vat_report_html" model="ir.actions.report">
@@ -118,7 +107,6 @@
         <field name="model">vat.report.wizard</field>
         <field name="report_type">qweb-html</field>
         <field name="report_name">account_financial_report.vat_report</field>
-        <field name="report_file">account_financial_report.vat_report</field>
     </record>
 
     <!-- XLSX REPORTS -->
@@ -128,7 +116,6 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_general_ledger_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_general_ledger</field>
     </record>
     <record id="action_report_journal_ledger_xlsx" model="ir.actions.report">
         <field name="name">Journal Ledger XLSX</field>
@@ -136,7 +123,6 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_journal_ledger_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_journal_ledger</field>
     </record>
     <record id="action_report_trial_balance_xlsx" model="ir.actions.report">
         <field name="name">Trial Balance XLSX</field>
@@ -144,7 +130,6 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_trial_balance_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_trial_balance</field>
     </record>
     <record id="action_report_open_items_xlsx" model="ir.actions.report">
         <field name="name">Open Items XLSX</field>
@@ -152,7 +137,6 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_open_items_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_open_items</field>
     </record>
     <record id="action_report_aged_partner_balance_xlsx" model="ir.actions.report">
         <field name="name">Aged Partner Balance XLSX</field>
@@ -160,7 +144,6 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_aged_partner_balance_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_aged_partner_balance</field>
     </record>
     <record id="action_report_vat_report_xlsx" model="ir.actions.report">
         <field name="name">VAT Report XLSX</field>
@@ -168,6 +151,5 @@
         <field name="type">ir.actions.report</field>
         <field name="report_name">a_f_r.report_vat_report_xlsx</field>
         <field name="report_type">xlsx</field>
-        <field name="report_file">report_vat_report</field>
     </record>
 </odoo>

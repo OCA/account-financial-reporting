@@ -271,9 +271,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                             "initial_credit": group_item["init_bal"]["credit"],
                             "initial_balance": group_item["init_bal"]["balance"],
                             "type": "partner",
-                            "grouped_by": account["grouped_by"]
-                            if "grouped_by" in account
-                            else "",
+                            "grouped_by": account.get("grouped_by", ""),
                             "currency_id": accounts_data[account["id"]]["currency_id"],
                             "currency_name": accounts_data[account["id"]][
                                 "currency_name"

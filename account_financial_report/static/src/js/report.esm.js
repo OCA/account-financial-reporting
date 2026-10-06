@@ -1,5 +1,3 @@
-import {useComponent, useEffect} from "@odoo/owl";
-
 function toTitleCase(str) {
     return str
         .replaceAll(".", " ")
@@ -56,19 +54,6 @@ function enrich(component, targetElement, selector, isIFrame = false) {
     }
 }
 
-export function useEnrichWithActionLinks(ref, selector = null) {
-    const comp = useComponent();
-    useEffect(
-        (element) => {
-            // If we get an iframe, we need to wait until everything is loaded
-            if (element.matches("iframe")) {
-                element.addEventListener("load", () =>
-                    enrich(comp, element, selector, true)
-                );
-            } else {
-                enrich(comp, element, selector);
-            }
-        },
-        () => [ref.el]
-    );
+export function enrichWithActionLinks(component, iframe, selector = null) {
+    enrich(component, iframe, selector, true);
 }

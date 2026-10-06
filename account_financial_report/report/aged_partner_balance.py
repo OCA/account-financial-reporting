@@ -3,9 +3,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import operator
-from datetime import date, datetime, timedelta
+from datetime import timedelta
 
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.tools import float_is_zero
 
 
@@ -160,7 +160,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         partners_ids = set()
         partners_data = {}
         ag_pb_data = {}
-        if date_at_object < date.today():
+        if date_at_object < fields.Date.context_today(self):
             (
                 acc_partial_rec,
                 debit_amount,
@@ -414,7 +414,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         account_ids = data["account_ids"]
         partner_ids = data["partner_ids"]
         date_at = data["date_at"]
-        date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
+        date_at_object = fields.Date.to_date(date_at)
         date_from = data["date_from"]
         only_posted_moves = data["only_posted_moves"]
         show_move_line_details = data["show_move_line_details"]

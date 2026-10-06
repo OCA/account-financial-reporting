@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import time
-from datetime import date
 
 from odoo import fields
 from odoo.tests import Form, tagged
@@ -362,12 +361,8 @@ class TestVATReport(AccountTestInvoicingCommon):
             }
         )
         wizard.onchange_date_range_id()
-        self.assertEqual(
-            wizard.date_from, date(date.today().year, date.today().month, 1)
-        )
-        self.assertEqual(
-            wizard.date_to, date(date.today().year, date.today().month, 28)
-        )
+        self.assertEqual(wizard.date_from, fields.Date.today().replace(day=1))
+        self.assertEqual(wizard.date_to, fields.Date.today().replace(day=28))
         wizard._export("qweb-pdf")
         wizard.button_export_html()
         wizard.button_export_pdf()
@@ -382,12 +377,8 @@ class TestVATReport(AccountTestInvoicingCommon):
             }
         )
         wizard.onchange_date_range_id()
-        self.assertEqual(
-            wizard.date_from, date(date.today().year, date.today().month, 1)
-        )
-        self.assertEqual(
-            wizard.date_to, date(date.today().year, date.today().month, 28)
-        )
+        self.assertEqual(wizard.date_from, fields.Date.today().replace(day=1))
+        self.assertEqual(wizard.date_to, fields.Date.today().replace(day=28))
         wizard._export("qweb-pdf")
         wizard.button_export_html()
         wizard.button_export_pdf()
