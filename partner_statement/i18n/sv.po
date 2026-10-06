@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-06-18 15:36+0000\n"
+"PO-Revision-Date: 2026-10-06 08:27+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: none\n"
 "Language: sv\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: partner_statement
 #. odoo-python
@@ -80,6 +80,12 @@ msgid ""
 "due or overdue.\n"
 "                    </span>"
 msgstr ""
+"<span class=\"o_form_label\">Uppgifter om förfallostatus kan visas i "
+"rapporten, uppdelade i\n"
+"tidsintervall,\n"
+"så att partnern kan se hur mycket som är utestående, förfaller till "
+"betalning eller är försenat. \n"
+"</span>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_wizard_view
@@ -100,6 +106,19 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Aktivitetsöversikten redovisar alla "
+"transaktioner gällande \n"
+"en partners kund- och leverantörsreskontra mellan två valda datum. Detta "
+"inkluderar\n"
+"alla fakturor,\n"
+"återbetalningar och betalningar. Eventuellt utestående saldo från tiden före "
+"den valda\n"
+"perioden\n"
+"visas som ett ingående saldo högst upp i översikten. Listan\n"
+"visas i kronologisk ordning och är uppdelad per valuta.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.detailed_activity_statement_wizard_view
@@ -115,6 +134,14 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Den detaljerade aktivitetsöversikten är ett "
+"komplement till \n"
+"aktivitetsöversikten och syftar till att redogöra för de transaktioner \n"
+"som ägt rum under perioden; den innehåller även avsnitt för ingående \n"
+"och utgående saldo.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.outstanding_statement_wizard_view
@@ -133,6 +160,18 @@ msgid ""
 "                <br/>\n"
 "                <br/>"
 msgstr ""
+"<span class=\"o_form_label\">Sammanställningen över utestående poster "
+"redovisar alla \n"
+"utestående \n"
+"fordringar och skulder för en partner fram till ett visst datum. Detta "
+"omfattar alla obetalda \n"
+"fakturor, outnyttjade återbetalningar och utestående \n"
+"betalningar. Listan visas i kronologisk ordning \n"
+"och är \n"
+"uppdelad efter valuta.\n"
+"                </span>\n"
+"                <br/>\n"
+"                <br/>"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.activity_statement_document
@@ -176,7 +215,7 @@ msgstr "Kontotyp"
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__excluded_accounts_selector
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__excluded_accounts_selector
 msgid "Accounts to exclude"
-msgstr ""
+msgstr "Konton som ska undantas"
 
 #. module: partner_statement
 #. odoo-python
@@ -204,7 +243,7 @@ msgstr "Aktivitetsbeskrivning XLSX"
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
 msgid "Activity Statements"
-msgstr ""
+msgstr "Aktivitetsöversikter"
 
 #. module: partner_statement
 #: model_terms:ir.ui.view,arch_db:partner_statement.res_config_settings_view_form
@@ -248,7 +287,7 @@ msgstr "Åldersrapport vid %(end)s i %(currency)s"
 #. odoo-python
 #: code:addons/partner_statement/report/report_statement_common.py:0
 msgid "Aging Report at %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Åldersanalys per %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -380,6 +419,8 @@ msgid ""
 "Detailed Statement between %(starting_date)s and %(ending_date)s in %"
 "(currency)s"
 msgstr ""
+"Detaljerad sammanställning för perioden %(starting_date)s till %(ending_date)"
+"s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -388,6 +429,8 @@ msgid ""
 "Detailed Supplier Statement between %(starting_date)s and %(ending_date)s in "
 "%(currency)s"
 msgstr ""
+"Detaljerat leverantörsutdrag för perioden %(starting_date)s till %"
+"(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__display_name
@@ -435,7 +478,7 @@ msgstr "Utgående balans"
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Ending Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Slutsaldo per %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__filter_negative_balances
@@ -548,7 +591,7 @@ msgstr "Utestående uttalande"
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_outstanding_statement_wizard
 msgid "Outstanding Statement Wizard"
-msgstr "Outstanding Statement Wizard"
+msgstr "Utmärkt guide för kontoutdrag"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_outstanding_statement_xlsx
@@ -612,7 +655,7 @@ msgstr "Ange standardvärden under Aktivitetsförklaringar."
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Prior Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Ingående saldo per %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #: model:ir.model.fields.selection,name:partner_statement.selection__activity_statement_wizard__account_type__asset_receivable
@@ -645,6 +688,8 @@ msgid ""
 "Select account codes to be excluded with a comma-separated list of "
 "expressions like 70%."
 msgstr ""
+"Välj kontokoder som ska undantas med hjälp av en kommaseparerad lista med "
+"uttryck, till exempel 70%."
 
 #. module: partner_statement
 #: model:ir.model.fields,field_description:partner_statement.field_activity_statement_wizard__show_aging_buckets
@@ -666,7 +711,7 @@ msgstr "Visa saldokolumnen"
 #: model:ir.model.fields,field_description:partner_statement.field_outstanding_statement_wizard__show_only_overdue
 #: model:ir.model.fields,field_description:partner_statement.field_statement_common_wizard__show_only_overdue
 msgid "Show Only Overdue"
-msgstr ""
+msgstr "Visa endast förfallna"
 
 #. module: partner_statement
 #: model:ir.model.fields,help:partner_statement.field_activity_statement_wizard__show_only_overdue
@@ -674,12 +719,12 @@ msgstr ""
 #: model:ir.model.fields,help:partner_statement.field_outstanding_statement_wizard__show_only_overdue
 #: model:ir.model.fields,help:partner_statement.field_statement_common_wizard__show_only_overdue
 msgid "Show only lines due before the selected date"
-msgstr ""
+msgstr "Visa endast rader med förfallodatum före det valda datumet"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_report_p_s_report_statement_common_xlsx
 msgid "Statement Common XLSX Report"
-msgstr ""
+msgstr "Uttalande Gemensam XLSX-rapport"
 
 #. module: partner_statement
 #: model:ir.model,name:partner_statement.model_statement_common
@@ -696,6 +741,8 @@ msgstr "Utskriftsrapporter Gemensam guide"
 #: code:addons/partner_statement/report/activity_statement.py:0
 msgid "Statement between %(starting_date)s and %(ending_date)s in %(currency)s"
 msgstr ""
+"Kontoutdrag för perioden %(starting_date)s till %(ending_date)s i %(currency)"
+"s"
 
 #. module: partner_statement
 #. odoo-python
@@ -726,19 +773,19 @@ msgstr "Uttalande till:"
 #. odoo-python
 #: code:addons/partner_statement/report/outstanding_statement.py:0
 msgid "Statement up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Kontoutdrag till och med %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Supplier Ending Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Leverantörens slutsaldo per %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/detailed_activity_statement.py:0
 msgid "Supplier Prior Balance up to %(ending_date)s in %(currency)s"
-msgstr ""
+msgstr "Leverantörens tidigare saldo per %(ending_date)s i %(currency)s"
 
 #. module: partner_statement
 #. odoo-python
@@ -747,12 +794,16 @@ msgid ""
 "Supplier Statement between %(starting_date)s and %(ending_date)s in %"
 "(currency)s"
 msgstr ""
+"Leverantörsutdrag för perioden %(starting_date)s till %(ending_date)s i %"
+"(currency)s"
 
 #. module: partner_statement
 #. odoo-python
 #: code:addons/partner_statement/report/outstanding_statement.py:0
 msgid "Supplier Statement up to %(ending_date)s in %(currency)s"
 msgstr ""
+"Kontoutdrag för perioden %(starting_date)s till %(ending_date)s i %(currency)"
+"s"
 
 #. module: partner_statement
 #. odoo-python
