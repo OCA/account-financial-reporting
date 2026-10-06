@@ -76,7 +76,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         days_difference = abs((today - due_date).days)
         for index, line in enumerate(interval_lines):
             lower_limit = 0 if not index else interval_lines[index - 1].inferior_limit
-            next_line = interval_lines[index] if index < len(interval_lines) else None
+            next_line = line if index < len(interval_lines) else None
             interval_range = self._get_values_for_range_intervals(
                 lower_limit, next_line.inferior_limit
             )
@@ -115,14 +115,14 @@ class AgedPartnerBalanceReport(models.AbstractModel):
         for account_partial_reconcile_data in accounts_partial_reconcile:
             debit_move_id = account_partial_reconcile_data["debit_move_id"][0]
             credit_move_id = account_partial_reconcile_data["credit_move_id"][0]
-            if debit_move_id not in debit_amount.keys():
+            if debit_move_id not in debit_amount:
                 debit_amount[debit_move_id] = 0.0
                 debit_amount_currency[debit_move_id] = 0.0
             debit_amount_currency[debit_move_id] += account_partial_reconcile_data[
                 "debit_amount_currency"
             ]
             debit_amount[debit_move_id] += account_partial_reconcile_data["amount"]
-            if credit_move_id not in credit_amount.keys():
+            if credit_move_id not in credit_amount:
                 credit_amount[credit_move_id] = 0.0
                 credit_amount_currency[credit_move_id] = 0.0
             credit_amount[credit_move_id] += account_partial_reconcile_data["amount"]
@@ -208,7 +208,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             if prt_id not in partners_ids:
                 partners_data.update({prt_id: {"id": prt_id, "name": prt_name}})
                 partners_ids.add(prt_id)
-            if acc_id not in ag_pb_data.keys():
+            if acc_id not in ag_pb_data:
                 ag_pb_data = self._initialize_account(ag_pb_data, acc_id)
             if prt_id not in ag_pb_data[acc_id]:
                 ag_pb_data = self._initialize_partner(ag_pb_data, acc_id, prt_id)
@@ -288,9 +288,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                 lower_limit = (
                     0 if not index else interval_lines[index - 1].inferior_limit
                 )
-                next_line = (
-                    interval_lines[index] if index < len(interval_lines) else None
-                )
+                next_line = interval_line if index < len(interval_lines) else None
                 interval_range = self._get_values_for_range_intervals(
                     lower_limit, next_line.inferior_limit
                 )
@@ -355,7 +353,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                             )
                             self._compute_maturity_date(ml, date_at_oject)
                             move_lines.append(ml)
-                        move_lines = sorted(move_lines, key=lambda k: (k["date"]))
+                        move_lines = sorted(move_lines, key=lambda k: k["date"])
                         partner.update({"move_lines": move_lines})
                     account["partners"].append(partner)
             aged_partner_data.append(account)

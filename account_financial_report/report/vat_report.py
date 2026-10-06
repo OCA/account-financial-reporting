@@ -122,7 +122,7 @@ class VATReport(models.AbstractModel):
                 pass
             else:
                 tax_group_id = tax_data[tax_id]["tax_group_id"]
-                if tax_group_id not in vat_report.keys():
+                if tax_group_id not in vat_report:
                     vat_report[tax_group_id] = {}
                     vat_report[tax_group_id]["net"] = 0.0
                     vat_report[tax_group_id]["tax"] = 0.0
@@ -140,7 +140,7 @@ class VATReport(models.AbstractModel):
                 vat_report[tax_group_id][tax_id]["tax"] += tax_move_line["tax"]
         tax_group_data = self._get_tax_group_data(list(vat_report.keys()))
         vat_report_list = []
-        for tax_group_id in vat_report.keys():
+        for tax_group_id in vat_report:
             vat_report[tax_group_id]["name"] = tax_group_data[tax_group_id]["name"]
             vat_report[tax_group_id]["code"] = tax_group_data[tax_group_id]["code"]
             if tax_detail:
@@ -172,7 +172,7 @@ class VATReport(models.AbstractModel):
             else:
                 if tags_ids:
                     for tag_id in tags_ids:
-                        if tag_id not in vat_report.keys():
+                        if tag_id not in vat_report:
                             vat_report[tag_id] = {}
                             vat_report[tag_id]["net"] = 0.0
                             vat_report[tag_id]["tax"] = 0.0
@@ -190,7 +190,7 @@ class VATReport(models.AbstractModel):
                         vat_report[tag_id]["tax"] += tax_move_line["tax"]
         tags_data = self._get_tags_data(list(vat_report.keys()))
         vat_report_list = []
-        for tag_id in vat_report.keys():
+        for tag_id in vat_report:
             vat_report[tag_id]["name"] = tags_data[tag_id]["name"]
             vat_report[tag_id]["code"] = tags_data[tag_id]["code"]
             if tax_detail:
