@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- Copyright 2016 Lorenzo Battistini - Agile Business Group
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
@@ -44,8 +44,8 @@
         groups="account.group_account_user,account.group_account_manager"
     />
     <menuitem
-        action="action_open_tax_balances"
         id="menu_action_open_tax_balances"
+        action="action_open_tax_balances"
         parent="menu_tax_balances"
         groups="account.group_account_user,account.group_account_manager"
     />
