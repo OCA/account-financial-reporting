@@ -1,0 +1,10 @@
+id,name,model_id,group_id/id,operation,domain
+access_aged_partner_balance_report_wizard,access_aged_partner_balance_report_wizard,aged.partner.balance.report.wizard,base.group_user,crud,
+access_general_ledger_report_wizard,access_general_ledger_report_wizard,general.ledger.report.wizard,base.group_user,crud,
+access_journal_ledger_report_wizard,access_journal_ledger_report_wizard,journal.ledger.report.wizard,base.group_user,crud,
+access_open_items_report_wizard,access_open_items_report_wizard,open.items.report.wizard,base.group_user,crud,
+access_trial_balance_report_wizard,access_trial_balance_report_wizard,trial.balance.report.wizard,base.group_user,crud,
+access_vat_report_wizard,access_vat_report_wizard,vat.report.wizard,base.group_user,crud,
+access_account_age_report_configuration,access_account_age_report_configuration,account.age.report.configuration,base.group_user,crud,
+account_age_report_configuration_rule,Account age report configuration rule,account.age.report.configuration,,crud,"[('company_id', 'in', company_ids + [False])]"
+access_account_age_report_configuration_line,access_account_age_report_configuration_line,account.age.report.configuration.line,base.group_user,crud,

@@ -1,0 +1,2 @@
+odoo-addon-date_range @ git+https://github.com/OCA/server-ux@refs/pull/1341/head#subdirectory=date_range
+odoo-addon-report_xlsx @ git+https://github.com/OCA/reporting-engine@refs/pull/1203/head#subdirectory=report_xlsx
