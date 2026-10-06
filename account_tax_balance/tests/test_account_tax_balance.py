@@ -3,7 +3,7 @@
 # Copyright 2019 Andrea Stirpe <a.stirpe@onestein.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from dateutil.rrule import MONTHLY
 
@@ -36,8 +36,8 @@ class TestAccountTaxBalance(HttpCase):
             {"name": "Fiscal year", "allow_overlap": False}
         )
         cls.range_generator = cls.env["date.range.generator"]
-        cls.current_year = datetime.now().year
-        cls.current_month = datetime.now().month
+        cls.current_year = Date.today().year
+        cls.current_month = Date.today().month
         range_generator = cls.range_generator.create(
             {
                 "date_start": f"{cls.current_year}-01-01",
@@ -296,6 +296,41 @@ class TestInvoicingBalance(AccountTestInvoicingCommon):
             to_date=date,
         )
         self.assertEqual(tax.balance, balance)
+
+    def test_view_lines_actions(self):
+        """The journal items opened from the balances use a valid domain."""
+        tax = self.env["account.tax"].create(
+            {"name": "Tax 10.0%", "amount": 10.0, "amount_type": "percent"}
+        )
+        self.init_invoice("out_invoice", post=True, amounts=[100], taxes=tax)
+        tax = tax.with_context(
+            from_date=Date.today().replace(month=1, day=1),
+            to_date=Date.today().replace(month=12, day=31),
+        )
+        for method in (
+            "view_tax_lines",
+            "view_base_lines",
+            "view_tax_regular_lines",
+            "view_base_regular_lines",
+            "view_tax_refund_lines",
+            "view_base_refund_lines",
+        ):
+            with self.subTest(method=method):
+                action = getattr(tax, method)()
+                self.assertEqual(action["res_model"], "account.move.line")
+                self.env["account.move.line"].search_count(action["domain"])
+
+    def test_open_taxes_wizard(self):
+        wizard = self.env["wizard.open.tax.balances"].create(
+            {
+                "from_date": Date.today().replace(month=1, day=1),
+                "to_date": Date.today().replace(month=12, day=31),
+            }
+        )
+        action = wizard.open_taxes()
+        self.assertEqual(action["res_model"], "account.tax")
+        self.assertEqual(action["context"]["target_move"], "posted")
+        self.assertEqual(action["context"]["company_ids"], wizard.company_ids.ids)
 
     def test_financial_type_with_amount(self):
         """Check that financial_type are computed correctly."""
