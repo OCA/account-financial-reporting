@@ -26,13 +26,18 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 tracking_disable=True,
             )
         )
-        # Remove previous account groups and related invoices to avoid conflicts
-        group_obj = cls.env["account.group"]
-        cls.group1 = group_obj.create({"code_prefix_start": "1", "name": "Group 1"})
+        group_obj = cls.env["account.account"]
+        group_vals = {"account_type": "income_other"}
+        cls.group1 = group_obj.create({**group_vals, "code": "1", "name": "Group 1"})
         cls.group11 = group_obj.create(
-            {"code_prefix_start": "11", "name": "Group 11", "parent_id": cls.group1.id}
+            {
+                **group_vals,
+                "code": "11",
+                "name": "Group 11",
+                "parent_id": cls.group1.id,
+            }
         )
-        cls.group2 = group_obj.create({"code_prefix_start": "2", "name": "Group 2"})
+        cls.group2 = group_obj.create({**group_vals, "code": "2", "name": "Group 2"})
         # Set accounts
         cls.account001 = cls._create_account_account(
             cls,
@@ -77,6 +82,9 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "account_type": "income_other",
             },
         )
+        cls.account100.parent_id = cls.group1
+        cls.account200.parent_id = cls.group2
+        cls.account201.parent_id = cls.group2
         cls.previous_fy_date_start = "2015-01-01"
         cls.previous_fy_date_end = "2015-12-31"
         cls.fy_date_start = "2016-01-01"
@@ -269,11 +277,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         return lines
 
     def check_partner_in_report(self, account_id, partner_id, total_amount):
-        partner_in_report = False
-        if account_id in total_amount.keys():
-            if partner_id in total_amount[account_id]:
-                partner_in_report = True
-        return partner_in_report
+        return account_id in total_amount and partner_id in total_amount[account_id]
 
     def _get_partner_lines(self, account_id, partner_id, total_amount):
         acc_id = account_id
@@ -290,14 +294,14 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         total = 0.0
         for account in trial_balance:
             if account["type"] == "account_type":
-                for key in account.keys():
+                for key in account:
                     if key == feature:
                         total += account[key]
         return total
 
     def test_00_account_group(self):
-        self.assertTrue(self.account100 in self.group1.compute_account_ids)
-        self.assertTrue(self.account200 in self.group2.compute_account_ids)
+        self.assertIn(self.group1, self.account100.parent_ids)
+        self.assertIn(self.group2, self.account200.parent_ids)
 
     def test_02_account_balance_hierarchy(self):
         # Generate the general ledger line
@@ -876,3 +880,128 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         self.assertEqual(account_lines["final_balance"], 160.0)
         total = result_foreign_currency["total_amount"][self.account100.id]
         self.assertEqual(total["ending_currency_balance"], 220.0)
+
+    def test_09_hierarchy_levels_and_xlsx(self):
+        """Parent accounts give the hierarchy rows, their levels and the XLSX."""
+        self.account200.parent_id = self.group11
+        self._add_move(
+            date=self.date_start,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+        res_data = self._get_report_lines(show_hierarchy=True)
+        rows = {(row["type"], row["id"]): row for row in res_data["trial_balance"]}
+        group1 = rows["group_type", self.group1.id]
+        group11 = rows["group_type", self.group11.id]
+        self.assertEqual(group1["level"], 0)
+        self.assertEqual(group11["level"], 1)
+        self.assertEqual(group11["parent_id"], self.group1.id)
+        self.assertEqual(group1["debit"], 1000)
+        self.assertEqual(group11["credit"], 1000)
+        self.assertEqual(
+            rows["account_type", self.account200.id]["level"],
+            2,
+        )
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "show_hierarchy": True,
+                "company_id": self.env.user.company_id.id,
+                "fy_start_date": self.fy_date_start,
+            }
+        )
+        content, content_type = (
+            self.env["ir.actions.report"]
+            .with_context(
+                active_model=wizard._name,
+                active_id=wizard.id,
+                active_ids=wizard.ids,
+            )
+            ._render_xlsx(
+                "account_financial_report.action_report_trial_balance_xlsx",
+                wizard.ids,
+                wizard._prepare_report_data(),
+            )
+        )
+        self.assertEqual(content_type, "xlsx")
+        self.assertTrue(content)
+
+    def test_10_group_by_analytic_account(self):
+        plan = self.env["account.analytic.plan"].create({"name": "Plan"})
+        analytic = self.env["account.analytic.account"].create(
+            {"name": "Analytic 1", "plan_id": plan.id}
+        )
+
+        def add_move(date, amount, distribution):
+            move = self.env["account.move"].create(
+                {
+                    "move_type": "entry",
+                    "date": date,
+                    "line_ids": [
+                        Command.create(
+                            {
+                                "account_id": self.account100.id,
+                                "debit": amount,
+                                "analytic_distribution": distribution,
+                            }
+                        ),
+                        Command.create(
+                            {
+                                "account_id": self.account200.id,
+                                "credit": amount,
+                                "analytic_distribution": distribution,
+                            }
+                        ),
+                    ],
+                }
+            )
+            move.action_post()
+
+        add_move(self.previous_fy_date_end, 100, {str(analytic.id): 100})
+        add_move(self.date_start, 40, {str(analytic.id): 100})
+        add_move(self.date_start, 10, False)
+        self.env.flush_all()
+        company = self.env.user.company_id
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": True,
+                "company_id": company.id,
+                "fy_start_date": self.fy_date_start,
+                "grouped_by": "analytic_account",
+            }
+        )
+        res_data = self.env[
+            "report.account_financial_report.trial_balance"
+        ]._get_report_values(wizard, wizard._prepare_report_data())
+        groups = {group["name"]: group for group in res_data["trial_balance_grouped"]}
+        self.assertEqual(set(groups), {"Analytic 1", "Without analytic account"})
+        analytic_group = groups["Analytic 1"]
+        self.assertEqual(analytic_group["type"], "analytic_account_type")
+        receivable = next(
+            line
+            for line in analytic_group["account_data"]
+            if line["id"] == self.account100.id
+        )
+        self.assertEqual(receivable["initial_balance"], 100)
+        self.assertEqual(receivable["debit"], 40)
+        self.assertEqual(receivable["ending_balance"], 140)
+        income = next(
+            line
+            for line in analytic_group["account_data"]
+            if line["id"] == self.account200.id
+        )
+        self.assertEqual(income["credit"], 40)
+        without = next(
+            line
+            for line in groups["Without analytic account"]["account_data"]
+            if line["id"] == self.account100.id
+        )
+        self.assertEqual(without["debit"], 10)
+        self.assertEqual(without["initial_balance"], 0)

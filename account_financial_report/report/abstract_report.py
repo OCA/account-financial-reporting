@@ -1,13 +1,15 @@
 # Copyright 2020 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from typing import ClassVar
+
 from odoo import api, models
 
 
 class AgedPartnerBalanceReport(models.AbstractModel):
     _name = "report.account_financial_report.abstract_report"
     _description = "Abstract Report"
-    COMMON_ML_FIELDS = [
+    COMMON_ML_FIELDS: ClassVar[list[str]] = [
         "account_id",
         "partner_id",
         "journal_id",
@@ -137,7 +139,6 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                         "code": account.code,
                         "name": account.name,
                         "hide_account": False,
-                        "group_id": account.group_id.id,
                         "currency_id": account.currency_id.id,
                         "currency_name": account.currency_id.name,
                         "centralized": account.centralized,

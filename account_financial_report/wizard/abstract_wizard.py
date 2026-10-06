@@ -32,7 +32,6 @@ class AbstractWizard(models.AbstractModel):
         comodel_name="res.company",
         default=lambda self: self.env.company.id,
         required=False,
-        string="Company",
     )
     label_text_limit = fields.Integer(default=40)
 

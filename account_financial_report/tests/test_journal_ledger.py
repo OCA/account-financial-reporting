@@ -2,7 +2,6 @@
 # Copyright 2019-20 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
@@ -39,7 +38,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
         cls.company = cls.company_data["company"]
         cls.company.account_sale_tax_id = False
         cls.company.account_purchase_tax_id = False
-        today = datetime.today()
+        today = Date.today()
         last_year = today - relativedelta(years=1)
         cls.previous_fy_date_start = Date.to_string(last_year.replace(month=1, day=1))
         cls.previous_fy_date_end = Date.to_string(last_year.replace(month=12, day=31))
@@ -162,7 +161,7 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
     def test_01_test_total(self):
         today_date = Date.today()
-        last_year_date = Date.to_string(datetime.today() - relativedelta(years=1))
+        last_year_date = Date.to_string(today_date - relativedelta(years=1))
 
         move1 = self._add_move(today_date, self.journal_sale, 0, 100, 100, 0)
         move2 = self._add_move(last_year_date, self.journal_sale, 0, 100, 100, 0)

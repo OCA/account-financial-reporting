@@ -2,7 +2,8 @@
 #  License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.tests import TransactionCase, tagged
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, test_reports
+from odoo.tests import reports as test_reports
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 
 
 @tagged("post_install", "-at_install")

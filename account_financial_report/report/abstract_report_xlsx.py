@@ -291,30 +291,28 @@ class AbstractReportXslx(models.AbstractModel):
                         self._round_value_by_currency(value),
                         report_data["formats"]["format_amount"],
                     )
-                elif cell_type == "amount_currency":
-                    if my_object["currency_id"]:
-                        format_amt = self._get_currency_amt_format_dict(
-                            my_object, report_data
-                        )
-                        report_data["sheet"].write_number(
-                            report_data["row_pos"],
-                            col_pos,
-                            self._round_value_by_currency(
-                                value, my_object.get("currency_id")
-                            ),
-                            format_amt,
-                        )
+                elif cell_type == "amount_currency" and my_object["currency_id"]:
+                    format_amt = self._get_currency_amt_format_dict(
+                        my_object, report_data
+                    )
+                    report_data["sheet"].write_number(
+                        report_data["row_pos"],
+                        col_pos,
+                        self._round_value_by_currency(
+                            value, my_object.get("currency_id")
+                        ),
+                        format_amt,
+                    )
             elif column.get("field_currency_balance"):
                 value = my_object.get(column["field_currency_balance"], False)
                 cell_type = column.get("type", "string")
-                if cell_type == "many2one":
-                    if my_object["currency_id"]:
-                        report_data["sheet"].write_string(
-                            report_data["row_pos"],
-                            col_pos,
-                            value.name or "",
-                            report_data["formats"]["format_right"],
-                        )
+                if cell_type == "many2one" and my_object["currency_id"]:
+                    report_data["sheet"].write_string(
+                        report_data["row_pos"],
+                        col_pos,
+                        value.name or "",
+                        report_data["formats"]["format_right"],
+                    )
         report_data["row_pos"] += 1
 
     def write_ending_balance_from_dict(self, my_object, name, label, report_data):
@@ -363,19 +361,18 @@ class AbstractReportXslx(models.AbstractModel):
                         self._round_value_by_currency(value),
                         report_data["formats"]["format_header_amount"],
                     )
-                elif cell_type == "amount_currency":
-                    if my_object["currency_id"]:
-                        format_amt = self._get_currency_amt_format_dict(
-                            my_object, report_data
-                        )
-                        report_data["sheet"].write_number(
-                            report_data["row_pos"],
-                            col_pos,
-                            self._round_value_by_currency(
-                                value, my_object.get("currency_id")
-                            ),
-                            format_amt,
-                        )
+                elif cell_type == "amount_currency" and my_object["currency_id"]:
+                    format_amt = self._get_currency_amt_format_dict(
+                        my_object, report_data
+                    )
+                    report_data["sheet"].write_number(
+                        report_data["row_pos"],
+                        col_pos,
+                        self._round_value_by_currency(
+                            value, my_object.get("currency_id")
+                        ),
+                        format_amt,
+                    )
             elif column.get("field_currency_balance"):
                 value = my_object.get(column["field_currency_balance"], False)
                 cell_type = column.get("type", "string")

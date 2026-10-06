@@ -24,7 +24,7 @@
         </t>
         <t t-set="company_name" t-value="Company_Name" />
         <!--       <t t-set="res_company" t-value="company_id"/>-->
-        <t class="page">
+        <t>
             <div class="row">
                 <h4
                     class="mt0"
@@ -285,20 +285,20 @@
                 </t>
                 <t t-if="balance['type'] == 'group_type'">
                     <div class="act_as_cell left" t-att-style="style">
-                        <t t-set="res_model" t-value="'account.group'" />
+                        <t t-set="res_model" t-value="'account.account'" />
                         <span
                             t-att-res-id="balance['id']"
-                            res-model="account.group"
+                            res-model="account.account"
                             view-type="form"
                         >
                             <t t-out="balance['code']" />
                         </span>
                     </div>
                     <div class="act_as_cell left" t-att-style="style">
-                        <t t-set="res_model" t-value="'account.group'" />
+                        <t t-set="res_model" t-value="'account.account'" />
                         <span
                             t-att-res-id="balance['id']"
-                            res-model="account.group"
+                            res-model="account.account"
                             view-type="form"
                         >
                             <t t-out="balance['name']" />
@@ -381,7 +381,7 @@
                             t-value="[('account_id', '=', balance['id']),
                                          ('date', '&gt;=', date_from),
                                          ('date', '&lt;=', date_to),
-                                         ('debit', '&lt;&gt;', 0)]"
+                                         ('debit', '!=', 0)]"
                         />
                         <span
                             t-att-domain="domain+aml_domain_common+aml_domain_extra"
@@ -399,7 +399,7 @@
                             t-value="[('account_id', 'in', balance['account_ids']),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
-                                    ('debit', '&lt;&gt;', 0)]"
+                                    ('debit', '!=', 0)]"
                         />
                         <span
                             t-att-domain="domain+aml_domain_common"
@@ -419,7 +419,7 @@
                                  ('partner_id', '=', int(partner_id) or False),
                                  ('date', '&gt;=', date_from),
                                  ('date', '&lt;=', date_to),
-                                 ('debit', '&lt;&gt;', 0)]"
+                                 ('debit', '!=', 0)]"
                     />
                     <span
                         t-att-domain="domain+aml_domain_common"
@@ -441,7 +441,7 @@
                             t-value="[('account_id', '=', balance['id']),
                                          ('date', '&gt;=', date_from),
                                          ('date', '&lt;=', date_to),
-                                         ('credit', '&lt;&gt;', 0)]"
+                                         ('credit', '!=', 0)]"
                         />
                         <span
                             t-att-domain="domain+aml_domain_common+aml_domain_extra"
@@ -459,7 +459,7 @@
                             t-value="[('account_id', 'in', balance['account_ids']),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
-                                    ('credit', '&lt;&gt;', 0)]"
+                                    ('credit', '!=', 0)]"
                         />
                         <span
                             t-att-domain="domain+aml_domain_common"
@@ -479,7 +479,7 @@
                                  ('partner_id', '=', int(partner_id) or False),
                                  ('date', '&gt;=', date_from),
                                  ('date', '&lt;=', date_to),
-                                 ('credit', '&lt;&gt;', 0)]"
+                                 ('credit', '!=', 0)]"
                     />
                     <span
                         t-att-domain="domain+aml_domain_common"
@@ -501,7 +501,7 @@
                             t-value="[('account_id', '=', balance['id']),
                                     ('date', '&gt;=', date_from),
                                     ('date', '&lt;=', date_to),
-                                    ('balance', '&lt;&gt;', 0)]"
+                                    ('balance', '!=', 0)]"
                         />
                         <span
                             t-att-domain="domain+aml_domain_common+aml_domain_extra"
@@ -538,7 +538,7 @@
                                  ('partner_id', '=', int(partner_id) or False),
                                  ('date', '&gt;=', date_from),
                                  ('date', '&lt;=', date_to),
-                                 ('balance', '&lt;&gt;', 0)]"
+                                 ('balance', '!=', 0)]"
                     />
                     <span
                         t-att-domain="domain+aml_domain_common"
@@ -785,7 +785,7 @@
     <!--                        t-value="[('account_id', '=', account.account_id.id),-->
     <!--                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),-->
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
-    <!--                                  ('debit', '&lt;&gt;', 0)]"/>-->
+    <!--                                  ('debit', '!=', 0)]"/>-->
     <!--                    <span>-->
     <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
@@ -800,7 +800,7 @@
     <!--                        t-value="[('account_id', '=', account.account_id.id),-->
     <!--                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),-->
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
-    <!--                                  ('credit', '&lt;&gt;', 0)]"/>-->
+    <!--                                  ('credit', '!=', 0)]"/>-->
     <!--                    <span>-->
     <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->
@@ -815,7 +815,7 @@
     <!--                        t-value="[('account_id', '=', account.account_id.id),-->
     <!--                                  ('date', '&gt;=', account.report_id.date_from.strftime('%Y-%m-%d')),-->
     <!--                                  ('date', '&lt;=', account.report_id.date_to.strftime('%Y-%m-%d')),-->
-    <!--                                  ('period_balance', '&lt;&gt;', 0)]"/>-->
+    <!--                                  ('period_balance', '!=', 0)]"/>-->
     <!--                    <span>-->
     <!--                        <a t-att-data-t-att-domain="domain"-->
     <!--                           t-att-data-res-model="'account.move.line'"-->

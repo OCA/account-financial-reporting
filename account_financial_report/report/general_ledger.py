@@ -7,7 +7,7 @@ import calendar
 import datetime
 import operator
 
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.tools import float_is_zero
 
 
@@ -534,7 +534,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     full_reconcile_ids.add(rec_id)
             acc_id = move_line["account_id"][0]
             ml_id = move_line["id"]
-            if acc_id not in gen_ld_data.keys():
+            if acc_id not in gen_ld_data:
                 gen_ld_data[acc_id] = self._initialize_data(foreign_currency)
                 gen_ld_data[acc_id]["id"] = acc_id
                 gen_ld_data[acc_id]["mame"] = move_line["account_id"][1]
@@ -607,7 +607,7 @@ class GeneralLedgerReport(models.AbstractModel):
 
     def _create_account(self, account, acc_id, gen_led_data, rec_after_date_to_ids):
         move_lines = []
-        for ml_id in gen_led_data[acc_id].keys():
+        for ml_id in gen_led_data[acc_id]:
             if not isinstance(ml_id, int):
                 account.update({ml_id: gen_led_data[acc_id][ml_id]})
             else:
@@ -625,11 +625,11 @@ class GeneralLedgerReport(models.AbstractModel):
         self, account, acc_id, gen_led_data, rec_after_date_to_ids, grouped_by
     ):
         move_lines = []
-        for prt_id in gen_led_data[acc_id].keys():
+        for prt_id in gen_led_data[acc_id]:
             if not isinstance(prt_id, int):
                 account.update({prt_id: gen_led_data[acc_id][prt_id]})
             elif isinstance(gen_led_data[acc_id][prt_id], dict):
-                for ml_id in gen_led_data[acc_id][prt_id].keys():
+                for ml_id in gen_led_data[acc_id][prt_id]:
                     if isinstance(ml_id, int):
                         move_lines += [gen_led_data[acc_id][prt_id][ml_id]]
         move_lines = sorted(move_lines, key=lambda k: k["date"])
@@ -645,13 +645,13 @@ class GeneralLedgerReport(models.AbstractModel):
         self, data, account, rec_after_date_to_ids, hide_account_at_0, rounding
     ):
         list_grouped = []
-        for data_id in data.keys():
+        for data_id in data:
             group_item = {}
             move_lines = []
             if not isinstance(data_id, int):
                 account.update({data_id: data[data_id]})
             else:
-                for ml_id in data[data_id].keys():
+                for ml_id in data[data_id]:
                     if not isinstance(ml_id, int):
                         group_item.update({ml_id: data[data_id][ml_id]})
                     else:
@@ -685,7 +685,7 @@ class GeneralLedgerReport(models.AbstractModel):
     ):
         general_ledger = []
         rounding = self.env.company.currency_id.rounding
-        for acc_id in gen_led_data.keys():
+        for acc_id in gen_led_data:
             account = {}
             account.update(
                 {
@@ -738,9 +738,9 @@ class GeneralLedgerReport(models.AbstractModel):
     def _calculate_centralization(self, centralized_ml, move_line, date_to):
         jnl_id = move_line["journal_id"]
         month = move_line["date"].month
-        if jnl_id not in centralized_ml.keys():
+        if jnl_id not in centralized_ml:
             centralized_ml[jnl_id] = {}
-        if month not in centralized_ml[jnl_id].keys():
+        if month not in centralized_ml[jnl_id]:
             centralized_ml[jnl_id][month] = {}
             last_day_month = calendar.monthrange(move_line["date"].year, month)
             date = datetime.date(move_line["date"].year, month, last_day_month[1])
@@ -777,7 +777,7 @@ class GeneralLedgerReport(models.AbstractModel):
     def _get_centralized_ml(self, account, date_to, grouped_by):
         centralized_ml = {}
         if isinstance(date_to, str):
-            date_to = datetime.datetime.strptime(date_to, "%Y-%m-%d").date()
+            date_to = fields.Date.to_date(date_to)
         if account[grouped_by]:
             for item in account["list_grouped"]:
                 for move_line in item["move_lines"]:
@@ -794,7 +794,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     date_to,
                 )
         list_centralized_ml = []
-        for jnl_id in centralized_ml.keys():
+        for jnl_id in centralized_ml:
             list_centralized_ml += list(centralized_ml[jnl_id].values())
         return list_centralized_ml
 
@@ -951,7 +951,7 @@ class GeneralLedgerReport(models.AbstractModel):
                 "taxes_data": taxes_data,
                 "centralize": centralize,
                 "analytic_data": analytic_data,
-                "filter_partner_ids": True if partner_ids else False,
+                "filter_partner_ids": bool(partner_ids),
                 "currency_model": self.env["res.currency"],
             }
         )

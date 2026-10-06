@@ -206,8 +206,8 @@
     </template>
     <template id="account_financial_report.report_journal_move">
         <t t-set="display_move_info" t-value="True" />
-        <t t-set="last_partner" t-eval="None" />
-        <t t-set="display_partner" t-eval="True" />
+        <t t-set="last_partner" t-value="None" />
+        <t t-set="display_partner" t-value="True" />
         <t t-foreach="move['report_move_lines']" t-as="move_line">
             <div class="act_as_row lines">
                 <t

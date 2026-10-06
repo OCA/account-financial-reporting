@@ -301,14 +301,10 @@ class JournalLedgerReport(models.AbstractModel):
                         journals_taxes_data[journal_id][tax.id][field_key] += ml_data[
                             field_key
                         ]
-        journals_taxes_data_2 = {}
-        for journal_id in journals_taxes_data:
-            journals_taxes_data_2[journal_id] = []
-            for tax_id in journals_taxes_data[journal_id].keys():
-                journals_taxes_data_2[journal_id] += [
-                    journals_taxes_data[journal_id][tax_id]
-                ]
-        return journals_taxes_data_2
+        return {
+            journal_id: list(taxes_data.values())
+            for journal_id, taxes_data in journals_taxes_data.items()
+        }
 
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
@@ -336,7 +332,7 @@ class JournalLedgerReport(models.AbstractModel):
         for move_data in moves_data:
             move_id = move_data["move_id"]
             move_data["report_move_lines"] = []
-            if move_id in move_lines_data.keys():
+            if move_id in move_lines_data:
                 move_data["report_move_lines"] += move_lines_data[move_id]
         journals_taxes_data = {}
         if moves_data:
@@ -345,7 +341,7 @@ class JournalLedgerReport(models.AbstractModel):
             journal_id = journal_ledger_data["id"]
             journal_ledger_data["tax_lines"] = journals_taxes_data.get(journal_id, [])
         journal_totals = {}
-        for move_id in move_lines_data.keys():
+        for move_id in move_lines_data:
             for move_line_data in move_lines_data[move_id]:
                 journal_id = move_line_data["journal_id"]
                 if journal_id not in journal_totals:
@@ -354,10 +350,7 @@ class JournalLedgerReport(models.AbstractModel):
                     journal_totals[journal_id][item] += move_line_data[item]
         for journal_ledger_data in journal_ledgers_data:
             journal_id = journal_ledger_data["id"]
-            if journal_id in journal_moves_data:
-                journal_ledger_data["report_moves"] = journal_moves_data[journal_id]
-            else:
-                journal_ledger_data["report_moves"] = []
+            journal_ledger_data["report_moves"] = journal_moves_data.get(journal_id, [])
             if journal_id in journal_totals:
                 for item in ["debit", "credit"]:
                     journal_ledger_data[item] += journal_totals[journal_id][item]

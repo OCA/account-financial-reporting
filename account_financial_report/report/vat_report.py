@@ -129,7 +129,7 @@ class VATReport(models.AbstractModel):
                     vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
                     vat_report[tax_group_id][tax_id].update({"net": 0.0, "tax": 0.0})
                 else:
-                    if tax_id not in vat_report[tax_group_id].keys():
+                    if tax_id not in vat_report[tax_group_id]:
                         vat_report[tax_group_id][tax_id] = dict(tax_data[tax_id])
                         vat_report[tax_group_id][tax_id].update(
                             {"net": 0.0, "tax": 0.0}
@@ -140,17 +140,15 @@ class VATReport(models.AbstractModel):
                 vat_report[tax_group_id][tax_id]["tax"] += tax_move_line["tax"]
         tax_group_data = self._get_tax_group_data(list(vat_report.keys()))
         vat_report_list = []
-        for tax_group_id in vat_report:
-            vat_report[tax_group_id]["name"] = tax_group_data[tax_group_id]["name"]
-            vat_report[tax_group_id]["code"] = tax_group_data[tax_group_id]["code"]
+        for tax_group_id, tax_group in vat_report.items():
+            tax_group["name"] = tax_group_data[tax_group_id]["name"]
+            tax_group["code"] = tax_group_data[tax_group_id]["code"]
             if tax_detail:
-                vat_report[tax_group_id]["taxes"] = []
-                for tax_id in vat_report[tax_group_id]:
+                tax_group["taxes"] = []
+                for tax_id in list(tax_group):
                     if isinstance(tax_id, int):
-                        vat_report[tax_group_id]["taxes"].append(
-                            vat_report[tax_group_id][tax_id]
-                        )
-            vat_report_list.append(vat_report[tax_group_id])
+                        tax_group["taxes"].append(tax_group[tax_id])
+            vat_report_list.append(tax_group)
         return vat_report_list
 
     def _get_tags_data(self, tags_ids):
@@ -179,7 +177,7 @@ class VATReport(models.AbstractModel):
                             vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
                             vat_report[tag_id][tax_id].update({"net": 0.0, "tax": 0.0})
                         else:
-                            if tax_id not in vat_report[tag_id].keys():
+                            if tax_id not in vat_report[tag_id]:
                                 vat_report[tag_id][tax_id] = dict(tax_data[tax_id])
                                 vat_report[tag_id][tax_id].update(
                                     {"net": 0.0, "tax": 0.0}
@@ -190,15 +188,15 @@ class VATReport(models.AbstractModel):
                         vat_report[tag_id]["tax"] += tax_move_line["tax"]
         tags_data = self._get_tags_data(list(vat_report.keys()))
         vat_report_list = []
-        for tag_id in vat_report:
-            vat_report[tag_id]["name"] = tags_data[tag_id]["name"]
-            vat_report[tag_id]["code"] = tags_data[tag_id]["code"]
+        for tag_id, tag in vat_report.items():
+            tag["name"] = tags_data[tag_id]["name"]
+            tag["code"] = tags_data[tag_id]["code"]
             if tax_detail:
-                vat_report[tag_id]["taxes"] = []
-                for tax_id in vat_report[tag_id]:
+                tag["taxes"] = []
+                for tax_id in list(tag):
                     if isinstance(tax_id, int):
-                        vat_report[tag_id]["taxes"].append(vat_report[tag_id][tax_id])
-            vat_report_list.append(vat_report[tag_id])
+                        tag["taxes"].append(tag[tax_id])
+            vat_report_list.append(tag)
         return vat_report_list
 
     def _get_report_values(self, docids, data):
