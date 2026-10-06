@@ -7,3 +7,5 @@
 - Iván Antón \<<ozono@ozonomultimedia.com>\>
 - [Sygel](https://www.sygel.es):
   - Valentin Vinagre
+- [Stesi Consulting](https://www.stesi.consulting):
+  - Michele Di Croce \<<dicroce.m@stesi.consulting>\>

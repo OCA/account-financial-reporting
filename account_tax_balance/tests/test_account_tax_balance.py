@@ -3,7 +3,7 @@
 # Copyright 2019 Andrea Stirpe <a.stirpe@onestein.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from dateutil.rrule import MONTHLY
 
@@ -13,6 +13,8 @@ from odoo.fields import Date
 from odoo.tests import Form, HttpCase
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
+
+from ..hooks import pre_init_hook
 
 
 @odoo.tests.tagged("post_install", "-at_install")
@@ -36,8 +38,8 @@ class TestAccountTaxBalance(HttpCase):
             {"name": "Fiscal year", "allow_overlap": False}
         )
         cls.range_generator = cls.env["date.range.generator"]
-        cls.current_year = datetime.now().year
-        cls.current_month = datetime.now().month
+        cls.current_year = Date.today().year
+        cls.current_month = Date.today().month
         range_generator = cls.range_generator.create(
             {
                 "date_start": f"{cls.current_year}-01-01",
@@ -297,6 +299,41 @@ class TestInvoicingBalance(AccountTestInvoicingCommon):
         )
         self.assertEqual(tax.balance, balance)
 
+    def test_view_lines_actions(self):
+        """The journal items opened from the balances use a valid domain."""
+        tax = self.env["account.tax"].create(
+            {"name": "Tax 10.0%", "amount": 10.0, "amount_type": "percent"}
+        )
+        self.init_invoice("out_invoice", post=True, amounts=[100], taxes=tax)
+        tax = tax.with_context(
+            from_date=Date.today().replace(month=1, day=1),
+            to_date=Date.today().replace(month=12, day=31),
+        )
+        for method in (
+            "view_tax_lines",
+            "view_base_lines",
+            "view_tax_regular_lines",
+            "view_base_regular_lines",
+            "view_tax_refund_lines",
+            "view_base_refund_lines",
+        ):
+            with self.subTest(method=method):
+                action = getattr(tax, method)()
+                self.assertEqual(action["res_model"], "account.move.line")
+                self.env["account.move.line"].search_count(action["domain"])
+
+    def test_open_taxes_wizard(self):
+        wizard = self.env["wizard.open.tax.balances"].create(
+            {
+                "from_date": Date.today().replace(month=1, day=1),
+                "to_date": Date.today().replace(month=12, day=31),
+            }
+        )
+        action = wizard.open_taxes()
+        self.assertEqual(action["res_model"], "account.tax")
+        self.assertEqual(action["context"]["target_move"], "posted")
+        self.assertEqual(action["context"]["company_ids"], wizard.company_ids.ids)
+
     def test_financial_type_with_amount(self):
         """Check that financial_type are computed correctly."""
         in_invoice = self.init_invoice("in_invoice", post=True, amounts=[100])
@@ -318,3 +355,87 @@ class TestInvoicingBalance(AccountTestInvoicingCommon):
         self.assertEqual(out_invoice.financial_type, "receivable")
         out_refund = self._reverse_invoice(out_invoice, post=True)
         self.assertEqual(out_refund.financial_type, "receivable_refund")
+
+    def test_has_moves_depends_on_context(self):
+        """has_moves follows the date range of the context, not the cache."""
+        today = fields.Date.today()
+        self.init_invoice(
+            "out_invoice",
+            invoice_date=today,
+            post=True,
+            amounts=[100],
+            taxes=self.tax_sale_a,
+        )
+        company_ids = [self.tax_sale_a.company_id.id]
+        in_period = self.tax_sale_a.with_context(
+            from_date=today, to_date=today, company_ids=company_ids
+        )
+        out_of_period = self.tax_sale_a.with_context(
+            from_date=Date.to_date("1990-01-01"),
+            to_date=Date.to_date("1990-01-02"),
+            company_ids=company_ids,
+        )
+        self.assertTrue(in_period.has_moves)
+        self.assertFalse(out_of_period.has_moves)
+        self.env.invalidate_all()
+        self.assertFalse(out_of_period.has_moves)
+        self.assertTrue(in_period.has_moves)
+
+    def test_open_taxes_action_name(self):
+        """The action name shows the label of the target moves selection."""
+        wizard = self.env["wizard.open.tax.balances"].create(
+            {
+                "from_date": Date.today().replace(month=1, day=1),
+                "to_date": Date.today().replace(month=12, day=31),
+            }
+        )
+        self.assertIn("All Posted Entries", wizard.open_taxes()["name"])
+        wizard.target_move = "all"
+        self.assertIn("All Entries", wizard.open_taxes()["name"])
+
+    def test_pre_init_hook_matches_compute(self):
+        """The hook gives the same financial_type as the compute method."""
+        payable = self.company_data["default_account_payable"]
+        expense = self.company_data["default_account_expense"]
+        journal = self.company_data["default_journal_misc"]
+        date = fields.Date.today()
+
+        def _entry(lines):
+            move = self.env["account.move"].create(
+                {
+                    "move_type": "entry",
+                    "journal_id": journal.id,
+                    "date": date,
+                    "line_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "account_id": account.id,
+                                "debit": debit,
+                                "credit": credit,
+                            },
+                        )
+                        for account, debit, credit in lines
+                    ],
+                }
+            )
+            move.action_post()
+            return move
+
+        moves = (
+            _entry([(payable, 100, 0), (payable, 0, 100)])
+            | _entry([(payable, 0, 30), (payable, 100, 0), (expense, 0, 70)])
+            | self.init_invoice("in_invoice", post=True, amounts=[100])
+            | self.init_invoice("out_invoice", post=True, amounts=[100])
+        )
+        expected = dict(moves.mapped(lambda m: (m.id, m.financial_type)))
+        self.env.cr.execute(
+            "UPDATE account_move SET financial_type = NULL WHERE id IN %s",
+            (tuple(moves.ids),),
+        )
+        pre_init_hook(self.env)
+        moves.invalidate_recordset(["financial_type"])
+        self.assertEqual(
+            dict(moves.mapped(lambda m: (m.id, m.financial_type))), expected
+        )
