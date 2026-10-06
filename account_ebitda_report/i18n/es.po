@@ -1,0 +1,275 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_ebitda_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-06 22:22+0000\n"
+"PO-Revision-Date: 2026-10-06 22:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_ma_personal
+msgid "(+) M&A Adj: Personal Expenses"
+msgstr "(+) Ajustes M&A: Gastos Personales"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_norm_exp
+msgid "(+) Normalization Expenses"
+msgstr "(+) Gastos de Normalización"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_ma_salary
+msgid "(+/-) M&A Adj: Owner Salary"
+msgstr "(+/-) Ajustes M&A: Sueldo Socios"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_ma_rent
+msgid "(+/-) M&A Adj: Related Rent"
+msgstr "(+/-) Ajustes M&A: Alquileres Vinculados"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_capex
+msgid "(-) CAPEX (Fixed Asset Additions)"
+msgstr "(-) CAPEX (Adiciones a Inmovilizado)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_norm_inc
+msgid "(-) Normalization Income"
+msgstr "(-) Ingresos de Normalización"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_wc
+msgid "(-/+) Working Capital Variation"
+msgstr "(-/+) Variación de Fondo de Maniobra"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_sep2
+msgid "--- DERIVED METRICS ---"
+msgstr "--- MÉTRICAS DERIVADAS ---"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_sep3
+msgid "--- FREE CASH FLOW BRIDGE ---"
+msgstr "--- PUENTE DE FLUJO DE CAJA LIBRE ---"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_sep1
+msgid "--- NORMALIZATION ADJUSTMENTS ---"
+msgstr "--- AJUSTES DE NORMALIZACIÓN ---"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_adj_ebitda
+msgid "ADJUSTED EBITDA (M&A Ready)"
+msgstr "EBITDA AJUSTADO (M&A Ready)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_adj_margin
+msgid "Adjusted EBITDA Margin (%)"
+msgstr "Margen EBITDA Ajustado (%)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_cogs
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_cogs
+msgid "COGS (Cost of Goods Sold)"
+msgstr "Coste de Ventas (COGS)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_taxes
+msgid "Corporate Taxes"
+msgstr "Impuesto sobre Sociedades"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_debt_ratio
+msgid "Debt / EBITDA Ratio (Years)"
+msgstr "Ratio Deuda / EBITDA (Años)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_da
+msgid "Depreciation & Amortization"
+msgstr "Amortizaciones"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_ebitda
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_ebitda
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_ebitda
+msgid "EBITDA"
+msgstr "EBITDA"
+
+#. module: account_ebitda_report
+#: model:mis.report,name:account_ebitda_report.mis_report_ebitda_bottom_up
+msgid "EBITDA (Bottom-up)"
+msgstr "EBITDA (Bottom-up)"
+
+#. module: account_ebitda_report
+#: model:mis.report,name:account_ebitda_report.mis_report_ebitda_pro
+msgid "EBITDA (Professional & Adjusted)"
+msgstr "EBITDA (Profesional & Ajustado)"
+
+#. module: account_ebitda_report
+#: model:mis.report,name:account_ebitda_report.mis_report_ebitda_top_down
+msgid "EBITDA (Top-down)"
+msgstr "EBITDA (Top-down)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_capex
+msgid "EBITDA / CAPEX (Fixed Asset Additions)"
+msgstr "EBITDA / CAPEX (Adiciones a Inmovilizado)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_exc_exp
+msgid "EBITDA / Exceptional Expense (Below EBITDA)"
+msgstr "EBITDA / Gastos Excepcionales (Bajo EBITDA)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_exc_inc
+msgid "EBITDA / Exceptional Income (Below EBITDA)"
+msgstr "EBITDA / Ingresos Excepcionales (Bajo EBITDA)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_debt
+msgid "EBITDA / Financial Debt"
+msgstr "EBITDA / Deuda Financiera"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_int_exp
+msgid "EBITDA / Interest Expense"
+msgstr "EBITDA / Gastos Financieros"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_int_inc
+msgid "EBITDA / Interest Income"
+msgstr "EBITDA / Ingresos Financieros"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_ma_salary
+msgid "EBITDA / M&A Adj: Owner Salary"
+msgstr "EBITDA / Ajustes M&A: Sueldo Socios"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_ma_personal
+msgid "EBITDA / M&A Adj: Personal Expenses"
+msgstr "EBITDA / Ajustes M&A: Gastos Personales"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_ma_rent
+msgid "EBITDA / M&A Adj: Related Rent"
+msgstr "EBITDA / Ajustes M&A: Alquileres Vinculados"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_norm_exp
+msgid "EBITDA / Normalization Expense (Adjustments)"
+msgstr "EBITDA / Gastos de Normalización (Ajustes)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_norm_inc
+msgid "EBITDA / Normalization Income (Adjustments)"
+msgstr "EBITDA / Ingresos de Normalización (Ajustes)"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_taxes
+msgid "EBITDA / Taxes"
+msgstr "EBITDA / Impuestos"
+
+#. module: account_ebitda_report
+#: model:account.account.tag,name:account_ebitda_report.account_tag_ebitda_wc
+msgid "EBITDA / Working Capital"
+msgstr "EBITDA / Fondo de Maniobra"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_margin
+msgid "EBITDA Margin (%)"
+msgstr "Margen EBITDA (%)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_exc_exp
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_exc_exp
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_exc_exp
+msgid "Exceptional Expenses"
+msgstr "Gastos Excepcionales"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_exc_inc
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_exc_inc
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_exc_inc
+msgid "Exceptional Income"
+msgstr "Ingresos Excepcionales"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_fcf
+msgid "FREE CASH FLOW (FCF)"
+msgstr "FLUJO DE CAJA LIBRE (FCF)"
+
+#. module: account_ebitda_report
+#: model:mis.report,description:account_ebitda_report.mis_report_ebitda_pro
+msgid ""
+"Includes Analytical Breakdown readiness, Adjusted EBITDA, Margin, and Debt "
+"Ratio."
+msgstr ""
+"Incluye preparación para Desglose Analítico, EBITDA Ajustado, Margen y Ratio"
+" de Deuda."
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_int_exp
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_int_exp
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_int_exp
+msgid "Interest Expense"
+msgstr "Gastos Financieros"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_int_inc
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_int_inc
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_int_inc
+msgid "Interest Income"
+msgstr "Ingresos Financieros"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_debt
+msgid "Net Financial Debt"
+msgstr "Deuda Financiera Neta"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_net_profit
+msgid "Net Profit"
+msgstr "Beneficio Neto"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_opex
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_opex
+msgid "Operating Expenses (excl. D&A)"
+msgstr "Gastos Operativos (excl. Amortizaciones)"
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_revenue
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_pro_revenue
+msgid "Operating Revenue"
+msgstr "Ingresos Operativos"
+
+#. module: account_ebitda_report
+#: model:mis.report,description:account_ebitda_report.mis_report_ebitda_bottom_up
+msgid ""
+"Starts from Net Profit and adds Taxes, Interest, Depreciation, and "
+"Exceptional items."
+msgstr ""
+"Parte del Beneficio Neto y suma Impuestos, Intereses, Amortizaciones y "
+"partidas Excepcionales."
+
+#. module: account_ebitda_report
+#: model:mis.report,description:account_ebitda_report.mis_report_ebitda_top_down
+msgid "Starts from Total Revenue and subtracts COGS and Operating Expenses."
+msgstr ""
+"Parte de los Ingresos Totales y resta el Coste de Ventas y los Gastos "
+"Operativos."
+
+#. module: account_ebitda_report
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m1_taxes
+#: model:mis.report.kpi,description:account_ebitda_report.mis_kpi_m2_taxes
+msgid "Taxes"
+msgstr "Impuestos"
