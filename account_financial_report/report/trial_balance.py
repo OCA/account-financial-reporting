@@ -440,9 +440,11 @@ class TrialBalanceReport(models.AbstractModel):
         for acc_id, total_data in total_amount.items():
             tmp_list = sorted(
                 total_data.items(),
-                key=lambda x: ("\xff" if not x[0] else x[1]["partner_name"])
-                if isinstance(x[0], int)
-                else "!",  # ~ is the last ASCII printable char, and ! the first
+                key=lambda x: (
+                    ("\xff" if not x[0] else x[1]["partner_name"])
+                    if isinstance(x[0], int)
+                    else "!"
+                ),  # ~ is the last ASCII printable char, and ! the first
             )
             total_amount[acc_id] = {}
             for key, value in tmp_list:
@@ -546,8 +548,9 @@ class TrialBalanceReport(models.AbstractModel):
         for account_rg in tb_initial_acc_rg:
             element = list(
                 filter(
-                    lambda acc_dict: acc_dict["account_id"]
-                    == account_rg["account_id"][0],
+                    lambda acc_dict: (
+                        acc_dict["account_id"] == account_rg["account_id"][0]
+                    ),
                     tb_initial_acc,
                 )
             )
@@ -840,7 +843,7 @@ class TrialBalanceReport(models.AbstractModel):
                 else ""
             )
             if account.group_id.id:
-                if account.group_id.id not in account_group_relation.keys():
+                if account.group_id.id not in account_group_relation:
                     account_group_relation.update({account.group_id.id: [account.id]})
                 else:
                     account_group_relation[account.group_id.id].append(account.id)
@@ -868,7 +871,7 @@ class TrialBalanceReport(models.AbstractModel):
             if foreign_currency:
                 groups_data[group.id]["initial_currency_balance"] = 0.0
                 groups_data[group.id]["ending_currency_balance"] = 0.0
-        for group_id in account_group_relation.keys():
+        for group_id in account_group_relation:
             for account_id in account_group_relation[group_id]:
                 groups_data[group_id]["initial_balance"] += total_amount[account_id][
                     "initial_balance"
