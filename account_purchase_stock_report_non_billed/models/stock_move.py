@@ -9,74 +9,61 @@ class StockMove(models.Model):
 
     @api.depends("purchase_line_id")
     def _compute_currency_id(self):
-        non_purchase_move = self.env["stock.move"]
-        for move in self:
-            if move.purchase_line_id:
-                move.currency_id = move.purchase_line_id.currency_id
-            else:
-                non_purchase_move |= move
-        if non_purchase_move:
-            return super(StockMove, non_purchase_move)._compute_currency_id()
+        purchase_moves = self.filtered("purchase_line_id")
+        for move in purchase_moves:
+            move.currency_id = move.purchase_line_id.currency_id
+        return super(StockMove, self - purchase_moves)._compute_currency_id()
 
     def get_quantity_invoiced(self, invoice_lines):
-        if self.purchase_line_id:
-            if not invoice_lines:
-                return 0
-            qty_invoiced = abs(
-                sum(
-                    invoice_lines.mapped(
-                        lambda line: line.quantity
-                        if (
-                            line.move_id.move_type == "in_invoice"
-                            and not self.to_refund
-                        )
-                        or (line.move_id.move_type == "in_refund" and self.to_refund)
-                        else -line.quantity
-                    )
+        if not self.purchase_line_id:
+            return super().get_quantity_invoiced(invoice_lines)
+        if not invoice_lines:
+            return 0
+        total_invoiced = abs(
+            sum(
+                invoice_lines.mapped(
+                    lambda line: line.quantity
+                    if (line.move_id.move_type == "in_invoice" and not self.to_refund)
+                    or (line.move_id.move_type == "in_refund" and self.to_refund)
+                    else -line.quantity
                 )
             )
-            # Check when grouping different moves in an invoice line
-            moves = invoice_lines.mapped("move_line_ids")
-            date_start = self.env.context.get("moves_date_start")
-            date_end = self.env.context.get("moves_date_end")
-            if date_start and date_end:
-                moves = moves.filtered(
-                    lambda ml: ml.state == "done"
-                    and (ml.date_done >= date_start and ml.date_done <= date_end)
+        )
+        # Check when grouping different moves in an invoice line
+        moves = invoice_lines.move_line_ids.filtered(lambda x: x.state == "done")
+        date_start = self.env.context.get("moves_date_start")
+        date_end = self.env.context.get("moves_date_end")
+        if date_start and date_end:
+            moves = moves.filtered(
+                lambda ml: ml.date_done >= date_start and ml.date_done <= date_end
+            )
+        total_qty = moves.get_total_devolution_moves()
+        if total_invoiced != total_qty:
+            invoiced = 0.0
+            for move in moves:
+                qty = (
+                    move.quantity
+                    if move.quantity <= (total_invoiced - invoiced)
+                    else total_invoiced - invoiced
                 )
-            total_qty = moves.get_total_devolution_moves()
-            if qty_invoiced != total_qty:
-                invoiced = 0.0
-                for move in moves:
-                    qty = (
-                        move.quantity
-                        if move.quantity <= (qty_invoiced - invoiced)
-                        else qty_invoiced - invoiced
-                    )
-                    if move.check_is_return():
-                        qty = -qty
-                    if move == self:
-                        return qty
-                    invoiced += qty
-                return 0
-            return self.quantity if not self.check_is_return() else -self.quantity
-        return super().get_quantity_invoiced(invoice_lines)
+                if move.check_is_return():
+                    qty = -qty
+                if move == self:
+                    return qty
+                invoiced += qty
+            return 0
+        return self.quantity if not self.check_is_return() else -self.quantity
 
     def _set_not_invoiced_values(self, qty_to_invoice, invoiced_qty):
         self.ensure_one()
-        if self.purchase_line_id:
-            self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
-            price_unit = self.purchase_line_id.price_unit
-            if "discount" in self.purchase_line_id._fields:
-                price_unit = self.purchase_line_id.price_unit * (
-                    1 - self.purchase_line_id.discount / 100
-                )
-            self.price_not_invoiced = (qty_to_invoice - invoiced_qty) * price_unit
-        else:
+        if not self.purchase_line_id:
             return super()._set_not_invoiced_values(qty_to_invoice, invoiced_qty)
+        self.quantity_not_invoiced = qty_to_invoice - invoiced_qty
+        self.price_not_invoiced = (
+            qty_to_invoice - invoiced_qty
+        ) * self.purchase_line_id.price_unit_discounted
 
     @api.depends("purchase_line_id")
-    @api.depends_context("date_check_invoiced_moves")
     def _compute_not_invoiced_values(self):
         return super()._compute_not_invoiced_values()
 
