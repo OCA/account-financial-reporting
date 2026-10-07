@@ -31,7 +31,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
     def test_01_report_move_not_invoiced(self):
         picking = self.get_picking_done_po()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -46,7 +46,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -72,7 +72,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking_ret.button_validate()
         moves_not_done = picking_ret.move_ids
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -94,7 +94,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -143,7 +143,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking.button_validate()
         move_lines += picking.move_ids
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -178,7 +178,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         picking.move_ids.quantity = 2.0
         picking.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -209,7 +209,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -223,7 +223,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         )
         wiz_return = wiz_return_form.save()
         wiz_return.product_return_moves.to_refund = False
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 1})
         picking_return.button_validate()
@@ -244,7 +244,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 1})
         picking_return.button_validate()
@@ -254,7 +254,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 1})
         picking_return_return.button_validate()
@@ -263,7 +263,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         invoice.invoice_date = self.po.create_date
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -288,7 +288,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 1})
         picking_return.button_validate()
@@ -298,12 +298,12 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 1})
         picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -332,7 +332,7 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return = wiz_return_form.save()
-        return_id = wiz_return.create_returns()["res_id"]
+        return_id = wiz_return.action_create_returns_all()["res_id"]
         picking_return = self.env["stock.picking"].browse(return_id)
         picking_return.move_line_ids.write({"quantity": 1})
         picking_return.button_validate()
@@ -344,12 +344,12 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
             )
         )
         wiz_return_return = wiz_return_return_form.save()
-        return_return_id = wiz_return_return.create_returns()["res_id"]
+        return_return_id = wiz_return_return.action_create_returns_all()["res_id"]
         picking_return_return = self.env["stock.picking"].browse(return_return_id)
         picking_return_return.move_line_ids.write({"quantity": 1})
         picking_return_return.button_validate()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today()}
+            {"date_check": fields.Date.context_today(self.env.user)}
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]
@@ -371,10 +371,15 @@ class TestAccountPurchaseStockReportNonBilled(common.TransactionCase):
         # Emulate prepaying invoice
         inv_action = self.po.action_create_invoice()
         invoice = self.env["account.move"].browse([(inv_action["res_id"])])
-        invoice.invoice_date = fields.Date.today() - relativedelta(days=5)
+        invoice.invoice_date = fields.Date.context_today(self.env.user) - relativedelta(
+            days=5
+        )
         invoice.action_post()
         wiz = self.env["account.sale.stock.report.non.billed.wiz"].create(
-            {"date_check": fields.Date.today(), "interval_restrict_invoices": True}
+            {
+                "date_check": fields.Date.context_today(self.env.user),
+                "interval_restrict_invoices": True,
+            }
         )
         action = wiz.open_at_date()
         domain_ids = action["domain"][0][2]

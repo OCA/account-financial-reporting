@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 from odoo import api, models
-from odoo.osv import expression
+from odoo.fields import Domain
 
 
 class AccountSaleStockReportNonBilledWiz(models.TransientModel):
@@ -10,7 +10,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
 
     def _get_search_domain(self):
         domain = super()._get_search_domain()
-        res_domain = expression.OR(
+        return Domain.OR(
             [
                 domain,
                 [
@@ -18,7 +18,7 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
                     ("date_done", "<=", self.date_check),
                     ("purchase_line_id", "!=", False),
                     ("state", "=", "done"),
-                    ("scrapped", "=", False),
+                    ("scrap_id", "=", False),
                     "|",
                     ("location_id.usage", "=", "supplier"),
                     "&",
@@ -27,7 +27,6 @@ class AccountSaleStockReportNonBilledWiz(models.TransientModel):
                 ],
             ]
         )
-        return res_domain
 
     @api.model
     def discart_kits_from_moves(self, stock_moves):
