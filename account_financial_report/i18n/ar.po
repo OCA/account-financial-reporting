@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-09 17:13+0000\n"
+"PO-Revision-Date: 2026-10-09 17:38+0000\n"
 "Last-Translator: Rachid Al Assir <rachidalassir@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ar\n"
@@ -20,7 +20,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 msgid "%s"
-msgstr "من: %(date_from)s إلى: %(date_to)s"
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -116,7 +116,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_from
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_from
 msgid "Account Code From"
-msgstr "رمز الحساب"
+msgstr "من رمز الحساب"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_code_to
@@ -124,7 +124,7 @@ msgstr "رمز الحساب"
 #: model:ir.model.fields,field_description:account_financial_report.field_open_items_report_wizard__account_code_to
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__account_code_to
 msgid "Account Code To"
-msgstr "رمز الحساب"
+msgstr "إلى رمز الحساب"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_group
@@ -179,14 +179,12 @@ msgid ""
 "Age ≤ 120\n"
 "                            d."
 msgstr ""
-"العمر ≤ 120\n"
-"يوم."
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 120 d."
-msgstr "‫â¤ 120 يوم."
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
@@ -199,33 +197,33 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 30 d."
-msgstr "‫â¤ 30 يوم."
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
 "                            d."
-msgstr "العمر ≤ 60 يومًا."
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 60 d."
-msgstr "‫‫‫â¤ 60 يوم."
+msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
 "                            d."
-msgstr "المدة ≤ 90 يوم."
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 90 d."
-msgstr "‫‫‫â¤ 90 يوم."
+msgstr ""
 
 #. module: account_financial_report
 #. odoo-python
@@ -321,7 +319,7 @@ msgstr "القيمة بالعملة."
 #. odoo-python
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 msgid "Amount Currency"
-msgstr "عملة المبلغ"
+msgstr "المبلغ بالعملة الأجنبية"
 
 #. module: account_financial_report
 #. odoo-python
@@ -864,7 +862,7 @@ msgstr "من:"
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 msgid "From: %(date_from)s To: %(date_to)s"
-msgstr ""
+msgstr "من: %(date_from)s إلى: %(date_to)s"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__complete_code
@@ -1009,7 +1007,7 @@ msgstr ""
 msgid ""
 "Initial\n"
 "                        balance cur."
-msgstr "الرصيد الافتتاحي"
+msgstr "الرصيد الافتتاحي بالعملة الأجنبية"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
@@ -1333,7 +1331,7 @@ msgstr "الخيارات"
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 msgid "Original"
-msgstr "الإجمالي"
+msgstr "المبلغ الأصلي"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1362,7 +1360,7 @@ msgstr "إجمالي الرصيد التراكمي"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 msgid "Partner Initial balance"
-msgstr "رصيد الشريك الافتتاحي"
+msgstr "الرصيد الافتتاحي للشريك"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__open_items_report_wizard__grouped_by__salesperson
@@ -1447,17 +1445,14 @@ msgstr "الحسابات المدينة فقط"
 msgid ""
 "Ref -\n"
 "                        Label"
-msgstr "مرجع -"
+msgstr "المرجع - البيان"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 msgid ""
 "Ref -\n"
 "                    Label"
-msgstr ""
-"مرجع -\n"
-"\n"
-"العلامة"
+msgstr "المرجع - البيان"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1467,7 +1462,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 msgid "Ref - Label"
-msgstr "المرجع - التسمية"
+msgstr "المرجع - البيان"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_ir_actions_report
@@ -1827,7 +1822,7 @@ msgstr "معالج تقرير ضريبة القيمة المضافة"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_vat_report_xlsx
 msgid "VAT Report XLSX"
-msgstr "تقرير  ضريبة القيمة المضافة إكسال"
+msgstr "تقرير ضريبة القيمة المضافة إكسل"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1843,7 +1838,7 @@ msgstr "تقرير ضريبة القيمة المضافة"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_vat_report_xlsx
 msgid "Vat Report XLSX Report"
-msgstr "تقرير  ضريبة القيمة المضافة إكسال"
+msgstr "تقرير ضريبة القيمة المضافة إكسل"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
