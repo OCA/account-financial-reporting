@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportTrialBalance">
+        <t t-if="!options.showPartnerDetails and !options.showHierarchy">
+            <details open="open" class="bg-white rounded shadow-sm p-3">
+                <summary class="fw-bold text-body">Accounts</summary>
+                <div class="table-responsive mt-3">
+                    <table class="table table-hover align-middle text-nowrap mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <t
+                                    t-foreach="getColumns"
+                                    t-as="column"
+                                    t-key="column.key"
+                                >
+                                    <th t-if="column.show">
+                                        <span t-out="column.label" />
+                                    </th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                t-foreach="getRows"
+                                t-as="row"
+                                t-key="row.key || row.id"
+                                t-att-class="options.showHierarchy and row.type === 'group_type'
+                                    ? 'fw-bold bg-body-tertiary'
+                                    : ''"
+                            >
+                                <AccountReportLines columns="getColumns" row="row" />
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </t>
+        <t t-if="options.showHierarchy and !options.showPartnerDetails">
+            <details
+                t-foreach="reportSections"
+                t-as="section"
+                t-key="section.key"
+                open="open"
+                class="bg-white rounded shadow-sm p-3 mb-3"
+            >
+                <summary class="fw-bold text-body text-break">
+                    <t
+                    t-out="section.group.values.find((value) => value.key === 'code').value"
+                /> —
+                    <t
+                    t-out="section.group.values.find((value) => value.key === 'account').value"
+                />
+                </summary>
+                <div class="table-responsive mt-3">
+                    <table class="table table-hover align-middle text-nowrap mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th
+                                    t-foreach="getColumns"
+                                    t-as="column"
+                                    t-key="column.key"
+                                    t-if="column.show"
+                                >
+                                    <t t-out="column.label" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                t-foreach="section.rows"
+                                t-as="row"
+                                t-key="row.key"
+                                t-att-class="row.type === 'group_type' ? 'fw-bold bg-body-tertiary' : ''"
+                            >
+                                <AccountReportLines columns="getColumns" row="row" />
+                            </tr>
+                        </tbody>
+                        <tfoot
+                            t-if="!env.selectedAccountPrefix || !section.rows.length"
+                            class="table-light fw-bold"
+                        >
+                            <tr>
+                                <AccountReportLines
+                                    columns="getColumns"
+                                    row="section.group"
+                                />
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </details>
+        </t>
+        <t t-if="options.showPartnerDetails">
+            <t t-foreach="getRows" t-as="row" t-key="row.key || row.id">
+                <details open="open" class="m-1 bg-white rounded shadow-sm p-3">
+                    <summary class="fw-bold text-body text-break">
+                        <span t-out="row.account.code" /> — <span
+                        t-out="row.account.name"
+                    />
+                    </summary>
+                    <div class="table-responsive mt-3">
+                        <table
+                            class="table caption-top table-hover align-middle text-nowrap mb-0"
+                            t-att-aria-label="row.account.code + ' — ' + row.account.name"
+                        >
+                            <thead class="table-light">
+                                <tr>
+                                    <t
+                                        t-foreach="getColumns"
+                                        t-as="column"
+                                        t-key="column.key"
+                                    >
+                                        <th t-if="column.show">
+                                            <span t-out="column.label" />
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    t-foreach="row.partners"
+                                    t-as="partner"
+                                    t-key="partner_index"
+                                >
+                                    <AccountReportLines
+                                        columns="getColumns"
+                                        row="partner"
+                                    />
+                                </tr>
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr class="border-top fw-bold">
+                                    <td>Total</td>
+                                    <AccountReportLines
+                                        columns="getColumns"
+                                        row="row"
+                                    />
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </details>
+            </t>
+        </t>
+    </t>
+</templates>

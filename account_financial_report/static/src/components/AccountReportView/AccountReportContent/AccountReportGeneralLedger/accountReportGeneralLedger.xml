@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportGeneralLedger">
+        <details
+            t-foreach="rows"
+            t-as="account"
+            t-key="account.key"
+            open="open"
+            class="m-1 bg-white rounded shadow-sm p-3"
+        >
+            <summary class="fw-bold text-body text-break">
+                <span t-out="account.account.code" /> —
+                <span t-out="account.account.name" />
+            </summary>
+            <div class="table-responsive mt-3">
+                <table
+                    class="table caption-top table-hover align-middle text-nowrap mb-0"
+                    t-att-aria-label="account.account.code + ' — ' + account.account.name"
+                >
+                    <thead class="table-light">
+                        <tr>
+                            <th t-foreach="columns" t-as="column" t-key="column.key">
+                                <span t-out="column.label" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <t t-if="account.groups">
+                        <tbody
+                            t-foreach="account.groups"
+                            t-as="group"
+                            t-key="group.key"
+                        >
+                            <tr class="bg-body-tertiary">
+                                <td
+                                    t-att-colspan="isGroupOpen(group) ? columns.length : groupLabelColspan"
+                                >
+                                    <button
+                                        type="button"
+                                        class="btn p-0 border-0 fw-bold text-body text-start"
+                                        t-att-aria-expanded="isGroupOpen(group) ? 'true' : 'false'"
+                                        t-on-click="() => this.toggleGroup(group)"
+                                    >
+                                        <i
+                                            t-att-class="isGroupOpen(group) ? 'fa fa-caret-down me-2' : 'fa fa-caret-right me-2'"
+                                            aria-hidden="true"
+                                        />
+                                        <t t-out="group.name" />
+                                    </button>
+                                </td>
+                                <AccountReportLines
+                                    t-if="!isGroupOpen(group)"
+                                    columns="groupBalanceColumns"
+                                    row="balanceRow(group, account)"
+                                />
+                            </tr>
+                            <t t-if="isGroupOpen(group)">
+                                <t
+                                    t-call="account_financial_report.GeneralLedgerSectionRows"
+                                >
+                                    <t t-set="section" t-value="group" />
+                                </t>
+                            </t>
+                        </tbody>
+                    </t>
+                    <tbody t-else="">
+                        <t t-call="account_financial_report.GeneralLedgerSectionRows">
+                            <t t-set="section" t-value="account" />
+                        </t>
+                    </tbody>
+                    <tfoot
+                        t-if="account.groups and account.showTotal"
+                        class="table-light"
+                    >
+                        <tr class="border-top fw-bold">
+                            <AccountReportLines
+                                columns="columns"
+                                row="balanceRow(account, account)"
+                            />
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </details>
+        <p t-if="!rows.length" class="text-muted">No records found.</p>
+    </t>
+    <t t-name="account_financial_report.GeneralLedgerSectionRows">
+        <tr t-if="account.includeInitialBalance" class="fw-bold">
+            <AccountReportLines
+                columns="columns"
+                row="balanceRow(section, account, true)"
+            />
+        </tr>
+        <tr t-foreach="section.moveLines" t-as="row" t-key="row.key">
+            <AccountReportLines columns="columns" row="row" />
+        </tr>
+        <tr class="table-light border-top fw-bold">
+            <AccountReportLines columns="columns" row="balanceRow(section, account)" />
+        </tr>
+    </t>
+</templates>
