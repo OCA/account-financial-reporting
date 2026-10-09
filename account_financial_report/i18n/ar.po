@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-09 17:38+0000\n"
+"PO-Revision-Date: 2026-10-09 17:44+0000\n"
 "Last-Translator: Rachid Al Assir <rachidalassir@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ar\n"
@@ -178,52 +178,52 @@ msgstr ""
 msgid ""
 "Age ≤ 120\n"
 "                            d."
-msgstr ""
+msgstr "العمر ≤ 120 يومًا"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 120 d."
-msgstr ""
+msgstr "العمر ≤ 120 يومًا"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 30\n"
 "                            d."
-msgstr ""
+msgstr "العمر ≤ 30 يومًا"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 30 d."
-msgstr ""
+msgstr "العمر ≤ 30 يومًا"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 60\n"
 "                            d."
-msgstr ""
+msgstr "العمر ≤ 60 يومًا"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 60 d."
-msgstr ""
+msgstr "العمر ≤ 60 يومًا"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 msgid ""
 "Age ≤ 90\n"
 "                            d."
-msgstr ""
+msgstr "العمر ≤ 90 يومًا"
 
 #. module: account_financial_report
 #. odoo-python
 #: code:addons/account_financial_report/report/aged_partner_balance_xlsx.py:0
 msgid "Age ≤ 90 d."
-msgstr ""
+msgstr "العمر ≤ 90 يومًا"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1385,7 +1385,7 @@ msgstr "الرصيد النهائي"
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 msgid "Partner initial balance"
-msgstr "Partner initial balance"
+msgstr "الرصيد الافتتاحي للشريك"
 
 #. module: account_financial_report
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__partners
