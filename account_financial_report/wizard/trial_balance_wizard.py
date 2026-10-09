@@ -253,19 +253,9 @@ class TrialBalanceReportWizard(models.TransientModel):
                 )
                 .report_action(self, data=data)
             )
-        return {
-            "type": "ir.actions.client",
-            "tag": "account_report_view",
-            "path": "trial-balance-report",
-            "params": {
-                "active_id": self.id,
-                "model": self._name,
-                "report_model": "report.account_financial_report.trial_balance",
-                "report_type": "trial_balance",
-                "report_name": self.env._("Trial Balance"),
-                "data": data,
-            },
-        }
+        return self._get_report_view_action(
+            "trial_balance", self.env._("Trial Balance"), data
+        )
 
     def _prepare_report_trial_balance(self):
         # TODO: Kept for compatibility - To be merged into _prepare_report_data in 19

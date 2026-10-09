@@ -1,10 +1,10 @@
 // Copyright 2026 Tecnativa - Adasat Torres
 // License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import {formatDate, parseDate} from "@web/core/l10n/dates";
 import {AccountReportMoveLines} from "../AccountReportMoveLines/accountReportMoveLines.esm";
 import {Component} from "@odoo/owl";
 import {Dropdown} from "@web/core/dropdown/dropdown";
 import {formatMonetary} from "@web/views/fields/formatters";
-import {useService} from "@web/core/utils/hooks";
 
 export class AccountReportLines extends Component {
     static template = "account_financial_report.AccountReportLines";
@@ -16,11 +16,6 @@ export class AccountReportLines extends Component {
         row: Object,
         columns: Object,
     };
-
-    setup() {
-        super.setup();
-        this.action = useService("action");
-    }
 
     get columns() {
         return this.props.columns;
@@ -34,7 +29,12 @@ export class AccountReportLines extends Component {
     }
 
     formatValue(value, type, currencyId) {
+        if (value === undefined || value === null || value === false) {
+            return "";
+        }
         switch (type) {
+            case "date":
+                return formatDate(parseDate(value));
             case "monetary":
                 return formatMonetary(value, {currencyId: currencyId});
             default:

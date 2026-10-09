@@ -8,15 +8,15 @@
                 t-value="row.values.find((val) => (val.key === column.key))"
             />
             <td
-                t-if="column.show and cell"
+                t-if="column.show"
                 t-att-style="column.key === 'account' and row.level !== undefined
                 ? 'padding-left: ' + (12 + row.level * 16) + 'px;'
                 : ''"
             >
-                <Dropdown t-if="cell.clickable">
+                <Dropdown t-if="cell and cell.clickable">
                     <button type="button" class="btn btn-link p-0 border-0">
                         <t
-                            t-out="formatValue(cell.value, column.type, row.currencyId)"
+                            t-out="formatValue(cell?.value, column.type, cell?.currencyId ?? row.currencyId)"
                         />
                     </button>
 
@@ -30,7 +30,7 @@
                 </Dropdown>
                 <span
                     t-else=""
-                    t-out="formatValue(cell.value, column.type, row.currencyId)"
+                    t-out="formatValue(cell?.value, column.type, cell?.currencyId ?? row.currencyId)"
                 />
             </td>
         </t>

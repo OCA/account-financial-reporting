@@ -109,6 +109,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Account"
 msgstr ""
 
@@ -147,6 +148,7 @@ msgstr ""
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Account at 0"
 msgstr ""
 
@@ -254,6 +256,7 @@ msgstr ""
 #: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_aged_partner_balance_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_aged_partner_balance_wizard
+#: code:addons/account_financial_report/wizard/aged_partner_balance_wizard.py:0
 msgid "Aged Partner Balance"
 msgstr ""
 
@@ -324,6 +327,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "All entries"
 msgstr ""
 
@@ -355,6 +359,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Amount cur."
 msgstr ""
 
@@ -368,6 +374,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Analytic Distribution"
 msgstr ""
 
@@ -421,6 +429,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.trial_balance_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.vat_report_wizard
 msgid "Cancel"
+msgstr ""
+
+#. module: account_financial_report
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
+msgid "Centralize"
 msgstr ""
 
 #. module: account_financial_report
@@ -517,6 +531,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Credit"
 msgstr ""
 
@@ -524,6 +539,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Cumul cur."
 msgstr ""
 
@@ -531,6 +548,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Cumul. Bal."
 msgstr ""
 
@@ -582,6 +601,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Date"
 msgstr ""
 
@@ -603,6 +623,7 @@ msgstr ""
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Date Range"
 msgstr ""
 
@@ -665,6 +686,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Debit"
 msgstr ""
 
@@ -793,6 +815,8 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Ending balance"
 msgstr ""
 
@@ -819,6 +843,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Entry"
 msgstr ""
 
@@ -961,6 +987,7 @@ msgstr ""
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "From: %s To: %s"
 msgstr ""
 
@@ -988,6 +1015,7 @@ msgstr ""
 #: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_general_ledger_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_general_ledger_wizard
+#: code:addons/account_financial_report/wizard/general_ledger_wizard.py:0
 msgid "General Ledger"
 msgstr ""
 
@@ -1051,6 +1079,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Hide"
 msgstr ""
 
@@ -1147,6 +1176,7 @@ msgstr ""
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Initial balance"
 msgstr ""
 
@@ -1168,6 +1198,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_move_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Journal"
 msgstr ""
 
@@ -1187,6 +1218,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:account_financial_report.action_journal_ledger_wizard
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
+#: code:addons/account_financial_report/wizard/journal_ledger_wizard.py:0
 msgid "Journal Ledger"
 msgstr ""
 
@@ -1307,6 +1339,12 @@ msgid "Missing Salesperson"
 msgstr ""
 
 #. module: account_financial_report
+#. odoo-python
+#: code:addons/account_financial_report/report/general_ledger.py:0
+msgid "Missing Tax"
+msgstr ""
+
+#. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
 msgid "Model to set interval lines for Age partner balance report"
 msgstr ""
@@ -1359,6 +1397,8 @@ msgstr ""
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "No"
 msgstr ""
 
@@ -1387,6 +1427,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportSidebar/accountReportSidebar.xml:0
 msgid "No matching accounts."
+msgstr ""
+
+#. module: account_financial_report
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.xml:0
+msgid "No records found."
 msgstr ""
 
 #. module: account_financial_report
@@ -1431,6 +1477,7 @@ msgstr ""
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Only Posted Moves"
 msgstr ""
 
@@ -1441,6 +1488,7 @@ msgstr ""
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_open_items_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_open_items_wizard
+#: code:addons/account_financial_report/wizard/open_items_wizard.py:0
 msgid "Open Items"
 msgstr ""
 
@@ -1507,6 +1555,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_lines_header
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Partner"
 msgstr ""
 
@@ -1540,11 +1589,15 @@ msgstr ""
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_ending_cumul
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Partner ending balance"
 msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Partner initial balance"
 msgstr ""
 
@@ -1594,6 +1647,7 @@ msgstr ""
 #. module: account_financial_report
 #. odoo-javascript
 #: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/trialBalanceController.esm.js:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Posted entries"
 msgstr ""
 
@@ -1601,6 +1655,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Rec."
 msgstr ""
 
@@ -1634,6 +1690,8 @@ msgstr ""
 #: code:addons/account_financial_report/report/journal_ledger_xlsx.py:0
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Ref - Label"
 msgstr ""
 
@@ -1681,6 +1739,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Show"
 msgstr ""
 
@@ -1833,11 +1892,15 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_ending_cumul
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Tax ending balance"
 msgstr ""
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportContent/AccountReportGeneralLedger/accountReportGeneralLedger.esm.js:0
 msgid "Tax initial balance"
 msgstr ""
 
@@ -1848,6 +1911,8 @@ msgstr ""
 #: model:ir.model.fields.selection,name:account_financial_report.selection__general_ledger_report_wizard__grouped_by__taxes
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_journal_table_header
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Taxes"
 msgstr ""
 
@@ -1981,6 +2046,8 @@ msgstr ""
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_html
 #: model:ir.actions.report,name:account_financial_report.action_print_report_vat_report_qweb
 #: model:ir.ui.menu,name:account_financial_report.menu_vat_report_wizard
+#. odoo-python
+#: code:addons/account_financial_report/wizard/vat_report_wizard.py:0
 msgid "VAT Report"
 msgstr ""
 
@@ -2060,6 +2127,8 @@ msgstr ""
 #: code:addons/account_financial_report/report/open_items_xlsx.py:0
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/generalLedgerController.esm.js:0
 msgid "Yes"
 msgstr ""
 

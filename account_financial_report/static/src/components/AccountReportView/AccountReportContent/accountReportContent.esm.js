@@ -1,6 +1,7 @@
 // Copyright 2026 Tecnativa - Adasat Torres
 // License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import {AccountReportFilters} from "./AccountReportFilters/accountReportFilters.esm";
+import {AccountReportGeneralLedger} from "./AccountReportGeneralLedger/accountReportGeneralLedger.esm";
 import {AccountReportSidebar} from "./AccountReportSidebar/accountReportSidebar.esm";
 import {AccountReportTrialBalance} from "./AccountReportTrialBalance/accountReportTrialBalance.esm";
 import {Component} from "@odoo/owl";
@@ -12,6 +13,7 @@ export class AccountReportContent extends Component {
     static components = {
         AccountReportFilters,
         AccountReportTrialBalance,
+        AccountReportGeneralLedger,
         AccountReportSidebar,
         Pager,
     };
@@ -22,6 +24,7 @@ export class AccountReportContent extends Component {
 
     components_map = {
         trial_balance: AccountReportTrialBalance,
+        general_ledger: AccountReportGeneralLedger,
     };
 
     setup() {

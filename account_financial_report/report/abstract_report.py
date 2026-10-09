@@ -170,6 +170,11 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_currency",
         ]
 
+    @api.model
+    def get_report_values(self, docids, data):
+        """Expose report data to the OWL report view."""
+        return self._get_report_values(docids, data)
+
     def _get_report_values(self, docids, data):
         wizard = self.env[data["wizard_name"]].browse(data["wizard_id"])
         return {

@@ -117,6 +117,10 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_data()
+        if report_type == "qweb-html":
+            return self._get_report_view_action(
+                "aged_partner_balance", self.env._("Aged Partner Balance"), data
+            )
         if report_type == "xlsx":
             report_name = "a_f_r.report_aged_partner_balance_xlsx"
         else:
