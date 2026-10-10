@@ -1,0 +1,10 @@
+<odoo>
+    <record id="report_pl" model="mis.report">
+        <field name="name">Profit &amp; Loss</field>
+        <field name="style_id" ref="style_default" />
+    </record>
+    <record id="report_bs" model="mis.report">
+        <field name="name">Balance Sheet</field>
+        <field name="style_id" ref="style_default" />
+    </record>
+</odoo>

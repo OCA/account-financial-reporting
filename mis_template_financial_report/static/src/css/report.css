@@ -1,0 +1,11 @@
+div.mis_builder_horizontal_container {
+    display: table;
+    width: 100%;
+    border-spacing: 5px;
+}
+div.mis_builder_horizontal_row {
+    display: table-row;
+}
+div.mis_builder_horizontal_cell {
+    display: table-cell;
+}
