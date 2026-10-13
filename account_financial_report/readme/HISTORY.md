@@ -1,3 +1,9 @@
+## 18.0.1.5.0 (2026-09-08)
+
+- Added the option to select the columns to display and the ability to
+  limit the width of the text. It replaces the single `label_text_limit`
+  wizard option, whose value is now configured per column.
+
 ## 11.0.2.5.0 (2019-04-26)
 
 - In the Trial Balance you have an option to hide parent hierarchy
