@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-15 00:33+0000\n"
+"PO-Revision-Date: 2026-10-15 23:32+0000\n"
 "Last-Translator: Luis Felipe Miléo <mileo@kmee.com.br>\n"
 "Language-Team: none\n"
 "Language: pt_BR\n"
@@ -362,7 +362,7 @@ msgstr "Valor na Moeda"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Amount cur."
-msgstr "Valor."
+msgstr "Valor moeda"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_move_line__analytic_account_ids
@@ -569,7 +569,7 @@ msgstr "Crédito"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Cumul cur."
-msgstr "Cumul cur."
+msgstr "Acum. moeda"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1637,7 +1637,7 @@ msgstr "Lançado"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
 #, python-format
 msgid "Rec."
-msgstr "Rec."
+msgstr "Conc."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__receivable_accounts_only
@@ -1699,7 +1699,7 @@ msgstr "Modelo do recurso"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_lines_header
 #, python-format
 msgid "Residual"
-msgstr "Residual"
+msgstr "Em aberto"
 
 #. module: account_financial_report
 #. odoo-python
