@@ -127,6 +127,46 @@ class TestCashFlow(TransactionCase):
             ignore_rows=["balance", "period_balance", "in_total"],
         )
 
+    def test_balance_includes_forecast_on_non_liquidity_account(self):
+        """A forecast line booked on an account whose type is neither
+        liquidity nor receivable/payable (e.g. a current asset such as
+        "Invoices to be issued") must feed the progressive BALANCE row, just
+        as it already feeds PERIOD BALANCE, so that BALANCE keeps continuity
+        with PERIOD BALANCE.
+        """
+        accrual_account = self.env["account.account"].create(
+            {
+                "company_id": self.company.id,
+                "code": "TEST4",
+                "name": "Invoices to be issued",
+                "account_type": "asset_current",
+            }
+        )
+        date = Date.today() + timedelta(weeks=8)
+        self.env["mis.cash_flow.forecast_line"].create(
+            {
+                "account_id": accrual_account.id,
+                "date": date,
+                "balance": 1000,
+                "company_id": self.company.id,
+            }
+        )
+        with mute_logger("odoo.addons.mis_builder.models.kpimatrix"):
+            matrix = self.report._compute_matrix()
+        values = {}
+        for row in matrix.iter_rows():
+            for cell in row.iter_cells():
+                if not cell:
+                    continue
+                values[(row.kpi.name, cell.subcol.col.label)] = cell.val
+        # The forecast feeds the period rows...
+        self.assertEqual(values[("in_forecast", "+8w")], 1000)
+        self.assertEqual(values[("period_balance", "+8w")], 1000)
+        # ...so, with no prior movement, the progressive BALANCE at +8w must
+        # equal it (continuity with PERIOD BALANCE). A missing cell means 0,
+        # which is exactly the regression this guards against.
+        self.assertEqual(values.get(("balance", "+8w"), 0.0), 1000)
+
     def check_matrix(self, args=None, ignore_rows=None):
         if not args:
             args = []

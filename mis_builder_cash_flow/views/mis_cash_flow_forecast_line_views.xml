@@ -75,7 +75,7 @@
                 <field name="partner_id" />
                 <field
                     name="account_id"
-                    domain="[('company_id', '=', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('account_type', 'in', ['asset_receivable', 'liability_payable'])]"
+                    domain="[('company_id', '=', company_id), ('deprecated', '=', False), ('hide_in_cash_flow', '=', False), ('account_type', 'in', ['asset_receivable', 'asset_cash', 'asset_current', 'asset_non_current', 'asset_prepayments', 'asset_fixed', 'liability_payable', 'liability_credit_card', 'liability_current', 'liability_non_current'])]"
                 />
                 <field name="balance" />
             </tree>
