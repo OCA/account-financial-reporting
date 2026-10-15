@@ -6,16 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-12-19 19:06+0000\n"
-"Last-Translator: Rodrigo Sottomaior Macedo "
-"<sottomaiormacedotec@sottomaiormacedo.tech>\n"
+"PO-Revision-Date: 2026-10-15 00:33+0000\n"
+"Last-Translator: Luis Felipe Miléo <mileo@kmee.com.br>\n"
 "Language-Team: none\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_aged_partner_balance_lines_header
@@ -165,12 +164,12 @@ msgstr "Filtro de Saldo Zerado em Conta"
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_account_code
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_account_code
 msgid "Account code"
-msgstr ""
+msgstr "Código da conta"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_account_name
 msgid "Account name"
-msgstr ""
+msgstr "Nome da conta"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
@@ -382,12 +381,12 @@ msgstr "Distribuição Analítica"
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_cost_center
 msgid "Analytic account"
-msgstr ""
+msgstr "Conta analítica"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_analytic_tags
 msgid "Analytic tags"
-msgstr ""
+msgstr "Marcadores analíticos"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_balance
@@ -483,14 +482,14 @@ msgstr "Código"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__column_ids
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__column_ids
 msgid "Column"
-msgstr ""
+msgstr "Coluna"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.general_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 msgid "Columns"
-msgstr ""
+msgstr "Colunas"
 
 #. module: account_financial_report
 #. odoo-python
@@ -673,7 +672,7 @@ msgstr "Filtro de Data"
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_date_due
 msgid "Date due"
-msgstr ""
+msgstr "Data de vencimento"
 
 #. module: account_financial_report
 #. odoo-python
@@ -903,12 +902,12 @@ msgstr "Exportar XLSX"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__expression_label
 msgid "Expression Label"
-msgstr ""
+msgstr "Rótulo da expressão"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__field_type
 msgid "Field Type"
-msgstr ""
+msgstr "Tipo de campo"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_aged_partner_balance_report_wizard__account_ids
@@ -947,7 +946,7 @@ msgstr "Filtrar parceiros"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.journal_ledger_wizard
 #: model_terms:ir.ui.view,arch_db:account_financial_report.open_items_wizard
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__foreign_currency
@@ -959,7 +958,7 @@ msgstr "Moeda Estrangeira"
 #: model:account.financial.report.column,name:account_financial_report.journal_ledger_report_wizard_column_foreign_currency
 #: model:account.financial.report.column,name:account_financial_report.open_items_report_wizard_column_foreign_currency
 msgid "Foreign currency"
-msgstr ""
+msgstr "Moeda estrangeira"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.aged_partner_balance_wizard
@@ -1092,7 +1091,7 @@ msgstr "Ocultar contas zeradas"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__hide_account_at_end_0
 msgid "Hide accounts with 0 end balance"
-msgstr ""
+msgstr "Ocultar contas com saldo final zerado"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy_level
@@ -1297,7 +1296,7 @@ msgstr "Nível %s"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__limit
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1316,12 +1315,12 @@ msgstr "Linha"
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_financial_report_column
 msgid "Manage column options in financial reports"
-msgstr ""
+msgstr "Gerenciar opções de colunas nos relatórios financeiros"
 
 #. module: account_financial_report
 #: model:account.financial.report.column,name:account_financial_report.general_ledger_report_wizard_column_matching_number
 msgid "Matching number"
-msgstr ""
+msgstr "Número de correspondência"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1345,7 +1344,7 @@ msgstr "Vendedor desaparecido"
 #: code:addons/account_financial_report/report/trial_balance.py:0
 #, python-format
 msgid "Mode %(mode)s for removing account lines at 0 not supported"
-msgstr ""
+msgstr "Modo %(mode)s para remover linhas de conta zeradas não é suportado"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_account_age_report_configuration_line
@@ -1688,7 +1687,7 @@ msgstr "Ação do Relatório"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_financial_report_column__res_model
 msgid "Res Model"
-msgstr ""
+msgstr "Modelo do recurso"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1953,6 +1952,8 @@ msgid ""
 "There is a problem in the structure of the account groups. You may need to "
 "create some child group of %s."
 msgstr ""
+"Há um problema na estrutura dos grupos de contas. Pode ser necessário criar "
+"um grupo filho de %s."
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_general_ledger_report_wizard__domain
@@ -2108,6 +2109,8 @@ msgid ""
 "When this option is enabled, the trial balance will not display accounts "
 "that have end balance = 0"
 msgstr ""
+"Quando esta opção está ativada, o balancete não exibe as contas com saldo "
+"final = 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__hide_account_at_0
