@@ -82,21 +82,6 @@ class VATReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def _prepare_report_data(self):
-        res = super()._prepare_report_data()
-        res.update(
-            {
-                "company_id": self.company_id.id,
-                "date_from": self.date_from,
-                "date_to": self.date_to,
-                "based_on": self.based_on,
-                "only_posted_moves": self.target_move == "posted",
-                "tax_detail": self.tax_detail,
-                "account_financial_report_lang": self.env.lang,
-            }
-        )
-        return res
-
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)

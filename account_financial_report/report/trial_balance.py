@@ -911,49 +911,33 @@ class TrialBalanceReport(models.AbstractModel):
 
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
-        show_partner_details = data["show_partner_details"]
         wizard_id = data["wizard_id"]
-        company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
-        partner_ids = data["partner_ids"]
-        journal_ids = data["journal_ids"]
-        account_ids = data["account_ids"]
-        date_to = data["date_to"]
-        date_from = data["date_from"]
-        hide_account_at_0 = data["hide_account_at_0"]
-        hide_account_at_end_0 = data["hide_account_at_end_0"]
-        show_hierarchy = data["show_hierarchy"]
-        show_hierarchy_level = data["show_hierarchy_level"]
-        foreign_currency = data["foreign_currency"]
-        only_posted_moves = data["only_posted_moves"]
-        unaffected_earnings_account = data["unaffected_earnings_account"]
-        fy_start_date = data["fy_start_date"]
-        grouped_by = data["grouped_by"]
+        wizard = self.env["trial.balance.report.wizard"].browse(wizard_id)
         total_amount, accounts_data, partners_data = self._get_data(
-            account_ids,
-            journal_ids,
-            partner_ids,
-            company_id,
-            date_to,
-            date_from,
-            foreign_currency,
-            only_posted_moves,
-            show_partner_details,
-            hide_account_at_0,
-            hide_account_at_end_0,
-            unaffected_earnings_account,
-            fy_start_date,
-            grouped_by,
+            wizard.account_ids.ids,
+            wizard.journal_ids.ids,
+            wizard.partner_ids.ids,
+            wizard.company_id.id,
+            wizard.date_to,
+            wizard.date_from,
+            wizard.foreign_currency,
+            wizard.target_move == "posted",
+            wizard.show_partner_details,
+            wizard.hide_account_at_0,
+            wizard.hide_account_at_end_0,
+            wizard.unaffected_earnings_account.id,
+            wizard.fy_start_date,
+            wizard.grouped_by,
         )
         trial_balance_grouped = False
         total_amount_grouped = False
-        if grouped_by:
+        if wizard.grouped_by:
             trial_balance_grouped, total_amount_grouped = self._get_data_grouped(
-                total_amount, accounts_data, foreign_currency
+                total_amount, accounts_data, wizard.foreign_currency
             )
         trial_balance = []
-        if not show_partner_details:
-            for account_id in accounts_data.keys():
+        if not wizard.show_partner_details:
+            for account_id in accounts_data:
                 accounts_data[account_id].update(
                     {
                         "initial_balance": total_amount[account_id]["initial_balance"],
@@ -974,7 +958,7 @@ class TrialBalanceReport(models.AbstractModel):
                         "type": "account_type",
                     }
                 )
-                if foreign_currency:
+                if wizard.foreign_currency:
                     accounts_data[account_id].update(
                         {
                             "ending_currency_balance": total_amount[account_id][
@@ -985,9 +969,9 @@ class TrialBalanceReport(models.AbstractModel):
                             ],
                         }
                     )
-            if show_hierarchy:
+            if wizard.show_hierarchy:
                 groups_data = self._get_groups_data(
-                    accounts_data, total_amount, foreign_currency
+                    accounts_data, total_amount, wizard.foreign_currency
                 )
                 trial_balance = list(groups_data.values())
                 trial_balance += list(accounts_data.values())
@@ -999,8 +983,8 @@ class TrialBalanceReport(models.AbstractModel):
                 trial_balance = list(accounts_data.values())
                 trial_balance = sorted(trial_balance, key=lambda k: k["code"])
         else:
-            if foreign_currency:
-                for account_id in accounts_data.keys():
+            if wizard.foreign_currency:
+                for account_id in accounts_data:
                     total_amount[account_id]["currency_id"] = accounts_data[account_id][
                         "currency_id"
                     ]
@@ -1011,29 +995,29 @@ class TrialBalanceReport(models.AbstractModel):
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "trial.balance.report.wizard",
-                "docs": self.env["trial.balance.report.wizard"].browse(wizard_id),
-                "foreign_currency": data["foreign_currency"],
-                "company_name": company.display_name,
-                "company_currency": company.currency_id,
-                "currency_name": company.currency_id.name,
-                "date_from": data["date_from"],
-                "date_to": data["date_to"],
-                "only_posted_moves": data["only_posted_moves"],
-                "hide_account_at_0": data["hide_account_at_0"],
-                "hide_account_at_end_0": data["hide_account_at_end_0"],
-                "show_partner_details": data["show_partner_details"],
-                "limit_hierarchy_level": data["limit_hierarchy_level"],
-                "show_hierarchy": show_hierarchy,
-                "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
+                "docs": wizard,
+                "foreign_currency": wizard.foreign_currency,
+                "company_name": wizard.company_id.display_name,
+                "company_currency": wizard.company_id.currency_id,
+                "currency_name": wizard.company_id.currency_id.name,
+                "date_from": wizard.date_from,
+                "date_to": wizard.date_to,
+                "only_posted_moves": wizard.target_move == "posted",
+                "hide_account_at_0": wizard.hide_account_at_0,
+                "hide_account_at_end_0": wizard.hide_account_at_end_0,
+                "show_partner_details": wizard.show_partner_details,
+                "limit_hierarchy_level": wizard.limit_hierarchy_level,
+                "show_hierarchy": wizard.show_hierarchy,
+                "hide_parent_hierarchy_level": wizard.hide_parent_hierarchy_level,
                 "trial_balance": trial_balance,
                 "trial_balance_grouped": trial_balance_grouped,
                 "total_amount": total_amount,
                 "total_amount_grouped": total_amount_grouped,
                 "accounts_data": accounts_data,
                 "partners_data": partners_data,
-                "show_hierarchy_level": show_hierarchy_level,
+                "show_hierarchy_level": wizard.show_hierarchy_level,
                 "currency_model": self.env["res.currency"],
-                "grouped_by": grouped_by,
+                "grouped_by": wizard.grouped_by,
             }
         )
         return res

@@ -3,10 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import operator
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 from odoo import api, models
-from odoo.tools import float_is_zero
+from odoo.tools import float_is_zero, format_date
 
 
 class AgedPartnerBalanceReport(models.AbstractModel):
@@ -405,56 +405,45 @@ class AgedPartnerBalanceReport(models.AbstractModel):
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
-        company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
-        account_ids = data["account_ids"]
-        partner_ids = data["partner_ids"]
-        date_at = data["date_at"]
-        date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
-        date_from = data["date_from"]
-        only_posted_moves = data["only_posted_moves"]
-        show_move_line_details = data["show_move_line_details"]
-        aged_partner_configuration = self.env[
-            "account.age.report.configuration"
-        ].browse(data["age_partner_config_id"])
+        wizard = self.env["aged.partner.balance.report.wizard"].browse(wizard_id)
+        only_posted_moves = wizard.target_move == "posted"
+
         (ag_pb_data, accounts_data, partners_data, journals_data,) = self.with_context(
-            age_partner_config=aged_partner_configuration
+            age_partner_config=wizard.age_partner_config_id
         )._get_move_lines_data(
-            company_id,
-            account_ids,
-            partner_ids,
-            date_at_object,
-            date_from,
+            wizard.company_id.id,
+            wizard.account_ids.ids,
+            wizard.partner_ids.ids,
+            wizard.date_at,
+            wizard.date_from or False,
             only_posted_moves,
-            show_move_line_details,
+            wizard.show_move_line_details,
         )
         aged_partner_data = self.with_context(
-            age_partner_config=aged_partner_configuration
+            age_partner_config=wizard.age_partner_config_id
         )._create_account_list(
             ag_pb_data,
             accounts_data,
             partners_data,
             journals_data,
-            show_move_line_details,
-            date_at_object,
+            wizard.show_move_line_details,
+            wizard.date_at,
         )
         aged_partner_data = self.with_context(
-            age_partner_config=aged_partner_configuration
+            age_partner_config=wizard.age_partner_config_id
         )._calculate_percent(aged_partner_data)
         res.update(
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "aged.partner.balance.report.wizard",
-                "docs": self.env["aged.partner.balance.report.wizard"].browse(
-                    wizard_id
-                ),
-                "company_name": company.display_name,
-                "currency_name": company.currency_id.name,
-                "date_at": date_at,
+                "docs": wizard,
+                "company_name": wizard.company_id.display_name,
+                "currency_name": wizard.company_id.currency_id.name,
+                "date_at": format_date(self.env, wizard.date_at),
                 "only_posted_moves": only_posted_moves,
                 "aged_partner_balance": aged_partner_data,
-                "show_move_lines_details": show_move_line_details,
-                "age_partner_config": aged_partner_configuration,
+                "show_move_lines_details": wizard.show_move_line_details,
+                "age_partner_config": wizard.age_partner_config_id,
             }
         )
         return res

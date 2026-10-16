@@ -4,10 +4,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import operator
-from datetime import date, datetime
+from datetime import date
 
 from odoo import _, api, models
-from odoo.tools import float_is_zero
+from odoo.tools import float_is_zero, format_date
 
 
 class OpenItemsReport(models.AbstractModel):
@@ -245,16 +245,9 @@ class OpenItemsReport(models.AbstractModel):
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
-        company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
-        account_ids = data["account_ids"]
-        partner_ids = data["partner_ids"]
-        date_at = data["date_at"]
-        date_at_object = datetime.strptime(date_at, "%Y-%m-%d").date()
-        date_from = data["date_from"]
-        only_posted_moves = data["only_posted_moves"]
-        show_partner_details = data["show_partner_details"]
-        grouped_by = data["grouped_by"]
+        wizard = self.env["open.items.report.wizard"].browse(wizard_id)
+        only_posted_moves = wizard.target_move == "posted"
+
         (
             move_lines_data,
             partners_data,
@@ -262,19 +255,19 @@ class OpenItemsReport(models.AbstractModel):
             accounts_data,
             open_items_move_lines_data,
         ) = self._get_data(
-            account_ids,
-            partner_ids,
-            date_at_object,
+            wizard.account_ids.ids,
+            wizard.partner_ids.ids,
+            wizard.date_at,
             only_posted_moves,
-            company_id,
-            date_from,
-            grouped_by,
+            wizard.company_id.id,
+            wizard.date_from,
+            wizard.grouped_by,
         )
 
         total_amount = self._calculate_amounts(open_items_move_lines_data)
         open_items_move_lines_data = self._order_open_items_by_date(
             open_items_move_lines_data,
-            show_partner_details,
+            wizard.show_partner_details,
             partners_data,
             accounts_data,
         )
@@ -282,20 +275,20 @@ class OpenItemsReport(models.AbstractModel):
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "open.items.report.wizard",
-                "docs": self.env["open.items.report.wizard"].browse(wizard_id),
-                "foreign_currency": data["foreign_currency"],
-                "show_partner_details": data["show_partner_details"],
-                "company_name": company.display_name,
-                "currency_name": company.currency_id.name,
-                "date_at": date_at_object.strftime("%d/%m/%Y"),
-                "hide_account_at_0": data["hide_account_at_0"],
-                "target_move": data["target_move"],
+                "docs": wizard,
+                "foreign_currency": wizard.foreign_currency,
+                "show_partner_details": wizard.show_partner_details,
+                "company_name": wizard.company_id.display_name,
+                "currency_name": wizard.company_id.currency_id.name,
+                "date_at": format_date(self.env, wizard.date_at),
+                "hide_account_at_0": wizard.hide_account_at_0,
+                "target_move": wizard.target_move,
                 "journals_data": journals_data,
                 "partners_data": partners_data,
                 "accounts_data": accounts_data,
                 "total_amount": total_amount,
                 "Open_Items": open_items_move_lines_data,
-                "grouped_by": grouped_by,
+                "grouped_by": wizard.grouped_by,
             }
         )
         return res
