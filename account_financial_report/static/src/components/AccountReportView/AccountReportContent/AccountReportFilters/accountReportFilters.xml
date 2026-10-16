@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportFilters">
+        <div class="bg-white border rounded p-3">
+            <button
+                type="button"
+                class="btn btn-link d-flex align-items-center gap-2 text-muted text-decoration-none p-0 w-100 text-start"
+                t-att-class="state.open ? 'mb-3' : ''"
+                t-att-aria-expanded="state.open"
+                t-on-click="toggleFilters"
+            >
+                <i class="fa fa-filter" aria-hidden="true" />
+                <span class="small fw-semibold">Filters</span>
+                <i
+                    class="ms-auto"
+                    t-att-class="state.open ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"
+                    aria-hidden="true"
+                />
+            </button>
+
+            <div t-if="state.open" class="row g-3">
+                <t t-foreach="filters" t-as="filter" t-key="filter.key">
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="border-start ps-3 h-100">
+                            <div class="small text-muted mb-1 text-break">
+                                <t t-out="filter.label" />
+                            </div>
+                            <div class="fw-semibold text-break">
+                                <t t-out="filter.value" />
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

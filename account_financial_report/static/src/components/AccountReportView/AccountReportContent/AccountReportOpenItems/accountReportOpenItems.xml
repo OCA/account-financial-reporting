@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportOpenItems">
+        <details
+            t-foreach="rows"
+            t-as="account"
+            t-key="account.key"
+            open="open"
+            class="m-1 bg-white rounded shadow-sm p-3"
+        >
+            <summary class="fw-bold text-body text-break"><t
+                t-out="account.account.code"
+            /> — <t t-out="account.account.name" /></summary>
+            <div class="table-responsive mt-3">
+                <table
+                    class="table table-hover align-middle text-nowrap mb-0"
+                    t-att-aria-label="account.account.code + ' — ' + account.account.name"
+                >
+                    <thead class="table-light">
+                        <tr>
+                            <th t-foreach="columns" t-as="column" t-key="column.key">
+                                <t t-out="column.label" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="account.moveLines" t-as="row" t-key="row.key">
+                            <AccountReportLines columns="columns" row="row" />
+                        </tr>
+                    </tbody>
+                    <tbody t-foreach="account.groups" t-as="group" t-key="group.key">
+                        <tr class="table-light fw-bold">
+                            <td t-att-colspan="columns.length">
+                                <t t-out="group.name" />
+                            </td>
+                        </tr>
+                        <t t-if="group.partners.length">
+                            <t
+                                t-foreach="group.partners"
+                                t-as="partner"
+                                t-key="partner.key"
+                            >
+                                <tr class="fw-bold">
+                                    <td t-att-colspan="columns.length">
+                                        <t t-out="partner.name" />
+                                    </td>
+                                </tr>
+                                <tr
+                                    t-foreach="partner.moveLines"
+                                    t-as="row"
+                                    t-key="row.key"
+                                >
+                                    <AccountReportLines columns="columns" row="row" />
+                                </tr>
+                                <tr class="border-top fw-bold">
+                                    <AccountReportLines
+                                        columns="columns"
+                                        row="partner.total"
+                                    />
+                                </tr>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <tr t-foreach="group.moveLines" t-as="row" t-key="row.key">
+                                <AccountReportLines columns="columns" row="row" />
+                            </tr>
+                        </t>
+                        <tr class="table-light border-top fw-bold">
+                            <AccountReportLines columns="columns" row="group.total" />
+                        </tr>
+                    </tbody>
+                    <tfoot class="table-light">
+                        <tr class="border-top fw-bold">
+                            <AccountReportLines columns="columns" row="account.total" />
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </details>
+        <p t-if="!rows.length" class="text-muted">No records found.</p>
+    </t>
+</templates>

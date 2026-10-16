@@ -277,7 +277,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     tax_name = gl["tax_line_id"][1]
                 else:
                     tax_id = 0
-                    tax_name = "Missing Tax"
+                    tax_name = self.env._("Missing Tax")
                 acc_id = gl["account_id"][0]
                 data[acc_id][tax_id] = self._prepare_gen_ld_data_item(gl)
                 data[acc_id][tax_id]["id"] = tax_id
@@ -473,7 +473,7 @@ class GeneralLedgerReport(models.AbstractModel):
                     )
                     res.append({"id": tax_item.id, "name": tax_item.name})
             else:
-                res.append({"id": 0, "name": "Missing Tax"})
+                res.append({"id": 0, "name": self.env._("Missing Tax")})
         else:
             res.append({"id": 0, "name": ""})
         return res

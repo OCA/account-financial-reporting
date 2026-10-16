@@ -151,17 +151,25 @@ class OpenItemsReportWizard(models.TransientModel):
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_data()
-        if report_type == "xlsx":
-            report_name = "a_f_r.report_open_items_xlsx"
-        else:
-            report_name = "account_financial_report.open_items"
-        return (
-            self.env["ir.actions.report"]
-            .search(
-                [("report_name", "=", report_name), ("report_type", "=", report_type)],
-                limit=1,
+        if report_type in ("qweb-pdf", "xlsx"):
+            report_name = (
+                "a_f_r.report_open_items_xlsx"
+                if report_type == "xlsx"
+                else "account_financial_report.open_items"
             )
-            .report_action(self, data=data)
+            return (
+                self.env["ir.actions.report"]
+                .search(
+                    [
+                        ("report_name", "=", report_name),
+                        ("report_type", "=", report_type),
+                    ],
+                    limit=1,
+                )
+                .report_action(self, data=data)
+            )
+        return self._get_report_view_action(
+            "open_items", self.env._("Open Items"), data
         )
 
     def _prepare_report_open_items(self):

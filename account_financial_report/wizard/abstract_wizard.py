@@ -60,6 +60,23 @@ class AbstractWizard(models.AbstractModel):
             value = value[:limit] + "..."
         return value
 
+    def _get_report_view_action(self, report_type, report_name, data):
+        """Build the client action shared by the financial report views."""
+        self.ensure_one()
+        return {
+            "type": "ir.actions.client",
+            "tag": "account_report_view",
+            "path": f"{report_type.replace('_', '-')}-report",
+            "params": {
+                "active_id": self.id,
+                "model": self._name,
+                "report_model": f"report.account_financial_report.{report_type}",
+                "report_type": report_type,
+                "report_name": report_name,
+                "data": data,
+            },
+        }
+
     def _prepare_report_data(self):
         self.ensure_one()
         return {"wizard_name": self._name, "wizard_id": self.id}
