@@ -11,10 +11,12 @@ on:
 
 jobs:
   unreleased-deps:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: Detect unreleased dependencies
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           for reqfile in requirements.txt test-requirements.txt ; do
               if [ -f ${reqfile} ] ; then
@@ -52,7 +54,7 @@ jobs:
     env:
       OCA_ENABLE_CHECKLOG_ODOO: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install addons and dependencies
@@ -65,7 +67,7 @@ jobs:
         run: oca_init_test_database
       - name: Run tests
         run: oca_run_tests
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Update .pot files
