@@ -4,7 +4,7 @@
 
 import operator
 
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class VATReport(models.AbstractModel):
@@ -200,39 +200,32 @@ class VATReport(models.AbstractModel):
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
-        company = self.env["res.company"].browse(data["company_id"])
-        company_id = data["company_id"]
-        date_from = fields.Date.from_string(data["date_from"])
-        date_to = fields.Date.from_string(data["date_to"])
-        based_on = data["based_on"]
-        tax_detail = data["tax_detail"]
-        only_posted_moves = data["only_posted_moves"]
+        wizard = self.env["vat.report.wizard"].browse(wizard_id)
+        only_posted_moves = wizard.target_move == "posted"
         vat_report_data, tax_data = self._get_vat_report_data(
-            company_id, date_from, date_to, only_posted_moves
+            wizard.company_id.id, wizard.date_from, wizard.date_to, only_posted_moves
         )
-        if based_on == "taxgroups":
+        if wizard.based_on == "taxgroups":
             vat_report = self._get_vat_report_group_data(
-                vat_report_data, tax_data, tax_detail
+                vat_report_data, tax_data, wizard.tax_detail
             )
         else:
             vat_report = self._get_vat_report_tag_data(
-                vat_report_data, tax_data, tax_detail
+                vat_report_data, tax_data, wizard.tax_detail
             )
         res.update(
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "vat.report.wizard",
-                "docs": self.env["vat.report.wizard"].browse(wizard_id),
-                "company_name": company.display_name,
-                "currency_name": company.currency_id.name,
-                "date_from": date_from,
-                "date_to": date_to,
+                "docs": wizard,
+                "company_name": wizard.company_id.display_name,
+                "currency_name": wizard.company_id.currency_id.name,
+                "date_from": wizard.date_from,
+                "date_to": wizard.date_to,
                 "based_on": dict(
-                    self.env["vat.report.wizard"]
-                    ._fields["based_on"]
-                    ._description_selection(self.env)
-                ).get(data["based_on"]),
-                "tax_detail": data["tax_detail"],
+                    wizard._fields["based_on"]._description_selection(self.env)
+                ).get(wizard.based_on),
+                "tax_detail": wizard.tax_detail,
                 "vat_report": vat_report,
             }
         )
