@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportSidebar">
+        <aside
+            class="col-12 col-md-3 col-xl-2 flex-shrink-0 overflow-auto border-end p-2"
+        >
+            <div
+                class="o_account_report_sidebar bg-white rounded shadow-sm border p-3 h-100 d-flex flex-column overflow-hidden"
+            >
+                <div
+                    class="d-flex align-items-center gap-2 border-bottom pb-2 mb-3 flex-shrink-0"
+                >
+                    <span
+                        class="d-flex align-items-center justify-content-center flex-shrink-0 text-muted"
+                    >
+                        <i class="fa fa-sitemap" aria-hidden="true" />
+                    </span>
+                    <h6 class="fw-bold mb-0">Account prefixes</h6>
+                </div>
+                <div
+                    class="input-group mb-3 flex-shrink-0 rounded-pill border bg-body-tertiary overflow-hidden"
+                >
+                    <span class="input-group-text bg-transparent border-0 ps-3">
+                        <i class="fa fa-search text-muted" aria-hidden="true" />
+                    </span>
+                    <input
+                        type="search"
+                        class="form-control bg-transparent border-0 py-2 ps-1"
+                        placeholder="Search accounts..."
+                        aria-label="Search accounts by code or name"
+                        t-model="state.search"
+                    />
+                </div>
+                <a
+                    href="#"
+                    class="o_account_sidebar_link d-flex align-items-center gap-2 mb-2 px-2 py-2 rounded text-decoration-none flex-shrink-0"
+                    t-att-class="props.env.selectedAccountPrefix === '' ? 'o_selected fw-bold' : ''"
+                    t-on-click.prevent="() => props.onSelect('')"
+                >
+                    <i class="fa fa-list-ul" aria-hidden="true" />
+                    All accounts
+                </a>
+                <div class="flex-grow-1 overflow-auto border-top pt-2">
+                    <ul class="list-unstyled mb-0">
+                        <li
+                            t-foreach="visiblePrefixes"
+                            t-as="prefix"
+                            t-key="prefix.code"
+                            class="d-flex align-items-start py-1"
+                            t-att-style="'padding-left: ' + (prefix.code.length - 1) * 12 + 'px;'"
+                        >
+                            <button
+                                t-if="prefix.hasChildren and !searchQuery"
+                                type="button"
+                                class="btn btn-link btn-sm p-1 text-body text-decoration-none flex-shrink-0"
+                                t-on-click="() => this.togglePrefix(prefix.code)"
+                                t-att-aria-expanded="prefix.expanded"
+                            >
+                                <i
+                                    t-att-class="prefix.expanded ? 'fa fa-chevron-down' : 'fa fa-chevron-right'"
+                                    aria-hidden="true"
+                                />
+                            </button>
+                            <a
+                                href="#"
+                                class="o_account_sidebar_link flex-grow-1 px-2 py-1 rounded text-decoration-none"
+                                t-att-class="props.env.selectedAccountPrefix === prefix.code ? 'o_selected fw-bold' : ''"
+                                t-on-click.prevent="() => props.onSelect(prefix.code)"
+                            >
+                                <span class="fw-semibold" t-out="prefix.code" />
+                                <span
+                                    t-if="prefix.name"
+                                    class="d-block small text-muted"
+                                    t-out="prefix.name"
+                                />
+                            </a>
+                        </li>
+                    </ul>
+                    <p t-if="searchQuery and !prefixes.length" class="text-muted mb-0">
+                        No matching accounts.
+                    </p>
+                    <p t-elif="!prefixes.length" class="text-muted mb-0">
+                        No account prefixes available.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </t>
+</templates>
