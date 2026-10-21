@@ -876,3 +876,97 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         self.assertEqual(account_lines["final_balance"], 160.0)
         total = result_foreign_currency["total_amount"][self.account100.id]
         self.assertEqual(total["ending_currency_balance"], 220.0)
+
+    def test_10_group_by_analytic_account(self):
+        plan = self.env["account.analytic.plan"].create({"name": "Plan"})
+        analytic = self.env["account.analytic.account"].create(
+            {"name": "Analytic 1", "plan_id": plan.id}
+        )
+
+        def add_move(date, amount, distribution):
+            move = self.env["account.move"].create(
+                {
+                    "move_type": "entry",
+                    "date": date,
+                    "line_ids": [
+                        Command.create(
+                            {
+                                "account_id": self.account100.id,
+                                "debit": amount,
+                                "analytic_distribution": distribution,
+                            }
+                        ),
+                        Command.create(
+                            {
+                                "account_id": self.account200.id,
+                                "credit": amount,
+                                "analytic_distribution": distribution,
+                            }
+                        ),
+                    ],
+                }
+            )
+            move.action_post()
+
+        add_move(self.previous_fy_date_end, 100, {str(analytic.id): 100})
+        add_move(self.date_start, 40, {str(analytic.id): 100})
+        add_move(self.date_start, 10, False)
+        self.env.flush_all()
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "target_move": "posted",
+                "hide_account_at_0": True,
+                "company_id": self.env.user.company_id.id,
+                "fy_start_date": self.fy_date_start,
+                "grouped_by": "analytic_account",
+            }
+        )
+        data = wizard._prepare_report_data()
+        res_data = self.env[
+            "report.account_financial_report.trial_balance"
+        ]._get_report_values(wizard, data)
+        groups = {group["name"]: group for group in res_data["trial_balance_grouped"]}
+        self.assertEqual(set(groups), {"Analytic 1", "Without analytic account"})
+        analytic_group = groups["Analytic 1"]
+        self.assertEqual(analytic_group["type"], "analytic_account_type")
+        receivable = next(
+            line
+            for line in analytic_group["account_data"]
+            if line["id"] == self.account100.id
+        )
+        self.assertEqual(receivable["initial_balance"], 100)
+        self.assertEqual(receivable["debit"], 40)
+        self.assertEqual(receivable["ending_balance"], 140)
+        income = next(
+            line
+            for line in analytic_group["account_data"]
+            if line["id"] == self.account200.id
+        )
+        self.assertEqual(income["credit"], 40)
+        without = next(
+            line
+            for line in groups["Without analytic account"]["account_data"]
+            if line["id"] == self.account100.id
+        )
+        self.assertEqual(without["debit"], 10)
+        self.assertEqual(without["initial_balance"], 0)
+        report = self.env["ir.actions.report"].with_context(
+            active_model=wizard._name,
+            active_id=wizard.id,
+            active_ids=wizard.ids,
+        )
+        for foreign_currency in (False, True):
+            wizard.foreign_currency = foreign_currency
+            data = wizard._prepare_report_data()
+            content, content_type = report._render_qweb_html(
+                "account_financial_report.trial_balance", wizard.ids, data
+            )
+            self.assertEqual(content_type, "html")
+            self.assertIn("Analytic 1", content.decode())
+            content, content_type = report._render_xlsx(
+                "a_f_r.report_trial_balance_xlsx", wizard.ids, data
+            )
+            self.assertEqual(content_type, "xlsx")
+            self.assertTrue(content)
