@@ -36,6 +36,9 @@
                     </group>
                     <notebook>
                         <page string="Filter accounts">
+                            <group name="account_filter_prefix">
+                                <field colspan="2" name="account_prefix" />
+                            </group>
                             <group name="account_filter" col="4">
                                 <label for="account_ids" colspan="4" />
                                 <field name="receivable_accounts_only" />
@@ -56,6 +59,8 @@
                                         />
                                     </div>
                                 </div>
+                            </group>
+                            <group>
                                 <field
                                     name="account_ids"
                                     nolabel="1"
