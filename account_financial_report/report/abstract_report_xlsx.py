@@ -47,7 +47,9 @@ class AbstractReportXslx(models.AbstractModel):
         report_name = self._get_report_name(objects, data=data)
         report_footer = self._get_report_footer()
         filters = self._get_report_filters(objects)
-        report_data["columns"] = self._get_report_columns(objects)
+        report_data["columns"] = self._filter_report_columns(
+            objects, self._get_report_columns(objects)
+        )
         report_data["workbook"] = workbook
         report_data["sheet"] = workbook.add_worksheet(report_name[:31])
         self._set_column_width(report_data)
@@ -108,6 +110,29 @@ class AbstractReportXslx(models.AbstractModel):
         report_data["formats"]["format_amount_bold"].set_num_format(
             "#,##0." + "0" * currency_id.decimal_places
         )
+
+    def _filter_report_columns(self, report, columns):
+        """Apply the wizard's ``column_ids`` configuration (set on reports
+        with a "Columns" page) to the columns declared by
+        `_get_report_columns`: drop those marked not visible and attach the
+        configured `limit` to string columns, matched by the
+        `expression_label` key each of those columns declares.
+        Columns without a matching `account.financial.report.column` (either
+        because the report has none configured, or the column dict has no
+        `expression_label`) are kept as-is.
+        """
+        column_config = {c.expression_label: c for c in report.column_ids}
+        if not column_config:
+            return columns
+        res = {}
+        for column in columns.values():
+            config = column_config.get(column.get("expression_label"))
+            if config and not config.is_visible:
+                continue
+            if config and config.field_type == "string" and config.limit:
+                column = {**column, "limit": config.limit}
+            res[len(res)] = column
+        return res
 
     def _set_column_width(self, report_data):
         """Set width for all defined columns.
@@ -223,6 +248,9 @@ class AbstractReportXslx(models.AbstractModel):
                         and not isinstance(value, int)
                     ):
                         value = value and value.strftime("%d/%m/%Y")
+                    limit = column.get("limit")
+                    if limit and isinstance(value, str) and len(value) > limit:
+                        value = value[:limit] + "..."
                     report_data["sheet"].write_string(
                         report_data["row_pos"], col_pos, value or ""
                     )
