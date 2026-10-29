@@ -332,3 +332,22 @@ class TestJournalReport(AccountTestInvoicingCommon):
         data = wiz._prepare_report_data()
         res_data = self.JournalLedgerReport._get_report_values(wiz, data)
         self.assertIn("Journal_Ledgers", res_data)
+
+    def test_05_render_html(self):
+        self._add_move(Date.today(), self.journal_sale, 0, 100, 100, 0)
+        wiz = self.JournalLedgerReportWizard.create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.company.id,
+                "journal_ids": [Command.set(self.journal_sale.ids)],
+                "move_target": "all",
+            }
+        )
+        with self.assertNoLogs("odoo.addons.base.models.ir_qweb", "WARNING"):
+            html = self.env["ir.actions.report"]._render_qweb_html(
+                "account_financial_report.action_print_journal_ledger_wizard_html",
+                wiz.ids,
+                wiz._prepare_report_data(),
+            )[0]
+        self.assertIn(b"move name", html)
