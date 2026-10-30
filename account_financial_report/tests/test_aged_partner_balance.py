@@ -85,6 +85,32 @@ class TestAgedPartnerBalance(TransactionCase):
         )
         self.assertTrue(result)
 
+    def test_show_analytic_distribution_flag(self):
+        """Verify show_analytic_distribution is passed through to report values."""
+        wizard = self.wizard_model.create(
+            {
+                "show_move_line_details": True,
+                "show_analytic_distribution": True,
+                "receivable_accounts_only": True,
+            }
+        )
+        wizard.onchange_type_accounts_only()
+        data = wizard._prepare_report_data()
+        self.assertTrue(data["show_analytic_distribution"])
+
+        # The flag should be present in the values returned for template rendering
+        data.update({"date_at": data["date_at"].strftime(DEFAULT_SERVER_DATE_FORMAT)})
+        report = self.env["report.account_financial_report.aged_partner_balance"]
+        res = report._get_report_values(wizard, data)
+        self.assertIn("show_analytic_distribution", res)
+        self.assertIn("analytic_data", res)
+        self.assertTrue(res["show_analytic_distribution"])
+
+        # Disabled wizard should produce the matching False value
+        wizard.show_analytic_distribution = False
+        data = wizard._prepare_report_data()
+        self.assertFalse(data["show_analytic_distribution"])
+
     def test_report_with_aged_report_configuration(self):
         """Check that report is produced correctly."""
         wizard = self.wizard_with_line_details

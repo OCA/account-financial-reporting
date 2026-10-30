@@ -28,46 +28,60 @@ class OpenItemsXslx(models.AbstractModel):
             3: {"header": _("Account"), "field": "account", "width": 9},
             4: {"header": _("Partner"), "field": "partner_name", "width": 25},
             5: {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
-            6: {"header": _("Due date"), "field": "date_maturity", "width": 11},
-            7: {
-                "header": _("Original"),
-                "field": "original",
-                "type": "amount",
-                "width": 14,
-            },
-            8: {
-                "header": _("Residual"),
-                "field": "amount_residual",
-                "field_final_balance": "residual",
-                "type": "amount",
-                "width": 14,
-            },
         }
-        if report.foreign_currency:
-            foreign_currency = {
-                9: {
-                    "header": _("Cur."),
-                    "field": "currency_name",
-                    "field_currency_balance": "currency_name",
-                    "type": "currency_name",
-                    "width": 7,
-                },
-                10: {
-                    "header": _("Cur. Original"),
-                    "field": "amount_currency",
-                    "field_final_balance": "amount_currency",
-                    "type": "amount_currency",
-                    "width": 14,
-                },
-                11: {
-                    "header": _("Cur. Residual"),
-                    "field": "amount_residual_currency",
-                    "field_final_balance": "amount_currency",
-                    "type": "amount_currency",
-                    "width": 14,
-                },
+        # Analytic Distribution column inserted before the date/amount columns
+        # to group all descriptive fields together on the left side.
+        next_col = 6
+        if report.show_analytic_distribution:
+            res[next_col] = {
+                "header": _("Analytic Distribution"),
+                "field": "analytic_display",
+                "width": 20,
             }
-            res = {**res, **foreign_currency}
+            next_col += 1
+        res[next_col] = {
+            "header": _("Due date"),
+            "field": "date_maturity",
+            "width": 11,
+        }
+        next_col += 1
+        res[next_col] = {
+            "header": _("Original"),
+            "field": "original",
+            "type": "amount",
+            "width": 14,
+        }
+        next_col += 1
+        res[next_col] = {
+            "header": _("Residual"),
+            "field": "amount_residual",
+            "field_final_balance": "residual",
+            "type": "amount",
+            "width": 14,
+        }
+        next_col += 1
+        if report.foreign_currency:
+            res[next_col] = {
+                "header": _("Cur."),
+                "field": "currency_name",
+                "field_currency_balance": "currency_name",
+                "type": "currency_name",
+                "width": 7,
+            }
+            res[next_col + 1] = {
+                "header": _("Cur. Original"),
+                "field": "amount_currency",
+                "field_final_balance": "amount_currency",
+                "type": "amount_currency",
+                "width": 14,
+            }
+            res[next_col + 2] = {
+                "header": _("Cur. Residual"),
+                "field": "amount_residual_currency",
+                "field_final_balance": "amount_currency",
+                "type": "amount_currency",
+                "width": 14,
+            }
         return res
 
     def _get_report_filters(self, report):

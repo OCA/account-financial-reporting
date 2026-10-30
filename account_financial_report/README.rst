@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =========================
 Account Financial Reports
 =========================
@@ -17,7 +13,7 @@ Account Financial Reports
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
@@ -53,6 +49,20 @@ foreign currency balances are not available.
 Invoicing / Settings / Invoicing / OCA Aged Report Configuration you
 will be able to set dynamic intervals that will appear on the Aged
 Partner Balance. For further information, check CONFIGURE.rst
+
+**Analytic Distribution column**
+
+The following reports support an optional *Analytic Distribution* column
+(enabled by default via a wizard checkbox) that shows the analytic
+accounts and their split percentages for each journal item:
+
+- General Ledger (controlled by *Show Analytic Account*)
+- Journal Ledger (*Show Analytic Distribution*)
+- Open Items (*Show Analytic Distribution*)
+- Aged Partner Balance (*Show Analytic Distribution*, only when *Show
+  Move Line Details* is enabled)
+
+The column is available in both PDF and XLSX exports.
 
 **Table of contents**
 
@@ -189,6 +199,10 @@ Contributors
 - `Stesi Consulting <https://www.stesi.consulting>`__:
 
   - Michele Di Croce <dicroce.m@stesi.consulting>
+
+- `Heliconia Solutions Pvt. Ltd. <https://www.heliconia.io>`__
+
+  - Bhavesh Heliconia
 
 Much of the work in this module was done at a sprint in Sorrento, Italy
 in April 2016.
