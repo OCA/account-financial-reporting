@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 Odoo Community Association (OCA)
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="journal_ledger_wizard_analytic_tag" model="ir.ui.view">
+        <field name="name">Journal Ledger - Analytic Tags</field>
+        <field name="model">journal.ledger.report.wizard</field>
+        <field name="inherit_id" ref="account_financial_report.journal_ledger_wizard" />
+        <field name="arch" type="xml">
+            <!-- Place the Analytic Tags checkbox right after Show Analytic Distribution -->
+            <field name="show_analytic_distribution" position="after">
+                <field name="show_analytic_tags" />
+            </field>
+        </field>
+    </record>
+</odoo>
