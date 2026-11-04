@@ -7,22 +7,22 @@ from odoo import models
 class AccountAccount(models.Model):
     _inherit = "account.account"
 
-    def _get_open_items_at_date(self, date, only_posted_moves):
+    def _get_open_items_at_date(self, date, only_posted_moves, company=None):
         if not date or not self:
             return []
         move_states = ["posted"]
         if not only_posted_moves:
             move_states.append("draft")
-        amls = self.env["account.move.line"].search(
-            [
-                ("reconciled", "=", False),
-                ("account_id", "in", self.ids),
-                "|",
-                ("date_maturity", "<=", date),
-                "&",
-                ("date_maturity", "=", False),
-                ("date", "<=", date),
-                ("parent_state", "in", move_states),
-            ]
-        )
-        return amls
+        domain = [
+            ("reconciled", "=", False),
+            ("account_id", "in", self.ids),
+            "|",
+            ("date_maturity", "<=", date),
+            "&",
+            ("date_maturity", "=", False),
+            ("date", "<=", date),
+            ("parent_state", "in", move_states),
+        ]
+        if company:
+            domain.append(("company_id", "=", company.id))
+        return self.env["account.move.line"].search(domain)

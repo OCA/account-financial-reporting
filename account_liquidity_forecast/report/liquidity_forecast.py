@@ -1,5 +1,6 @@
 # Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+import bisect
 import calendar
 import datetime
 
@@ -60,16 +61,12 @@ class LiquidityForecastReport(models.AbstractModel):
             else:
                 domain += [("move_id.state", "in", ["posted", "draft"])]
 
-            initial_balances = self.env["account.move.line"].read_group(
-                domain=domain,
-                fields=["balance:sum"],
-                groupby=["company_id"],
+            [(initial_balance_amount,)] = self.env["account.move.line"]._read_group(
+                domain, aggregates=["balance:sum"]
             )
-            initial_balance_amount = 0.0
-            if initial_balances:
-                initial_balance = initial_balances[0]
-                initial_balance_amount = initial_balance["balance"]
-            line["periods"][period["sequence"]]["amount"] = initial_balance_amount
+            line["periods"][period["sequence"]]["amount"] = (
+                initial_balance_amount or 0.0
+            )
         else:
             ending_balance_line = list(
                 filter(
@@ -81,12 +78,12 @@ class LiquidityForecastReport(models.AbstractModel):
             ][period["sequence"] - 1]["amount"]
 
     def _complete_ending_balance(self, data, liquidity_forecast_lines, line, period):
-        starting_balance_line = list(
-            filter(lambda d: d["code"] == "beginning_balance", liquidity_forecast_lines)
-        )[0]
-        net_cash_flow_line = list(
-            filter(lambda d: d["code"] == "net_cash_flow", liquidity_forecast_lines)
-        )[0]
+        starting_balance_line = next(
+            d for d in liquidity_forecast_lines if d["code"] == "beginning_balance"
+        )
+        net_cash_flow_line = next(
+            d for d in liquidity_forecast_lines if d["code"] == "net_cash_flow"
+        )
         line["periods"][period["sequence"]]["amount"] = (
             starting_balance_line["periods"][period["sequence"]]["amount"]
             + net_cash_flow_line["periods"][period["sequence"]]["amount"]
@@ -125,31 +122,46 @@ class LiquidityForecastReport(models.AbstractModel):
             cash_flow += cash_flow_line["periods"][period["sequence"]]["amount"]
         line["periods"][period["sequence"]]["amount"] = cash_flow
 
+    def _get_cached(self, data, key, compute):
+        """Compute a value once per report rendering."""
+        cache = data.setdefault("liquidity_forecast_cache", {})
+        if key not in cache:
+            cache[key] = compute()
+        return cache[key]
+
+    def _get_period_sequence(self, periods, date):
+        """Sequence of the period a date falls in; earlier dates go to the first."""
+        index = bisect.bisect_left([p["date_to"] for p in periods], date)
+        return periods[index]["sequence"] if index < len(periods) else None
+
+    def _get_open_items_by_period(self, data, periods, accounts, date_type):
+        company = self.env["res.company"].browse(data["company_id"])
+        open_amls = accounts._get_open_items_at_date(
+            periods[-1]["date_to"], data["only_posted_moves"], company=company
+        )
+        rounding = company.currency_id.rounding
+        open_aml_ids_by_period = {}
+        for open_aml in open_amls:
+            if float_is_zero(open_aml.amount_residual, precision_rounding=rounding):
+                continue
+            sequence = self._get_period_sequence(
+                periods, open_aml[date_type] or open_aml.date
+            )
+            if sequence is not None:
+                open_aml_ids_by_period.setdefault(sequence, []).append(open_aml.id)
+        return open_aml_ids_by_period
+
     def _prepare_cash_flow_lines(
         self, data, liquidity_forecast_lines, period, periods, accounts, date_type
     ):
-        company_id = data.get("company_id", self.env.user.company_id.id)
-        company = self.env["res.company"].browse(company_id)
-        open_amls = accounts._get_open_items_at_date(
-            period["date_to"], data["only_posted_moves"]
+        open_aml_ids_by_period = self._get_cached(
+            data,
+            ("open_items", date_type, tuple(accounts.ids)),
+            lambda: self._get_open_items_by_period(data, periods, accounts, date_type),
         )
-        period_open_amls = self.env["account.move.line"]
-        rounding = company.currency_id.rounding
-        for open_aml in open_amls:
-            date_due = open_aml[date_type] or open_aml["date"]
-            if (
-                (
-                    (period["sequence"] == 0 and period["date_to"] >= date_due)
-                    or not date_due
-                )
-                or (
-                    period["sequence"] > 0
-                    and period["date_to"] >= date_due >= period["date_from"]
-                )
-            ) and not float_is_zero(
-                open_aml.amount_residual, precision_rounding=rounding
-            ):
-                period_open_amls |= open_aml
+        period_open_amls = self.env["account.move.line"].browse(
+            open_aml_ids_by_period.get(period["sequence"], [])
+        )
         in_flows = {}
         out_flows = {}
         for open_aml in period_open_amls:
@@ -168,7 +180,7 @@ class LiquidityForecastReport(models.AbstractModel):
         for account in in_flows:
             in_cash_flow_lines = list(
                 filter(
-                    lambda d: f"cash_flow_line_in_account_{account.code}" in d["code"],
+                    lambda d: d["code"] == f"cash_flow_line_in_account_{account.code}",
                     liquidity_forecast_lines,
                 )
             )
@@ -199,7 +211,7 @@ class LiquidityForecastReport(models.AbstractModel):
         for account in out_flows:
             out_cash_flow_lines = list(
                 filter(
-                    lambda d: f"cash_flow_line_out_account_{account.code}" in d["code"],
+                    lambda d: d["code"] == f"cash_flow_line_out_account_{account.code}",
                     liquidity_forecast_lines,
                 )
             )
@@ -235,33 +247,58 @@ class LiquidityForecastReport(models.AbstractModel):
         period,
         periods,
     ):
-        accounts = self.env["account.account"].search(
-            [
-                ("account_type", "in", ["asset_receivable", "liability_payable"]),
-                ("company_ids", "in", data["company_id"]),
-            ]
+        accounts = self._get_cached(
+            data,
+            "move_line_accounts",
+            lambda: self.env["account.account"].search(
+                [
+                    ("account_type", "in", ["asset_receivable", "liability_payable"]),
+                    *self.env["account.account"]._check_company_domain(
+                        data["company_id"]
+                    ),
+                ]
+            ),
         )
         self._prepare_cash_flow_lines(
             data, liquidity_forecast_lines, period, periods, accounts, "date_maturity"
         )
 
-    def _prepare_cash_flow_lines_payment(
-        self, data, liquidity_forecast_lines, period, periods
-    ):
-        company_id = data.get("company_id", self.env.user.company_id.id)
-        company = self.env["res.company"].browse(company_id)
+    def _get_outstanding_payment_accounts(self, data):
+        company = self.env["res.company"].browse(data["company_id"])
+        # Same defaults as account.payment._get_outstanding_account()
+        chart_template = self.env["account.chart.template"].with_context(
+            allowed_company_ids=company.root_id.ids
+        )
+        accounts = self.env["account.account"]
+        for account_ref in (
+            "account_journal_payment_debit_account_id",
+            "account_journal_payment_credit_account_id",
+        ):
+            accounts |= (
+                chart_template.ref(account_ref, raise_if_not_found=False)
+                or company.transfer_account_id
+            )
         bank_journals = self.env["account.journal"].search(
             [
                 ("type", "=", "bank"),
-                ("company_id", "=", company.id),
+                *self.env["account.journal"]._check_company_domain(data["company_id"]),
             ]
         )
-        accounts = self.env["account.account"]
         for bank_journal in bank_journals:
-            accounts += bank_journal._get_journal_inbound_outstanding_payment_accounts()
-            accounts += (
+            accounts |= bank_journal._get_journal_inbound_outstanding_payment_accounts()
+            accounts |= (
                 bank_journal._get_journal_outbound_outstanding_payment_accounts()
             )
+        return accounts
+
+    def _prepare_cash_flow_lines_payment(
+        self, data, liquidity_forecast_lines, period, periods
+    ):
+        accounts = self._get_cached(
+            data,
+            "payment_accounts",
+            lambda: self._get_outstanding_payment_accounts(data),
+        )
         self._prepare_cash_flow_lines(
             data, liquidity_forecast_lines, period, periods, accounts, "date"
         )
@@ -269,36 +306,28 @@ class LiquidityForecastReport(models.AbstractModel):
     def _prepare_cash_flow_lines_payment_planning_item(
         self, data, liquidity_forecast_lines, period, periods, direction="in"
     ):
-        company_id = data.get("company_id", self.env.user.company_id.id)
-        domain = [
-            ("company_id", "=", company_id),
-            ("date", "<=", period["date_to"]),
+        base_domain = [
+            ("company_id", "=", data["company_id"]),
             ("direction", "=", direction),
             ("expiry_date", ">=", fields.Date.today()),
         ]
+        totals_by_period = self._get_cached(
+            data,
+            ("planning_items", direction),
+            lambda: self._get_planning_item_totals_by_period(base_domain, periods),
+        )
+        domain = base_domain + [("date", "<=", period["date_to"])]
         if period["sequence"] > 0:
             domain += [("date", ">=", period["date_from"])]
-        totals = self.env["account.liquidity.forecast.planning.item"].read_group(
-            domain=domain,
-            fields=["amount:sum"],
-            groupby=["group_id"],
-        )
-        for total in totals:
-            group_id = total["group_id"] and total["group_id"][0] or False
-            group_name = ""
-            group = self.env["account.liquidity.forecast.planning.group"]
-            if group_id:
-                group = self.env["account.liquidity.forecast.planning.group"].browse(
-                    group_id
-                )
-                group_name = group and group.name or ""
+        for group, amount in totals_by_period.get(period["sequence"], {}).items():
+            group_name = group.name or ""
             title = group_name or self.env._("Forecast Planning Items")
             code = f"cash_flow_line_{direction}_planned_item"
             if group:
-                code = f"{code}_{group_name}"
+                code = f"{code}_{group.id}"
             cash_flow_lines = list(
                 filter(
-                    lambda d: code in d["code"],
+                    lambda d: d["code"] == code,
                     liquidity_forecast_lines,
                 )
             )
@@ -324,10 +353,23 @@ class LiquidityForecastReport(models.AbstractModel):
             else:
                 cash_flow_line = cash_flow_lines[0]
             sign = direction == "in" and 1 or -1
-            cash_flow_line["periods"][period["sequence"]]["amount"] += (
-                total["amount"] * sign
-            )
-            cash_flow_line["periods"][period["sequence"]]["domain"] = total["__domain"]
+            cash_flow_line["periods"][period["sequence"]]["amount"] += amount * sign
+            cash_flow_line["periods"][period["sequence"]]["domain"] = domain + [
+                ("group_id", "=", group.id)
+            ]
+
+    def _get_planning_item_totals_by_period(self, domain, periods):
+        totals = self.env["account.liquidity.forecast.planning.item"]._read_group(
+            domain + [("date", "<=", periods[-1]["date_to"])],
+            groupby=["group_id", "date:day"],
+            aggregates=["amount:sum"],
+        )
+        totals_by_period = {}
+        for group, date, amount in totals:
+            sequence = self._get_period_sequence(periods, date)
+            group_totals = totals_by_period.setdefault(sequence, {})
+            group_totals[group] = group_totals.get(group, 0.0) + amount
+        return totals_by_period
 
     def _prepare_cash_flow_lines_payment_planning_item_in(
         self, data, liquidity_forecast_lines, period, periods
@@ -344,12 +386,15 @@ class LiquidityForecastReport(models.AbstractModel):
         )
 
     def _generate_periods(self, data):
-        date_from = fields.Date.from_string(data["date_from"])
-        date_to = fields.Date.from_string(data["date_to"])
+        date_from = fields.Date.to_date(data["date_from"])
+        date_to = fields.Date.to_date(data["date_to"])
         period_length = data["period_length"]
         periods = []
         current_date = date_from
         sequence = 0
+        if period_length == "weeks":
+            lang = self.env["res.lang"]._lang_get(self.env.company.partner_id.lang)
+            week_start_day = int(lang.week_start or "7")
 
         while current_date <= date_to:
             if period_length == "days":
@@ -357,11 +402,9 @@ class LiquidityForecastReport(models.AbstractModel):
                 period_end = current_date
 
             elif period_length == "weeks":
-                lang = self.env.company.partner_id.lang
-                lang_obj = self.env["res.lang"].search([("code", "=", lang)], limit=1)
-                week_start_day = int(lang_obj.week_start or "7")
-
-                days_from_week_start = (current_date.weekday() - week_start_day) % 7
+                days_from_week_start = (
+                    current_date.weekday() - (week_start_day - 1)
+                ) % 7
                 week_start = current_date - datetime.timedelta(
                     days=days_from_week_start
                 )
@@ -386,7 +429,7 @@ class LiquidityForecastReport(models.AbstractModel):
                 name = format_date(self.env, current_date, date_format="MMMM yyyy")
 
             if sequence == 0:
-                name = self.env._("Current %s") % name
+                name = self.env._("Current %s", name)
 
             period = {
                 "sequence": sequence,
@@ -419,6 +462,10 @@ class LiquidityForecastReport(models.AbstractModel):
         return True
 
     def _prepare_liquidity_forecast_lines(self, data):
+        company_id = data.get("company_id")
+        if company_id and self.env.company.id != company_id:
+            return self.with_company(company_id)._prepare_liquidity_forecast_lines(data)
+        data = dict(data, liquidity_forecast_cache={})
         periods = self._generate_periods(data)
         liquidity_forecast_lines = [
             {
@@ -508,7 +555,7 @@ class LiquidityForecastReport(models.AbstractModel):
 
         return {
             "doc_ ids": [wizard_id],
-            "doc_model": "liquidity.forecast.report.wizard",
+            "doc_model": "account.liquidity.forecast.report.wizard",
             "docs": self.env["account.liquidity.forecast.report.wizard"].browse(
                 wizard_id
             ),

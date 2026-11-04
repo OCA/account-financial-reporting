@@ -1,6 +1,4 @@
-/** @odoo-module */
-
-import {useComponent, useEffect} from "@odoo/owl";
+import {user} from "@web/core/user";
 
 // Utility function to convert string to title case
 function toTitleCase(str) {
@@ -8,12 +6,17 @@ function toTitleCase(str) {
         .replaceAll(".", " ")
         .replace(
             /\w\S*/g,
-            (txt) => `${txt.charAt(0).toUpperCase()}${txt.substr(1).toLowerCase()}`
+            (txt) => `${txt.charAt(0).toUpperCase()}${txt.slice(1).toLowerCase()}`
         );
 }
 
 // Function to enrich DOM elements with action links
-function enrich(component, targetElement, selector, isIFrame = false) {
+export function enrichWithActionLinks(
+    component,
+    targetElement,
+    selector,
+    isIFrame = false
+) {
     let doc = window.document;
     let contentDocument = targetElement;
 
@@ -34,8 +37,21 @@ function enrich(component, targetElement, selector, isIFrame = false) {
         for (const element of elementsToWrap) {
             const wrapper = doc.createElement("a");
             wrapper.setAttribute("href", "#");
-            wrapper.addEventListener("click", (ev) => {
+            wrapper.addEventListener("click", async (ev) => {
                 ev.preventDefault();
+                const companyId = Number(element.getAttribute("company-id"));
+                const companyIds = user.activeCompanies.map((c) => c.id);
+                if (
+                    companyId &&
+                    !companyIds.includes(companyId) &&
+                    user.allowedCompanies.some((c) => c.id === companyId)
+                ) {
+                    // Records of the report company are only visible when it is active
+                    await user.activateCompanies([...companyIds, companyId], {
+                        includeChildCompanies: false,
+                        reload: false,
+                    });
+                }
                 component.env.services.action.doAction({
                     type: "ir.actions.act_window",
                     res_model: element.getAttribute("res-model"),
@@ -51,21 +67,4 @@ function enrich(component, targetElement, selector, isIFrame = false) {
             wrapper.appendChild(element);
         }
     }
-}
-
-// Hook to enrich elements with action links
-export function useEnrichWithActionLinks(ref, selector = null) {
-    const comp = useComponent();
-    useEffect(
-        (element) => {
-            if (element.matches("iframe")) {
-                element.addEventListener("load", () =>
-                    enrich(comp, element, selector, true)
-                );
-            } else {
-                enrich(comp, element, selector);
-            }
-        },
-        () => [ref.el]
-    );
 }

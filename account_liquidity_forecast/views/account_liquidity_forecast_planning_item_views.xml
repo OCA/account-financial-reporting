@@ -55,7 +55,7 @@
         id='account_liquidity_forecast_planning_item_action'
         model='ir.actions.act_window'
     >
-        <field name="name">Liquidity Forecast Planning Groups</field>
+        <field name="name">Liquidity Forecast Planning Items</field>
         <field name="res_model">account.liquidity.forecast.planning.item</field>
         <field name="view_mode">list,form</field>
     </record>

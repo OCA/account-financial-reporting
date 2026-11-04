@@ -12,7 +12,6 @@ class LiquidityForecastReportWizard(models.TransientModel):
         comodel_name="res.company",
         default=lambda self: self.env.company.id,
         required=False,
-        string="Company",
     )
     period_length = fields.Selection(
         selection=[

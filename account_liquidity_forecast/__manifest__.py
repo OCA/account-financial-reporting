@@ -1,15 +1,14 @@
 # Copyright 2023 ForgeFlow S.L. (https://www.forgeflow.com)
 {
     "name": "Account Liquidity Forecast",
-    "version": "18.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Reporting",
     "summary": "Account Liquidity Forecast",
     "author": "ForgeFlow,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
     "depends": ["account", "report_xlsx", "report_xlsx_helper"],
     "data": [
-        "security/ir.model.access.csv",
-        "security/security.xml",
+        "security/ir.access.csv",
         "wizards/account_liquidity_forecast_wizard_views.xml",
         "views/report_liquidity_forecast_views.xml",
         "views/account_liquidity_forecast_planning_item_views.xml",

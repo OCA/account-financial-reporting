@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import xlsxwriter
 
-from odoo import Command
+from odoo import Command, fields
 
 from odoo.addons.account_liquidity_forecast.report.liquidity_forecast_xlsx import (
     copy_format,
@@ -13,12 +13,14 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestLiquidityForecastReport(BaseCommon):
+    _test_user_groups = ("account.group_account_manager", "account.group_account_user")
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.report = cls.env["report.account_liquidity_forecast.liquidity_forecast"]
         cls.company = cls.env.user.company_id
-        cls.today = date.today()
+        cls.today = fields.Date.today()
 
         cls.base_data = {
             "company_id": cls.company.id,
@@ -578,4 +580,255 @@ class TestLiquidityForecastReport(BaseCommon):
         self.assertTrue(
             res_prep["only_posted_moves"],
             "Wizard with target_move='posted' must set only_posted_moves=True",
+        )
+
+    def test_planning_items_grouped_and_ungrouped_lines(self):
+        """Ungrouped planning items get their own line, not merged into a group."""
+        group = self.env["account.liquidity.forecast.planning.group"].create(
+            {"name": "Grants", "company_id": self.company.id}
+        )
+        PlanningItem = self.env["account.liquidity.forecast.planning.item"]
+        for name, group_id, amount in (
+            ("Grant", group.id, 500.0),
+            ("Misc", False, 200.0),
+        ):
+            PlanningItem.create(
+                {
+                    "name": name,
+                    "group_id": group_id,
+                    "company_id": self.company.id,
+                    "amount": amount,
+                    "direction": "in",
+                    "date": self.today,
+                    "expiry_date": self.today + timedelta(days=10),
+                }
+            )
+        data = self._make_data(
+            date_from=self.today.strftime("%Y-%m-%d"),
+            date_to=self.today.strftime("%Y-%m-%d"),
+        )
+        lines, _periods = self.report._prepare_liquidity_forecast_lines(data)
+        amounts = {
+            line["code"]: line["periods"][0]["amount"]
+            for line in lines
+            if line["code"].startswith("cash_flow_line_in_planned_item")
+        }
+        self.assertEqual(
+            amounts,
+            {
+                "cash_flow_line_in_planned_item": 200.0,
+                f"cash_flow_line_in_planned_item_{group.id}": 500.0,
+            },
+        )
+
+    def test_generate_periods_weeks_start_day(self):
+        """Weekly periods start on the company language's first day of week."""
+        lang = self.env["res.lang"]._lang_get(self.company.partner_id.lang)
+        # 2026-11-04 is a Wednesday
+        data = self._make_data(
+            date_from="2026-11-04", date_to="2026-11-30", period_length="weeks"
+        )
+        for week_start, expected in (
+            ("1", date(2026, 11, 2)),
+            ("7", date(2026, 11, 1)),
+        ):
+            with self.subTest(week_start=week_start):
+                lang.sudo().week_start = week_start
+                periods = self.report._generate_periods(data)
+                self.assertEqual(periods[0]["date_from"], expected)
+
+    def test_account_lines_with_prefix_codes(self):
+        """An account whose code prefixes another's gets its own line."""
+        journal = self._get_or_create_general_journal()
+        income = self._create_account("LFTINC", "Test Income", "income")
+        tomorrow = self.today + timedelta(days=1)
+        accounts = {}
+        for code, amount, date_maturity in (
+            ("LFT110", 100.0, self.today),
+            ("LFT11", 50.0, tomorrow),
+        ):
+            accounts[code] = self._create_account(
+                code, f"Test Receivable {code}", "asset_receivable"
+            )
+            self.env["account.move"].create(
+                {
+                    "move_type": "entry",
+                    "journal_id": journal.id,
+                    "date": self.today,
+                    "line_ids": [
+                        Command.create(
+                            {
+                                "account_id": accounts[code].id,
+                                "debit": amount,
+                                "date_maturity": date_maturity,
+                                "partner_id": self.partner.id,
+                            }
+                        ),
+                        Command.create({"account_id": income.id, "credit": amount}),
+                    ],
+                }
+            ).action_post()
+        data = self._make_data(
+            date_from=self.today.strftime("%Y-%m-%d"),
+            date_to=tomorrow.strftime("%Y-%m-%d"),
+        )
+        lines, _periods = self.report._prepare_liquidity_forecast_lines(data)
+        amounts = {
+            line["code"]: (line["periods"][0]["amount"], line["periods"][1]["amount"])
+            for line in lines
+            if line["code"].startswith("cash_flow_line_in_account_LFT")
+        }
+        self.assertEqual(
+            amounts,
+            {
+                "cash_flow_line_in_account_LFT110": (100.0, 0.0),
+                "cash_flow_line_in_account_LFT11": (0.0, 50.0),
+            },
+        )
+
+    def _post_receivable_move(self, env, journal, receivable, income, amount):
+        env["account.move"].create(
+            {
+                "move_type": "entry",
+                "journal_id": journal.id,
+                "date": self.today,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "account_id": receivable.id,
+                            "debit": amount,
+                            "date_maturity": self.today,
+                            "partner_id": self.partner.id,
+                        }
+                    ),
+                    Command.create({"account_id": income.id, "credit": amount}),
+                ],
+            }
+        ).action_post()
+
+    def _get_in_account_amounts(self, env, company, prefix):
+        data = self._make_data(
+            company_id=company.id,
+            date_from=self.today.strftime("%Y-%m-%d"),
+            date_to=self.today.strftime("%Y-%m-%d"),
+        )
+        lines, _periods = self.report.with_env(env)._prepare_liquidity_forecast_lines(
+            data
+        )
+        return {
+            line["code"]: line["periods"][0]["amount"]
+            for line in lines
+            if line["code"].startswith(f"cash_flow_line_in_account_{prefix}")
+        }
+
+    def test_report_company_not_active(self):
+        """The report uses the wizard company, not the active one."""
+        company_b = self.env["res.company"].sudo().create({"name": "LF Company B"})
+        self.env.user.sudo().company_ids |= company_b
+        env_b = self.env(
+            context=dict(
+                self.env.context, allowed_company_ids=[company_b.id, self.company.id]
+            )
+        )
+        account_vals = {"company_ids": [Command.set(company_b.ids)]}
+        receivable = env_b["account.account"].create(
+            {
+                **account_vals,
+                "code": "LFTB1",
+                "name": "B Receivable",
+                "account_type": "asset_receivable",
+            }
+        )
+        income = env_b["account.account"].create(
+            {
+                **account_vals,
+                "code": "LFTB2",
+                "name": "B Income",
+                "account_type": "income",
+            }
+        )
+        journal = env_b["account.journal"].create(
+            {"name": "LF B Misc", "code": "LFB", "type": "general"}
+        )
+        self._post_receivable_move(env_b, journal, receivable, income, 100.0)
+        env_a = self.env(
+            context=dict(
+                self.env.context, allowed_company_ids=[self.company.id, company_b.id]
+            )
+        )
+        self.assertEqual(
+            self._get_in_account_amounts(env_a, company_b, "LFTB"),
+            {"cash_flow_line_in_account_LFTB1": 100.0},
+        )
+        report_env = (
+            env_a["ir.actions.report"]
+            ._with_liquidity_forecast_report_env(
+                {"liquidity_forecast_report_lang": "en_US", "company_id": company_b.id}
+            )
+            .env
+        )
+        self.assertEqual(report_env.company, company_b)
+
+    def test_report_branch_open_items(self):
+        """Open items belong to the report company only, branches included."""
+        branch = (
+            self.env["res.company"]
+            .sudo()
+            .create({"name": "LF Branch", "parent_id": self.company.id})
+        )
+        self.env.user.sudo().company_ids |= branch
+        env_branch = self.env(
+            context=dict(
+                self.env.context, allowed_company_ids=[branch.id, self.company.id]
+            )
+        )
+        receivable = self._create_account(
+            "LFTBR", "Parent Receivable", "asset_receivable"
+        )
+        income = self._create_account("LFTBRI", "Parent Income", "income")
+        journal = env_branch["account.journal"].create(
+            {"name": "LF Branch Misc", "code": "LFBR", "type": "general"}
+        )
+        self._post_receivable_move(env_branch, journal, receivable, income, 100.0)
+        for company, expected in (
+            (self.company, {}),
+            (branch, {"cash_flow_line_in_account_LFTBR": 100.0}),
+        ):
+            with self.subTest(company=company.name):
+                self.assertEqual(
+                    self._get_in_account_amounts(env_branch, company, "LFTBR"),
+                    expected,
+                )
+
+    def test_report_query_count_independent_of_periods(self):
+        """Adding periods doesn't add queries."""
+        self._setup_full_report_fixtures()
+        counts = []
+        # The first run warms up caches unrelated to the number of periods
+        for days in (1, 5, 50):
+            data = self._make_data(
+                date_from=self.today.strftime("%Y-%m-%d"),
+                date_to=(self.today + timedelta(days=days)).strftime("%Y-%m-%d"),
+                only_posted_moves=False,
+            )
+            self.env.invalidate_all()
+            count0 = self.env.cr.sql_log_count
+            self.report._prepare_liquidity_forecast_lines(data)
+            counts.append(self.env.cr.sql_log_count - count0)
+        self.assertEqual(counts[1], counts[2])
+
+    def test_report_default_outstanding_account(self):
+        """Payments on the company default outstanding account are reported."""
+        fallback = self._create_account("LFTOUT", "Transfer", "asset_current")
+        fallback.reconcile = True
+        self.company.sudo().transfer_account_id = fallback
+        payment = self.env["account.payment"].new({"company_id": self.company.id})
+        outstanding = payment._get_outstanding_account("inbound")
+        outstanding.reconcile = True
+        income = self._create_account("LFTOUTI", "Outstanding Income", "income")
+        journal = self._get_or_create_general_journal()
+        self._post_receivable_move(self.env, journal, outstanding, income, 75.0)
+        self.assertEqual(
+            self._get_in_account_amounts(self.env, self.company, outstanding.code),
+            {f"cash_flow_line_in_account_{outstanding.code}": 75.0},
         )

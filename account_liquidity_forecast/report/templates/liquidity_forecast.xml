@@ -20,7 +20,7 @@
             <t t-out="currency_name" />
         </t>
         <t t-set="company_name" t-value="Company_Name" />
-        <t class="page">
+        <t>
             <div class="row">
                 <h4
                     class="mt0"
@@ -132,6 +132,7 @@
                                 <span
                                     t-att-domain="domain"
                                     t-att-res-model="line['model']"
+                                    t-att-company-id="res_company.id"
                                 >
                                     <t
                                         t-out="line['periods'][period['sequence']]['amount']"
