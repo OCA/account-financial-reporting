@@ -41,6 +41,7 @@
                                 groups="analytic.group_analytic_accounting"
                             />
                             <field name="hide_account_at_0" />
+                            <field name="hide_account_without_moves" />
                             <field name="show_partner_details" invisible="grouped_by" />
                             <field
                                 name="show_hierarchy"
