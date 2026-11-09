@@ -294,18 +294,18 @@ class OpenItemsXslx(models.AbstractModel):
                         )
                         self.write_line_from_dict(line, report_data)
 
-                    # Display ending balance line for account
-                    type_object = "account"
-                    self.write_ending_balance_from_dict(
-                        accounts_data[account_id],
-                        type_object,
-                        total_amount,
-                        report_data,
-                        account_id=account_id,
-                    )
+                # Display ending balance line for account
+                type_object = "account"
+                self.write_ending_balance_from_dict(
+                    accounts_data[account_id],
+                    type_object,
+                    total_amount,
+                    report_data,
+                    account_id=account_id,
+                )
 
-                    # 2 lines break
-                    report_data["row_pos"] += 2
+                # 2 lines break
+                report_data["row_pos"] += 2
 
     def _generate_report_content(self, workbook, report, data, report_data):
         res_data = self.env[
