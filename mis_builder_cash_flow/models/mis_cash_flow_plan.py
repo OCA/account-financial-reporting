@@ -14,8 +14,8 @@ class MisCashFlowPlan(models.Model):
     _order = "id desc"
 
     name = fields.Char(required=True)
-    partner_id = fields.Many2one("res.partner", string="Partner")
-    account_id = fields.Many2one("account.account", string="Account", required=True)
+    partner_id = fields.Many2one("res.partner")
+    account_id = fields.Many2one("account.account", required=True)
     balance = fields.Float(string="Balance / Amount", required=True)
     date_start = fields.Date(required=True, default=fields.Date.context_today)
     date_end = fields.Date(required=True)

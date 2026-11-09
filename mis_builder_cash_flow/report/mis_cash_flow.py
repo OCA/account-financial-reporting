@@ -18,13 +18,10 @@ class MisCashFlow(models.Model):
     name = fields.Char(readonly=True)
     account_id = fields.Many2one(
         comodel_name="account.account",
-        string="Account",
         index=True,
         readonly=True,
     )
-    partner_id = fields.Many2one(
-        comodel_name="res.partner", string="Partner", readonly=True
-    )
+    partner_id = fields.Many2one(comodel_name="res.partner", readonly=True)
     move_line_id = fields.Many2one(
         comodel_name="account.move.line",
         string="Journal Item",
@@ -32,7 +29,6 @@ class MisCashFlow(models.Model):
     )
     company_id = fields.Many2one(
         comodel_name="res.company",
-        string="Company",
         readonly=True,
         index=True,
     )
