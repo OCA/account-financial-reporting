@@ -15,7 +15,6 @@ class StatementCommon(models.AbstractModel):
     company_id = fields.Many2one(
         comodel_name="res.company",
         default=lambda self: self.env.company,
-        string="Company",
         required=True,
     )
     date_end = fields.Date(required=True, default=fields.Date.context_today)

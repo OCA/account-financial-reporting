@@ -11,16 +11,14 @@ class MisCashFlowForecastLine(models.Model):
     date = fields.Date(required=True, index=True)
     account_id = fields.Many2one(
         comodel_name="account.account",
-        string="Account",
         required=True,
         help="The account of the forecast line is only for informative purpose",
     )
-    partner_id = fields.Many2one(comodel_name="res.partner", string="Partner")
+    partner_id = fields.Many2one(comodel_name="res.partner")
     name = fields.Char(required=True, default="/")
     balance = fields.Float(required=True)
     company_id = fields.Many2one(
         "res.company",
-        string="Company",
         required=True,
         default=lambda self: self.env.company,
         index=True,
