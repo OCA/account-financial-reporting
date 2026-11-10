@@ -108,7 +108,9 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         move = self.env["account.move"].create(move_vals)
         move.action_post()
 
-    def _get_report_lines(self, with_partners=False, account_ids=False):
+    def _get_report_lines(
+        self, with_partners=False, account_ids=False, grouped_by="partners"
+    ):
         centralize = True
         if with_partners:
             centralize = False
@@ -123,6 +125,7 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
                 "account_ids": account_ids,
                 "fy_start_date": self.fy_date_start,
                 "centralize": centralize,
+                "grouped_by": grouped_by,
             }
         )
         data = general_ledger._prepare_report_data()
@@ -693,6 +696,98 @@ class TestGeneralLedgerReport(AccountTestInvoicingCommon):
         self.assertEqual(unaffected_fin_balance["debit"], 1500)
         self.assertEqual(unaffected_fin_balance["credit"], 1000)
         self.assertEqual(unaffected_fin_balance["balance"], 500)
+
+    def test_05_initial_balance_grouped_none_pl_account(self):
+        # P&L account with history in the previous fiscal year
+        self._add_move(
+            date=self.previous_fy_date_end,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+        # Move in the current fiscal year so the account is in the report
+        self._add_move(
+            date=self.fy_date_start,
+            receivable_debit=100,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=100,
+        )
+        init_balances = {}
+        for grouped_by in ("none", "partners", "taxes"):
+            general_ledger = self._get_report_lines(grouped_by=grouped_by)[
+                "general_ledger"
+            ]
+            self.assertTrue(
+                self.check_account_in_report(self.income_account.id, general_ledger)
+            )
+            init_balances[grouped_by] = self._get_initial_balance(
+                self.income_account.id, general_ledger
+            )
+        # The initial balance of a P&L account starts at the fiscal year start
+        self.assertEqual(init_balances["none"]["debit"], 0)
+        self.assertEqual(init_balances["none"]["credit"], 0)
+        self.assertEqual(init_balances["none"]["balance"], 0)
+        # Same initial balance whatever the grouping
+        for grouped_by in ("partners", "taxes"):
+            for field in ("debit", "credit", "balance"):
+                self.assertEqual(
+                    init_balances["none"][field], init_balances[grouped_by][field]
+                )
+
+    def test_06_initial_balance_grouped_none_bank_and_total(self):
+        bank_account = self.company_data["default_journal_bank"].default_account_id
+        self._add_move(
+            date=self.previous_fy_date_end,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": self.company_data["default_journal_misc"].id,
+                "date": self.previous_fy_date_end,
+                "line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 500,
+                            "credit": 0,
+                            "account_id": bank_account.id,
+                        },
+                    ),
+                    (
+                        0,
+                        0,
+                        {
+                            "debit": 0,
+                            "credit": 500,
+                            "account_id": self.receivable_account.id,
+                            "partner_id": self.partner.id,
+                        },
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        for grouped_by in ("none", "partners"):
+            general_ledger = self._get_report_lines(grouped_by=grouped_by)[
+                "general_ledger"
+            ]
+            # Non reconcilable balance sheet account keeps its initial balance
+            bank_init_balance = self._get_initial_balance(
+                bank_account.id, general_ledger
+            )
+            self.assertEqual(bank_init_balance["balance"], 500)
+            # Previous years P&L is only in the unaffected earnings line,
+            # so the initial balances of all the accounts sum zero
+            total_init_balance = sum(
+                account["init_bal"]["balance"] for account in general_ledger
+            )
+            self.assertAlmostEqual(total_init_balance, 0)
 
     def test_partner_filter(self):
         partner_1 = self.env.ref("base.res_partner_1")
