@@ -37,6 +37,9 @@
                         placeholder="Filtered partners (empty for all)"
                     />
                 </group>
+                <group name="account_filter_prefix">
+                    <field colspan="2" name="account_prefix" />
+                </group>
                 <group name="account_filter" col="4">
                     <field name="receivable_accounts_only" />
                     <field name="payable_accounts_only" />
@@ -56,6 +59,8 @@
                             />
                         </div>
                     </div>
+                </group>
+                <group>
                     <field
                         name="account_ids"
                         nolabel="1"

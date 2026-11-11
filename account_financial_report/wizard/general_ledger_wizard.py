@@ -9,8 +9,9 @@
 
 import time
 from ast import literal_eval
+from re import compile as re_compile
 
-from odoo import api, fields, models
+from odoo import Command, api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import date_utils
 
@@ -89,6 +90,7 @@ class GeneralLedgerReportWizard(models.TransientModel):
         default=[],
         help="This domain will be used to select specific domain for Journal Items",
     )
+    account_prefix = fields.Char()
 
     def _get_account_move_lines_domain(self):
         domain = literal_eval(self.domain) if self.domain else []
@@ -325,3 +327,22 @@ class GeneralLedgerReportWizard(models.TransientModel):
             return data[obj_id][key]
         except KeyError:
             return data[str(obj_id)][key]
+
+    @api.onchange("account_prefix")
+    def onchange_account_prefix(self):
+        delimiter_pattern = re_compile(r"[;,]\s*")
+        if self.account_prefix:
+            domain = fields.Domain.OR(
+                [
+                    [("code", "=like", f"{prefix}%")]
+                    for prefix in delimiter_pattern.split(self.account_prefix)
+                ]
+            )
+            if self.company_id:
+                domain = fields.Domain.AND(
+                    [domain, [("company_ids", "in", self.company_id.ids)]]
+                )
+                account_ids = self.env["account.account"].search(domain).ids
+            self.account_ids = [Command.set(account_ids)]
+        else:
+            self.account_ids = [Command.clear()]
