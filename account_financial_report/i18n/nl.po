@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-16 08:14+0000\n"
-"PO-Revision-Date: 2023-11-21 14:34+0000\n"
+"PO-Revision-Date: 2026-11-11 13:46+0000\n"
 "Last-Translator: Yung-Wa <yw.ng@onestein.nl>\n"
 "Language-Team: Dutch (https://www.transifex.com/oca/teams/23907/nl/)\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. module: account_financial_report
 #. odoo-python
@@ -151,7 +151,7 @@ msgstr "Rekening naam"
 #: code:addons/account_financial_report/report/trial_balance_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_trial_balance_filters
 msgid "Account at 0 filter"
-msgstr "Rekening balans met 0 filter"
+msgstr "Rekeningen met saldo 0"
 
 #. module: account_financial_report
 #. odoo-python
@@ -160,7 +160,7 @@ msgstr "Rekening balans met 0 filter"
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_filters
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_open_items_filters
 msgid "Account balance at 0 filter"
-msgstr "Rekening balans met 0 filter"
+msgstr "Rekeningen met saldo 0"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_group__account_ids
@@ -467,7 +467,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__create_uid
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__create_uid
 msgid "Created by"
-msgstr "Gecre??erd door"
+msgstr "Gecreëerd door"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_account_age_report_configuration__create_date
@@ -479,7 +479,7 @@ msgstr "Gecre??erd door"
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__create_date
 #: model:ir.model.fields,field_description:account_financial_report.field_vat_report_wizard__create_date
 msgid "Created on"
-msgstr "Gecre??erd op"
+msgstr "Gecreëerd op"
 
 #. module: account_financial_report
 #. odoo-python
@@ -498,7 +498,6 @@ msgstr "Credit"
 #. odoo-python
 #: code:addons/account_financial_report/report/general_ledger_xlsx.py:0
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_general_ledger_lines
-#, fuzzy
 msgid "Cumul cur."
 msgstr "Cumul cur."
 
@@ -962,7 +961,7 @@ msgid ""
 "                        only one unaffected earnings account."
 msgstr ""
 "Grootboek kan alleen worden berekend als het geselecteerde bedrijf\n"
-"                        slechts ????n niet-be??nvloede winstrekening heeft."
+"                        slechts één niet-beïnvloede winstrekening heeft."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__group_option
@@ -1123,32 +1122,32 @@ msgstr "Boekingsregels Domein"
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_html
 #: model:ir.ui.menu,name:account_financial_report.menu_journal_ledger_wizard
 msgid "Journal Ledger"
-msgstr "Grootboekbalans"
+msgstr "Dagboekrapport"
 
 #. module: account_financial_report
 #: model_terms:ir.ui.view,arch_db:account_financial_report.report_journal_ledger_base
 msgid "Journal Ledger -"
-msgstr "Grootboekbalans -"
+msgstr "Dagboekrapport -"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_account_financial_report_journal_ledger
 msgid "Journal Ledger Report"
-msgstr "Grootboekbalans Rapport"
+msgstr "Dagboekrapport"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_journal_ledger_report_wizard
 msgid "Journal Ledger Report Wizard"
-msgstr "Grootboekbalans Rapport Wizard"
+msgstr "Dagboekrapport wizard"
 
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_report_journal_ledger_xlsx
 msgid "Journal Ledger XLSX"
-msgstr "Grootboekbalans XLSX"
+msgstr "Dagboekrapport XLSX"
 
 #. module: account_financial_report
 #: model:ir.model,name:account_financial_report.model_report_a_f_r_report_journal_ledger_xlsx
 msgid "Journal Ledger XLSX Report"
-msgstr "Grootboekbalans XLSX"
+msgstr "Dagboekrapport XLSX"
 
 #. module: account_financial_report
 #. odoo-python
@@ -1596,7 +1595,7 @@ msgstr "Toon buitenlandse valuta"
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
 msgid "Show hierarchy"
-msgstr "Hi??rarchie tonen"
+msgstr "Hiërarchie tonen"
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_journal_ledger_report_wizard__sort_option
@@ -1761,7 +1760,7 @@ msgstr ""
 #: code:addons/account_financial_report/wizard/trial_balance_wizard.py:0
 msgid "The hierarchy level to filter on must be greater than 0."
 msgstr ""
-"Het hi??rarchieniveau waarop gefilterd moet worden, moet groter zijn dan 0."
+"Het hiërarchieniveau waarop gefilterd moet worden, moet groter zijn dan 0."
 
 #. module: account_financial_report
 #. odoo-python
@@ -1838,7 +1837,7 @@ msgid ""
 msgstr ""
 "Proefbalans kan alleen worden berekend als het geselecteerde bedrijf "
 "slechts\n"
-"                        ????n winstrekening heeft."
+"                        één winstrekening heeft."
 
 #. module: account_financial_report
 #: model:ir.model.fields,field_description:account_financial_report.field_general_ledger_report_wizard__unaffected_earnings_account
@@ -1861,7 +1860,7 @@ msgstr ""
 #. module: account_financial_report
 #: model:ir.model.fields,help:account_financial_report.field_trial_balance_report_wizard__show_hierarchy
 msgid "Use when your account groups are hierarchical"
-msgstr "Gebruik dit als je rekeninggroepen hi??rarchisch zijn"
+msgstr "Gebruik dit als je rekeninggroepen hiërarchisch zijn"
 
 #. module: account_financial_report
 #: model:ir.actions.act_window,name:account_financial_report.action_vat_report_wizard
@@ -1982,7 +1981,7 @@ msgstr "of"
 #. module: account_financial_report
 #: model:ir.actions.report,name:account_financial_report.action_print_journal_ledger_wizard_qweb
 msgid "ournal Ledger"
-msgstr "Grootboekbalans"
+msgstr "Dagboekrapport"
 
 #. module: account_financial_report
 #. odoo-python
