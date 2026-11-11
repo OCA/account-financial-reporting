@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="True">
+    <record
+        id="mis_cash_flow_category_supplier_contracts"
+        model="mis.cash.flow.forecast.category"
+    >
+        <field name="name">Supplier contracts</field>
+    </record>
+    <record
+        id="mis_cash_flow_category_client_contracts"
+        model="mis.cash.flow.forecast.category"
+    >
+        <field name="name">Client contracts</field>
+    </record>
+    <record id="mis_cash_flow_category_rents" model="mis.cash.flow.forecast.category">
+        <field name="name">Rents</field>
+        <field name="parent_id" ref="mis_cash_flow_category_supplier_contracts" />
+    </record>
+    <record id="mis_cash_flow_category_payroll" model="mis.cash.flow.forecast.category">
+        <field name="name">Payroll</field>
+    </record>
+</odoo>

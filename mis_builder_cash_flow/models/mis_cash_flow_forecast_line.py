@@ -25,6 +25,12 @@ class MisCashFlowForecastLine(models.Model):
         default=lambda self: self.env.company,
         index=True,
     )
+    category_id = fields.Many2one(
+        "mis.cash.flow.forecast.category",
+        string="Category",
+        ondelete="set null",
+        index=True,
+    )
     cash_flow_plan_id = fields.Many2one(
         "mis.cash.flow.plan",
         string="Origin Cash Flow Plan",

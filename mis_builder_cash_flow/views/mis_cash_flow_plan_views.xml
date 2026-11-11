@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name" />
+                <field name="category_id" />
                 <field name="account_id" />
                 <field name="balance" />
                 <field name="periodicity" />
@@ -80,6 +81,7 @@
                                 options="{'no_create': True}"
                             />
                             <field name="balance" />
+                            <field name="category_id" options="{'no_create': True}" />
                             <field
                                 name="company_id"
                                 groups="!base.group_multi_company"
@@ -113,6 +115,7 @@
         <field name="arch" type="xml">
             <search string="Mis Cash Flow Plan Search">
                 <field name="name" />
+                <field name="category_id" />
                 <field name="account_id" />
                 <field name="balance" />
 
@@ -128,6 +131,11 @@
                     domain="[('forecast_line_count', '&gt;', 0)]"
                 />
 
+                <filter
+                    string="Category"
+                    name="group_by_category"
+                    context="{'group_by':'category_id'}"
+                />
                 <filter
                     string="Account"
                     name="group_by_account"
