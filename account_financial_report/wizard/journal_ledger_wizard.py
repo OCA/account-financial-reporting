@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
+from odoo.tools import html2plaintext
 
 
 class JournalLedgerReportWizard(models.TransientModel):
@@ -135,14 +136,20 @@ class JournalLedgerReportWizard(models.TransientModel):
     ):
         taxes_description = ""
         if move_line_data["tax_line_id"]:
-            taxes_description = tax_line_data["description"] or tax_line_data["name"]
+            taxes_description = self._get_tax_description(tax_line_data)
         elif move_line_taxes_data:
             tax_names = []
             for tax_key in move_line_taxes_data:
                 tax = move_line_taxes_data[tax_key]
-                tax_names.append(tax["description"] or tax["name"])
+                tax_names.append(self._get_tax_description(tax))
             taxes_description = ",".join(tax_names)
         return taxes_description
+
+    @api.model
+    def _get_tax_description(self, tax_data):
+        # account.tax.description is an Html field
+        description = tax_data["description"]
+        return (description and html2plaintext(description)) or tax_data["name"]
 
     @api.model
     def _get_partner_name(self, partner_id, partner_data):

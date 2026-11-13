@@ -280,3 +280,47 @@ class TestJournalReport(AccountTestInvoicingCommon):
 
         self.check_report_journal_debit_credit(res_data, 250, 250)
         self.check_report_journal_debit_credit_taxes(res_data, 300, 0, 50, 0)
+
+    def test_04_tax_description_html(self):
+        # account.tax.description is an Html field: the web editor wraps it
+        self.tax_15_p.description = (
+            '<div data-oe-version="1.1">Purchase tax 15% (IGIC)</div>'
+        )
+        move_form = Form(
+            self.env["account.move"].with_context(default_move_type="in_invoice")
+        )
+        move_form.partner_id = self.partner_2
+        move_form.journal_id = self.journal_purchase
+        move_form.invoice_date = Date.today()
+        with move_form.invoice_line_ids.new() as line_form:
+            line_form.name = "test"
+            line_form.quantity = 1.0
+            line_form.price_unit = 100
+            line_form.account_id = self.expense_account
+            line_form.tax_ids.add(self.tax_15_p)
+        invoice = move_form.save()
+        invoice.action_post()
+
+        wiz = self.JournalLedgerReportWizard.create(
+            {
+                "date_from": self.fy_date_start,
+                "date_to": self.fy_date_end,
+                "company_id": self.company.id,
+                "journal_ids": [(6, 0, self.journal_purchase.ids)],
+                "move_target": "all",
+            }
+        )
+        data = wiz._prepare_report_data()
+
+        def tax_description():
+            res_data = self.JournalLedgerReport._get_report_values(wiz, data)
+            return wiz._get_ml_tax_description(
+                {"tax_line_id": self.tax_15_p.id},
+                res_data["tax_line_data"][self.tax_15_p.id],
+                False,
+            )
+
+        self.assertEqual(tax_description(), "Purchase tax 15% (IGIC)")
+        # an emptied description is not empty HTML: fall back on the tax name
+        self.tax_15_p.description = "<p><br></p>"
+        self.assertEqual(tax_description(), self.tax_15_p.name)
