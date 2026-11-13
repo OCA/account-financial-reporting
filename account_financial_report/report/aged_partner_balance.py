@@ -225,14 +225,23 @@ class AgedPartnerBalanceReport(models.AbstractModel):
                     ref_label = move_line["ref"]
                 else:
                     ref_label = move_line["ref"] + " - " + move_line["name"]
+                line_rec = line_model.browse(move_line["id"])
+                related_move_lines = (
+                    line_rec
+                    | line_rec.matched_debit_ids.mapped("debit_move_id")
+                    | line_rec.matched_credit_ids.mapped("credit_move_id")
+                )
                 move_line_data.update(
                     {
-                        "line_rec": line_model.browse(move_line["id"]),
+                        "line_rec": line_rec,
+                        "related_move_line_ids": related_move_lines.ids,
                         "date": move_line["date"],
                         "entry": move_line["move_id"][1],
+                        "entry_id": move_line["move_id"][0],
                         "jnl_id": move_line["journal_id"][0],
                         "acc_id": acc_id,
                         "partner": prt_name,
+                        "partner_id": prt_id,
                         "ref_label": ref_label,
                         "due_date": move_line["date_maturity"],
                         "residual": move_line["amount_residual"],
@@ -331,6 +340,7 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             for prt_id in ag_pb_data[acc_id]:
                 if isinstance(prt_id, int):
                     partner = {
+                        "partner_id": prt_id,
                         "name": partners_data[prt_id]["name"],
                         "residual": ag_pb_data[acc_id][prt_id]["residual"],
                         "current": ag_pb_data[acc_id][prt_id]["current"],
@@ -469,6 +479,32 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             }
         )
         return res
+
+    @api.model
+    def get_report_values(self, docids, data):
+        """Convert record keys before transporting report data to the web client."""
+        values = super().get_report_values(docids, data)
+        interval_keys = {
+            line: str(line.id) for line in values["age_partner_config"].line_ids
+        }
+
+        def serialize(value):
+            if isinstance(value, list):
+                return [serialize(item) for item in value]
+            if isinstance(value, dict):
+                return {
+                    interval_keys.get(key, key): serialize(item)
+                    for key, item in value.items()
+                }
+            return value
+
+        return {
+            **values,
+            "aged_partner_balance": serialize(values["aged_partner_balance"]),
+            "age_partner_config_lines": values["age_partner_config"].line_ids.read(
+                ["name"]
+            ),
+        }
 
     def _get_ml_fields(self):
         return self.COMMON_ML_FIELDS + [

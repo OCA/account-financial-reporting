@@ -170,6 +170,32 @@ class AgedPartnerBalanceReport(models.AbstractModel):
             "amount_currency",
         ]
 
+    @api.model
+    def get_report_values(self, docids, data):
+        """Expose report data with numeric currency IDs to the OWL view."""
+        values = self._get_report_values(docids, data)
+
+        def serialize_currencies(value):
+            if isinstance(value, list):
+                return [serialize_currencies(item) for item in value]
+            if isinstance(value, dict):
+                return {
+                    key: (item[0] if item else False)
+                    if isinstance(key, str)
+                    and key == "currency_id"
+                    and isinstance(item, (tuple, list))
+                    else serialize_currencies(item)
+                    for key, item in value.items()
+                }
+            return value
+
+        return {
+            **serialize_currencies(values),
+            "company_currency_id": self.env["res.company"]
+            .browse(data["company_id"])
+            .currency_id.id,
+        }
+
     def _get_report_values(self, docids, data):
         wizard = self.env[data["wizard_name"]].browse(data["wizard_id"])
         return {

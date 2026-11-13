@@ -1239,8 +1239,10 @@ msgid "Missing Partner"
 msgstr "Partner mancante"
 
 #. module: account_financial_report
+#. odoo-javascript
 #. odoo-python
 #: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/openItemsController.esm.js:0
 msgid "Missing Salesperson"
 msgstr "Addetto vendite non trovato"
 
@@ -2261,3 +2263,10 @@ msgstr "larghezza: 8,11%;"
 
 #~ msgid "Assigned accounts."
 #~ msgstr "Conti assegnati."
+
+
+#. module: account_financial_report
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/openItemsController.esm.js:0
+msgid "Salesperson ending balance"
+msgstr ""
