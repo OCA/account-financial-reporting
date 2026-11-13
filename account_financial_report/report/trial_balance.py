@@ -4,7 +4,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import _, api, models
+import unicodedata
+
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_is_zero
 
@@ -203,100 +205,11 @@ class TrialBalanceReport(models.AbstractModel):
             only_posted_moves,
             show_partner_details,
         )
-        initial_balances = self.env["account.move.line"].read_group(
-            domain=domain,
-            fields=["account_id", "balance", "amount_currency:sum"],
-            groupby=["account_id", "currency_id"],
+        [(balance, amount_currency)] = self.env["account.move.line"]._read_group(
+            domain, [], ["balance:sum", "amount_currency:sum"]
         )
-        pl_initial_balance = 0.0
-        pl_initial_currency_balance = 0.0
-        for initial_balance in initial_balances:
-            pl_initial_balance += initial_balance["balance"]
-            if foreign_currency:
-                pl_initial_currency_balance += round(
-                    initial_balance["amount_currency"], 2
-                )
-        return pl_initial_balance, pl_initial_currency_balance
-
-    @api.model
-    def _compute_account_amount(
-        self, total_amount, tb_initial_acc, tb_period_acc, foreign_currency
-    ):
-        for tb in tb_period_acc:
-            acc_id = tb["account_id"][0]
-            total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-            total_amount[acc_id]["credit"] = tb["credit"]
-            total_amount[acc_id]["debit"] = tb["debit"]
-            total_amount[acc_id]["balance"] = tb["balance"]
-            total_amount[acc_id]["initial_balance"] = 0.0
-            if foreign_currency:
-                total_amount[acc_id]["initial_currency_balance"] = 0.0
-            if "__context" in tb and "group_by" in tb["__context"]:
-                group_by = tb["__context"]["group_by"][0]
-                gb_data = {}
-                tb_grouped = self.env["account.move.line"].read_group(
-                    domain=tb["__domain"],
-                    fields=[
-                        group_by,
-                        "debit",
-                        "credit",
-                        "balance",
-                        "amount_currency:sum",
-                    ],
-                    groupby=[group_by],
-                )
-                for tb2 in tb_grouped:
-                    gb_id = tb2[group_by][0] if tb2[group_by] else 0
-                    gb_data[gb_id] = self._prepare_total_amount(tb2, foreign_currency)
-                    gb_data[gb_id]["credit"] = tb2["credit"]
-                    gb_data[gb_id]["debit"] = tb2["debit"]
-                    gb_data[gb_id]["balance"] = tb2["balance"]
-                    gb_data[gb_id]["initial_balance"] = 0.0
-                    if foreign_currency:
-                        gb_data[gb_id]["initial_currency_balance"] = 0.0
-                total_amount[acc_id]["group_by"] = group_by
-                total_amount[acc_id]["group_by_data"] = gb_data
-        for tb in tb_initial_acc:
-            acc_id = tb["account_id"]
-            if acc_id not in total_amount.keys():
-                total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-                total_amount[acc_id]["group_by_data"] = {}
-                total_amount[acc_id]["group_by_data"][0] = self._prepare_total_amount(
-                    tb, foreign_currency
-                )
-            else:
-                total_amount[acc_id]["initial_balance"] += tb["balance"]
-                total_amount[acc_id]["ending_balance"] += tb["balance"]
-                if foreign_currency:
-                    total_amount[acc_id]["initial_currency_balance"] += round(
-                        tb["amount_currency"], 2
-                    )
-                    total_amount[acc_id]["ending_currency_balance"] += round(
-                        tb["amount_currency"], 2
-                    )
-                if "group_by_data" in tb:
-                    for gb_key in list(tb["group_by_data"]):
-                        tb2 = tb["group_by_data"][gb_key]
-                        if "group_by_data" in total_amount[acc_id]:
-                            if gb_key not in total_amount[acc_id]["group_by_data"]:
-                                total_amount[acc_id]["group_by_data"][gb_key] = (
-                                    self._prepare_total_amount(tb2, foreign_currency)
-                                )
-                            else:
-                                total_amount[acc_id]["group_by_data"][gb_key][
-                                    "initial_balance"
-                                ] += tb2["balance"]
-                                total_amount[acc_id]["group_by_data"][gb_key][
-                                    "ending_balance"
-                                ] += tb2["balance"]
-                                if foreign_currency:
-                                    total_amount[acc_id]["group_by_data"][gb_key][
-                                        "initial_currency_balance"
-                                    ] = round(tb2["amount_currency"], 2)
-                                    total_amount[acc_id]["group_by_data"][gb_key][
-                                        "ending_currency_balance"
-                                    ] += round(tb2["amount_currency"], 2)
-        return total_amount
+        currency_balance = round(amount_currency or 0.0, 2) if foreign_currency else 0.0
+        return balance or 0.0, currency_balance
 
     @api.model
     def _prepare_total_amount(self, tb, foreign_currency):
@@ -313,85 +226,194 @@ class TrialBalanceReport(models.AbstractModel):
         return res
 
     @api.model
-    def _compute_acc_prt_amount(
-        self, total_amount, tb, acc_id, prt_id, foreign_currency
-    ):
-        # Add keys to dict if not exists
-        if acc_id not in total_amount:
-            total_amount[acc_id] = self._prepare_total_amount(tb, foreign_currency)
-        if prt_id not in total_amount[acc_id]:
-            total_amount[acc_id][prt_id] = self._prepare_total_amount(
-                tb, foreign_currency
-            )
-        else:
-            # Increase balance field values
-            total_amount[acc_id][prt_id]["initial_balance"] += tb["balance"]
-            total_amount[acc_id][prt_id]["ending_balance"] += tb["balance"]
-            if foreign_currency:
-                total_amount[acc_id][prt_id]["initial_currency_balance"] += round(
-                    tb["amount_currency"], 2
-                )
-                total_amount[acc_id][prt_id]["ending_currency_balance"] += round(
-                    tb["amount_currency"], 2
-                )
-        total_amount[acc_id][prt_id]["partner_name"] = (
-            tb["partner_id"][1] if tb["partner_id"] else _("Missing Partner")
+    def _get_empty_amounts(self, foreign_currency):
+        return self._prepare_total_amount(
+            {"balance": 0.0, "amount_currency": 0.0}, foreign_currency
         )
-        return total_amount
 
     @api.model
-    def _compute_partner_amount(
-        self, total_amount, tb_initial_prt, tb_period_prt, foreign_currency
+    def _read_ml_totals(self, domain, groupby, period=False):
+        """Sum the journal items of ``domain`` in a single query.
+
+        Each returned tuple holds the ``groupby`` records followed by the sums
+        of balance and amount in currency, and of debit and credit when
+        ``period`` is set. ``_read_group`` is used instead of ``read_group``
+        because the latter hides ``amount_currency`` unless the lines are
+        also grouped by currency, which used to need an extra query per
+        account.
+        """
+        aggregates = ["balance:sum", "amount_currency:sum"]
+        if period:
+            aggregates += ["debit:sum", "credit:sum"]
+        return self.env["account.move.line"]._read_group(domain, groupby, aggregates)
+
+    @api.model
+    def _add_ml_totals(self, amounts, totals, initial, foreign_currency):
+        """Add the sums returned by ``_read_ml_totals`` to ``amounts``."""
+        balance, amount_currency = totals[0], totals[1]
+        amounts["ending_balance"] += balance
+        if initial:
+            amounts["initial_balance"] += balance
+        else:
+            amounts["balance"] += balance
+            amounts["debit"] += totals[2]
+            amounts["credit"] += totals[3]
+        if foreign_currency:
+            amounts["ending_currency_balance"] += amount_currency
+            if initial:
+                amounts["initial_currency_balance"] += amount_currency
+
+    @api.model
+    def _partner_sort_key(self, partner_id, name):
+        """Alphabetical order ignoring case and accents, missing partner last."""
+        normalized = "".join(
+            char
+            for char in unicodedata.normalize("NFKD", str(name))
+            if not unicodedata.combining(char)
+        ).casefold()
+        return (not partner_id, normalized, partner_id)
+
+    @api.model
+    def _get_amount_domains(
+        self,
+        account_ids,
+        journal_ids,
+        partner_ids,
+        company_id,
+        date_to,
+        date_from,
+        only_posted_moves,
+        fy_start_date,
+        show_partner_details,
     ):
-        partners_ids = set()
+        """Return ``(domain, is initial balance)`` for the amount columns.
+
+        With ``show_partner_details``, the domain hooks restrict the lines to
+        receivable and payable accounts.
+        """
+        args = (account_ids, journal_ids, partner_ids, company_id)
+        return [
+            (
+                self._get_initial_balances_bs_ml_domain(
+                    *args, date_from, only_posted_moves, show_partner_details
+                ),
+                True,
+            ),
+            (
+                self._get_initial_balances_pl_ml_domain(
+                    *args,
+                    date_from,
+                    only_posted_moves,
+                    show_partner_details,
+                    fy_start_date,
+                ),
+                True,
+            ),
+            (
+                self._get_period_ml_domain(
+                    *args, date_to, date_from, only_posted_moves, show_partner_details
+                ),
+                False,
+            ),
+        ]
+
+    @api.model
+    def _sum_account_amounts(self, total_amount, domains, foreign_currency):
+        for domain, initial in domains:
+            for account, *totals in self._read_ml_totals(
+                domain, ["account_id"], period=not initial
+            ):
+                amounts = total_amount.setdefault(
+                    account.id, self._get_empty_amounts(foreign_currency)
+                )
+                self._add_ml_totals(amounts, totals, initial, foreign_currency)
+
+    @api.model
+    def _sum_analytic_amounts(self, total_amount, domains, foreign_currency):
+        """Amounts of each account by analytic account in ``group_by_data``.
+
+        A line with several analytic accounts is counted in each of them, so
+        these amounts never feed the account totals.
+        """
+        # Grouping by a many2many does not flush it: the analytic accounts of
+        # the lines are a stored compute that may still be pending.
+        self.env["account.move.line"].flush_model(["analytic_account_ids"])
+        for domain, initial in domains:
+            for account, analytic, *totals in self._read_ml_totals(
+                domain, ["account_id", "analytic_account_ids"], period=not initial
+            ):
+                gb_data = total_amount[account.id].setdefault("group_by_data", {})
+                amounts = gb_data.setdefault(
+                    analytic.id or 0, self._get_empty_amounts(foreign_currency)
+                )
+                self._add_ml_totals(amounts, totals, initial, foreign_currency)
+        for amounts in total_amount.values():
+            amounts["group_by"] = "analytic_account_ids"
+            amounts.setdefault(
+                "group_by_data", {0: self._get_empty_amounts(foreign_currency)}
+            )
+
+    @api.model
+    def _sum_partner_amounts(self, total_amount, domains, foreign_currency):
+        """Add the amounts by partner id (0 without partner) to each account."""
         partners_data = {}
-        for tb in tb_period_prt:
-            acc_id = tb["account_id"][0]
-            prt_id = tb["partner_id"][0] if tb["partner_id"] else 0
-            if prt_id not in partners_ids:
-                partner_name = (
-                    tb["partner_id"][1] if tb["partner_id"] else _("Missing Partner")
+        for domain, initial in domains:
+            for account, partner, *totals in self._read_ml_totals(
+                domain, ["account_id", "partner_id"], period=not initial
+            ):
+                prt_id = partner.id or 0
+                if prt_id not in partners_data:
+                    partners_data[prt_id] = {
+                        "id": prt_id,
+                        "name": partner.name or _("Missing Partner"),
+                    }
+                acc_amounts = total_amount[account.id]
+                if prt_id not in acc_amounts:
+                    acc_amounts[prt_id] = self._get_empty_amounts(foreign_currency)
+                    acc_amounts[prt_id]["partner_name"] = partners_data[prt_id]["name"]
+                self._add_ml_totals(
+                    acc_amounts[prt_id], totals, initial, foreign_currency
                 )
-                partners_data.update({prt_id: {"id": prt_id, "name": partner_name}})
-            if prt_id not in total_amount[acc_id]:
-                total_amount[acc_id][prt_id] = self._prepare_total_amount(
-                    tb, foreign_currency
-                )
-            else:
-                total_amount[acc_id][prt_id]["ending_balance"] += tb["balance"]
-            total_amount[acc_id][prt_id]["credit"] += tb["credit"]
-            total_amount[acc_id][prt_id]["debit"] += tb["debit"]
-            total_amount[acc_id][prt_id]["balance"] += tb["balance"]
-            total_amount[acc_id][prt_id]["initial_balance"] = 0.0
-            total_amount[acc_id][prt_id]["partner_name"] = partners_data[prt_id]["name"]
-            partners_ids.add(prt_id)
-        for tb in tb_initial_prt:
-            acc_id = tb["account_id"][0]
-            prt_id = tb["partner_id"][0] if tb["partner_id"] else 0
-            if prt_id not in partners_ids:
-                partner_name = (
-                    tb["partner_id"][1] if tb["partner_id"] else _("Missing Partner")
-                )
-                partners_data.update({prt_id: {"id": prt_id, "name": partner_name}})
-            total_amount = self._compute_acc_prt_amount(
-                total_amount, tb, acc_id, prt_id, foreign_currency
+        return partners_data
+
+    @api.model
+    def _remove_lone_missing_partner(self, total_amount):
+        """Without any partner to show, the lines without partner are the
+        whole account: drop that row so the account looks like the others."""
+        for acc_amounts in total_amount.values():
+            partner_keys = [key for key in acc_amounts if isinstance(key, int)]
+            if partner_keys == [0]:
+                del acc_amounts[0]
+
+    @api.model
+    def _round_currency_amounts(self, total_amount):
+        for amounts in total_amount.values():
+            items = [amounts]
+            items += [value for key, value in amounts.items() if isinstance(key, int)]
+            for item in items:
+                for key in ("initial_currency_balance", "ending_currency_balance"):
+                    item[key] = round(item[key], 2)
+
+    @api.model
+    def _sort_total_amount(self, total_amount, accounts_data):
+        """Accounts by code, and partners alphabetically inside each account."""
+        sorted_total_amount = {}
+        for acc_id in sorted(total_amount, key=lambda a: accounts_data[a]["code"]):
+            acc_amounts = total_amount[acc_id]
+            sorted_total_amount[acc_id] = {
+                key: value
+                for key, value in acc_amounts.items()
+                if not isinstance(key, int)
+            }
+            partner_keys = sorted(
+                (key for key in acc_amounts if isinstance(key, int)),
+                key=lambda key: self._partner_sort_key(
+                    key, acc_amounts[key]["partner_name"]
+                ),
             )
-        # sort on partner_name
-        # total_amount is a dictionary by account id that contains direct totalized
-        # values for that account (credit, debit, balance...), but also other integer
-        # keys that represents partner ids with the detail of each of them, and one
-        # of the partner id keys is 0 for those with no partner
-        for acc_id, total_data in total_amount.items():
-            tmp_list = sorted(
-                total_data.items(),
-                key=lambda x: ("\xff" if not x[0] else x[1]["partner_name"])
-                if isinstance(x[0], int)
-                else "!",  # ~ is the last ASCII printable char, and ! the first
-            )
-            total_amount[acc_id] = {}
-            for key, value in tmp_list:
-                total_amount[acc_id][key] = value
-        return total_amount, partners_data
+            for key in partner_keys:
+                sorted_total_amount[acc_id][key] = acc_amounts[key]
+        return sorted_total_amount
 
     def _remove_accounts_at_cero(self, total_amount, show_partner_details, company):
         def is_removable(d):
@@ -405,22 +427,25 @@ class TrialBalanceReport(models.AbstractModel):
 
         accounts_to_remove = []
         for acc_id, ta_data in total_amount.items():
-            if is_removable(ta_data):
-                accounts_to_remove.append(acc_id)
-            elif show_partner_details:
-                partner_to_remove = []
-                for key, value in ta_data.items():
-                    # If the show_partner_details option is checked,
-                    # the partner data is in the same account data dict
-                    # but with the partner id as the key
-                    if isinstance(key, int) and is_removable(value):
-                        partner_to_remove.append(key)
+            if show_partner_details:
+                # The partner data is in the same account data dict but with
+                # the partner id as the key
+                partner_to_remove = [
+                    key
+                    for key, value in ta_data.items()
+                    if isinstance(key, int) and is_removable(value)
+                ]
                 for partner_id in partner_to_remove:
                     del ta_data[partner_id]
+            # An account at 0 is still shown when some of its partners are
+            # not, e.g. an amount posted to the wrong partner.
+            if is_removable(ta_data) and not any(
+                isinstance(key, int) for key in ta_data
+            ):
+                accounts_to_remove.append(acc_id)
         for account_id in accounts_to_remove:
             del total_amount[account_id]
 
-    # flake8: noqa: C901
     @api.model
     def _get_data(
         self,
@@ -438,6 +463,15 @@ class TrialBalanceReport(models.AbstractModel):
         fy_start_date,
         grouped_by,
     ):
+        """Return the totals of every account, by code.
+
+        ``total_amount`` maps each account id to its amounts. With
+        ``show_partner_details``, receivable and payable accounts also hold
+        one entry per partner id (0 for the lines without partner), sorted
+        alphabetically; every other account keeps its own totals only. With
+        ``grouped_by``, ``group_by_data`` holds the amounts by analytic
+        account (0 for the lines without one).
+        """
         accounts_domain = [("company_ids", "in", [company_id])]
         if account_ids:
             accounts_domain += [("id", "in", account_ids)]
@@ -449,75 +483,12 @@ class TrialBalanceReport(models.AbstractModel):
             .with_context(active_test=False)
             .search(accounts_domain)
         )
-        tb_initial_acc = []
-        for account in accounts:
-            tb_initial_acc.append(
-                {"account_id": account.id, "balance": 0.0, "amount_currency": 0.0}
-            )
-        groupby_fields = ["account_id", "currency_id"]
-        if grouped_by:
-            groupby_fields.append("analytic_account_ids")
-        initial_domain_bs = self._get_initial_balances_bs_ml_domain(
-            account_ids,
-            journal_ids,
-            partner_ids,
-            company_id,
-            date_from,
-            only_posted_moves,
-            show_partner_details,
-        )
-        tb_initial_acc_bs = self.env["account.move.line"].read_group(
-            domain=initial_domain_bs,
-            fields=["account_id", "balance", "amount_currency:sum"],
-            groupby=groupby_fields,
-        )
-        initial_domain_pl = self._get_initial_balances_pl_ml_domain(
-            account_ids,
-            journal_ids,
-            partner_ids,
-            company_id,
-            date_from,
-            only_posted_moves,
-            show_partner_details,
-            fy_start_date,
-        )
-        tb_initial_acc_pl = self.env["account.move.line"].read_group(
-            domain=initial_domain_pl,
-            fields=["account_id", "balance", "amount_currency:sum"],
-            groupby=groupby_fields,
-        )
-        tb_initial_acc_rg = tb_initial_acc_bs + tb_initial_acc_pl
-        for account_rg in tb_initial_acc_rg:
-            element = list(
-                filter(
-                    lambda acc_dict: acc_dict["account_id"]
-                    == account_rg["account_id"][0],
-                    tb_initial_acc,
-                )
-            )
-            if element:
-                element[0]["balance"] += account_rg["balance"]
-                element[0]["amount_currency"] += account_rg["amount_currency"]
-                if "__context" in account_rg and "group_by" in account_rg["__context"]:
-                    group_by = account_rg["__context"]["group_by"][0]
-                    gb_data = {}
-                    account_rg_grouped = self.env["account.move.line"].read_group(
-                        domain=account_rg["__domain"],
-                        fields=[group_by, "balance", "amount_currency:sum"],
-                        groupby=[group_by],
-                    )
-                    for a_rg2 in account_rg_grouped:
-                        gb_id = a_rg2[group_by][0] if a_rg2[group_by] else 0
-                        gb_data[gb_id] = {
-                            "balance": a_rg2["balance"],
-                            "amount_currency": a_rg2["amount_currency"],
-                        }
-                    element[0]["group_by"] = group_by
-                    element[0]["group_by_data"] = gb_data
-        if hide_account_at_0:
-            tb_initial_acc = [p for p in tb_initial_acc if p["balance"] != 0]
+        total_amount = {
+            account.id: self._get_empty_amounts(foreign_currency)
+            for account in accounts
+        }
 
-        period_domain = self._get_period_ml_domain(
+        domains = self._get_amount_domains(
             account_ids,
             journal_ids,
             partner_ids,
@@ -525,84 +496,48 @@ class TrialBalanceReport(models.AbstractModel):
             date_to,
             date_from,
             only_posted_moves,
-            show_partner_details,
+            fy_start_date,
+            False,
         )
-        tb_period_acc = self.env["account.move.line"].read_group(
-            domain=period_domain,
-            fields=["account_id", "debit", "credit", "balance", "amount_currency:sum"],
-            groupby=groupby_fields,
-        )
-
+        self._sum_account_amounts(total_amount, domains, foreign_currency)
+        if grouped_by:
+            self._sum_analytic_amounts(total_amount, domains, foreign_currency)
+        partners_data = {}
         if show_partner_details:
-            tb_initial_prt_bs = self.env["account.move.line"].read_group(
-                domain=initial_domain_bs,
-                fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id", "currency_id"],
-                lazy=False,
+            partner_domains = self._get_amount_domains(
+                account_ids,
+                journal_ids,
+                partner_ids,
+                company_id,
+                date_to,
+                date_from,
+                only_posted_moves,
+                fy_start_date,
+                True,
             )
-            tb_initial_prt_pl = self.env["account.move.line"].read_group(
-                domain=initial_domain_pl,
-                fields=["account_id", "partner_id", "balance", "amount_currency:sum"],
-                groupby=["account_id", "partner_id", "currency_id"],
+            partners_data = self._sum_partner_amounts(
+                total_amount, partner_domains, foreign_currency
             )
-            tb_initial_prt = tb_initial_prt_bs + tb_initial_prt_pl
-            if hide_account_at_0:
-                tb_initial_prt = [p for p in tb_initial_prt if p["balance"] != 0]
-            tb_period_prt = self.env["account.move.line"].read_group(
-                domain=period_domain,
-                fields=[
-                    "account_id",
-                    "partner_id",
-                    "debit",
-                    "credit",
-                    "balance",
-                    "amount_currency:sum",
-                ],
-                groupby=["account_id", "currency_id", "partner_id"],
-                lazy=False,
-            )
-        total_amount = {}
-        partners_data = []
-        total_amount = self._compute_account_amount(
-            total_amount, tb_initial_acc, tb_period_acc, foreign_currency
-        )
-        if show_partner_details:
-            total_amount, partners_data = self._compute_partner_amount(
-                total_amount, tb_initial_prt, tb_period_prt, foreign_currency
-            )
+        if foreign_currency:
+            self._round_currency_amounts(total_amount)
         # Remove accounts a 0 from collections
         if hide_account_at_0:
             company = self.env["res.company"].browse(company_id)
             self._remove_accounts_at_cero(total_amount, show_partner_details, company)
+        if show_partner_details:
+            self._remove_lone_missing_partner(total_amount)
 
         accounts_ids = list(total_amount.keys())
         unaffected_id = unaffected_earnings_account
         if unaffected_id:
             if unaffected_id not in accounts_ids:
                 accounts_ids.append(unaffected_id)
-                total_amount[unaffected_id] = {}
-                total_amount[unaffected_id]["initial_balance"] = 0.0
-                total_amount[unaffected_id]["balance"] = 0.0
-                total_amount[unaffected_id]["credit"] = 0.0
-                total_amount[unaffected_id]["debit"] = 0.0
-                total_amount[unaffected_id]["ending_balance"] = 0.0
-                if foreign_currency:
-                    total_amount[unaffected_id]["amount_currency"] = 0
-                    total_amount[unaffected_id]["initial_currency_balance"] = 0.0
-                    total_amount[unaffected_id]["ending_currency_balance"] = 0.0
+                total_amount[unaffected_id] = self._get_empty_amounts(foreign_currency)
             if grouped_by:
-                total_amount[unaffected_id]["group_by"] = grouped_by
-                total_amount[unaffected_id]["group_by_data"] = {}
-                # Fix to prevent side effects
-                if (
-                    foreign_currency
-                    and "amount_currency" not in total_amount[unaffected_id]
-                ):
-                    total_amount[unaffected_id]["amount_currency"] = 0
-                group_by_data_item = self._prepare_total_amount(
-                    total_amount[unaffected_id], foreign_currency
-                )
-                total_amount[unaffected_id]["group_by_data"][0] = group_by_data_item
+                total_amount[unaffected_id]["group_by"] = "analytic_account_ids"
+                total_amount[unaffected_id]["group_by_data"] = {
+                    0: self._get_empty_amounts(foreign_currency)
+                }
         accounts_data = self._get_accounts_data(accounts_ids)
         (
             pl_initial_balance,
@@ -614,7 +549,7 @@ class TrialBalanceReport(models.AbstractModel):
             company_id,
             fy_start_date,
             only_posted_moves,
-            show_partner_details,
+            False,
             foreign_currency,
         )
         if unaffected_id:
@@ -628,19 +563,14 @@ class TrialBalanceReport(models.AbstractModel):
                     pl_initial_currency_balance
                 )
             if grouped_by:
-                total_amount[unaffected_id]["group_by_data"][0]["ending_balance"] = (
-                    total_amount[unaffected_id]["ending_balance"]
+                unaffected_amounts = total_amount[unaffected_id]
+                unaffected_amounts["group_by_data"][0].update(
+                    {
+                        key: unaffected_amounts[key]
+                        for key in unaffected_amounts["group_by_data"][0]
+                    }
                 )
-                total_amount[unaffected_id]["group_by_data"][0]["initial_balance"] = (
-                    total_amount[unaffected_id]["initial_balance"]
-                )
-                if foreign_currency:
-                    total_amount[unaffected_id]["group_by_data"][0][
-                        "ending_currency_balance"
-                    ] = total_amount[unaffected_id]["ending_currency_balance"]
-                    total_amount[unaffected_id]["group_by_data"][0][
-                        "initial_currency_balance"
-                    ] = total_amount[unaffected_id]["initial_currency_balance"]
+        total_amount = self._sort_total_amount(total_amount, accounts_data)
         return total_amount, accounts_data, partners_data
 
     def _get_data_grouped(self, total_amount, accounts_data, foreign_currency):
@@ -678,6 +608,8 @@ class TrialBalanceReport(models.AbstractModel):
                 data_item["id"] = a_id
                 data_item["name"] = accounts_data[a_id]["name"]
                 data_item["code"] = accounts_data[a_id]["code"]
+                data_item["aml_domain"] = accounts_data[a_id].get("aml_domain")
+                data_item["pl_domain"] = accounts_data[a_id].get("pl_domain")
                 if foreign_currency:
                     data_item["currency_id"] = accounts_data[a_id]["currency_id"]
                     data_item["currency_name"] = accounts_data[a_id]["currency_name"]
@@ -739,7 +671,7 @@ class TrialBalanceReport(models.AbstractModel):
                         "name": group.name,
                         "parent_id": group.parent_id.id,
                         "complete_code": group.complete_code,
-                        "account_ids": group.compute_account_ids.ids,
+                        "account_ids": [],
                         "type": "group_type",
                         "initial_balance": 0,
                         "debit": 0,
@@ -757,10 +689,10 @@ class TrialBalanceReport(models.AbstractModel):
                 for acc_key in acc_keys:
                     groups_data[parent_id][acc_key] += groups_data[group_id][acc_key]
                 if foreign_currency:
-                    groups_data[group_id]["initial_currency_balance"] += groups_data[
+                    groups_data[parent_id]["initial_currency_balance"] += groups_data[
                         group_id
                     ]["initial_currency_balance"]
-                    groups_data[group_id]["ending_currency_balance"] += groups_data[
+                    groups_data[parent_id]["ending_currency_balance"] += groups_data[
                         group_id
                     ]["ending_currency_balance"]
                 parent_id = groups_data[parent_id]["parent_id"]
@@ -797,7 +729,7 @@ class TrialBalanceReport(models.AbstractModel):
                         "parent_id": group.parent_id.id,
                         "type": "group_type",
                         "complete_code": group.complete_code,
-                        "account_ids": group.compute_account_ids.ids,
+                        "account_ids": [],
                         "initial_balance": 0.0,
                         "credit": 0.0,
                         "debit": 0.0,
@@ -833,55 +765,53 @@ class TrialBalanceReport(models.AbstractModel):
             groups_data,
             foreign_currency,
         )
+        # Accounts of the report below each group, for the drill-down domains
+        for group_id, account_ids in account_group_relation.items():
+            while group_id:
+                groups_data[group_id]["account_ids"] += account_ids
+                group_id = groups_data[group_id]["parent_id"]
         return groups_data
 
-    def _get_computed_groups_data(self, accounts_data, total_amount, foreign_currency):
-        groups = self.env["account.group"].search([("id", "!=", False)])
-        groups_data = {}
-        for group in groups:
-            len_group_code = len(group.code_prefix_start)
-            groups_data.update(
-                {
-                    group.id: {
-                        "id": group.id,
-                        "code": group.code_prefix_start,
-                        "name": group.name,
-                        "parent_id": group.parent_id.id,
-                        "type": "group_type",
-                        "complete_code": group.complete_code,
-                        "account_ids": group.compute_account_ids.ids,
-                        "initial_balance": 0.0,
-                        "credit": 0.0,
-                        "debit": 0.0,
-                        "balance": 0.0,
-                        "ending_balance": 0.0,
-                    }
-                }
+    def _get_aml_domain_common(self, data):
+        """Filters of the wizard that every drill-down domain must keep."""
+        if data["only_posted_moves"]:
+            domain = [("parent_state", "=", "posted")]
+        else:
+            domain = [("parent_state", "in", ("posted", "draft"))]
+        if data["company_id"]:
+            domain += [("company_id", "=", data["company_id"])]
+        if data["journal_ids"]:
+            domain += [("journal_id", "in", data["journal_ids"])]
+        if data["partner_ids"]:
+            domain += [("partner_id", "in", data["partner_ids"])]
+        return domain
+
+    def _get_partner_lines(self, account, total_amount, partners_data):
+        """Rows of the partners of a receivable or payable account."""
+        lines = []
+        acc_amounts = total_amount[account["id"]]
+        for partner_id, amounts in acc_amounts.items():
+            if not isinstance(partner_id, int):
+                continue
+            line = dict(
+                amounts,
+                type="partner_type",
+                id=partner_id,
+                account_id=account["id"],
+                code="",
+                name=partners_data[partner_id]["name"],
+                currency_id=account["currency_id"],
+                currency_name=account["currency_name"],
+                aml_domain=[
+                    ("account_id", "=", account["id"]),
+                    ("partner_id", "=", partner_id or False),
+                ],
+                pl_domain=account["pl_domain"],
             )
-            if foreign_currency:
-                groups_data[group.id]["initial_currency_balance"] = 0.0
-                groups_data[group.id]["ending_currency_balance"] = 0.0
-            for account in accounts_data.values():
-                if group.code_prefix_start == account["code"][:len_group_code]:
-                    acc_id = account["id"]
-                    group_id = group.id
-                    groups_data[group_id]["initial_balance"] += total_amount[acc_id][
-                        "initial_balance"
-                    ]
-                    groups_data[group_id]["debit"] += total_amount[acc_id]["debit"]
-                    groups_data[group_id]["credit"] += total_amount[acc_id]["credit"]
-                    groups_data[group_id]["balance"] += total_amount[acc_id]["balance"]
-                    groups_data[group_id]["ending_balance"] += total_amount[acc_id][
-                        "ending_balance"
-                    ]
-                    if foreign_currency:
-                        groups_data[group_id]["initial_currency_balance"] += (
-                            total_amount[acc_id]["initial_currency_balance"]
-                        )
-                        groups_data[group_id]["ending_currency_balance"] += (
-                            total_amount[acc_id]["ending_currency_balance"]
-                        )
-        return groups_data
+            if "level" in account:
+                line["level"] = account["level"] + 1
+            lines.append(line)
+        return lines
 
     def _get_report_values(self, docids, data):
         res = super()._get_report_values(docids, data)
@@ -917,68 +847,91 @@ class TrialBalanceReport(models.AbstractModel):
             fy_start_date,
             grouped_by,
         )
+        amount_keys = [
+            "initial_balance",
+            "debit",
+            "credit",
+            "balance",
+            "ending_balance",
+        ]
+        # The initial balance of profit and loss accounts starts with the
+        # fiscal year: the drill-down domains must do the same.
+        pl_domain = [
+            ("date", ">=", fields.Date.to_string(fields.Date.to_date(fy_start_date)))
+        ]
+        for account_id, account_data in accounts_data.items():
+            account_amounts = total_amount[account_id]
+            account_data.update({key: account_amounts[key] for key in amount_keys})
+            account_data.update(
+                {
+                    "group_by": account_amounts.get("group_by", False),
+                    "group_by_data": account_amounts.get("group_by_data", False),
+                    "type": "account_type",
+                    "has_partners": any(
+                        isinstance(key, int) for key in account_amounts
+                    ),
+                    "aml_domain": [("account_id", "=", account_id)],
+                    "pl_domain": (
+                        [] if account_data["include_initial_balance"] else pl_domain
+                    ),
+                }
+            )
+            if foreign_currency:
+                account_data.update(
+                    {
+                        "ending_currency_balance": account_amounts[
+                            "ending_currency_balance"
+                        ],
+                        "initial_currency_balance": account_amounts[
+                            "initial_currency_balance"
+                        ],
+                    }
+                )
+                account_amounts["currency_id"] = account_data["currency_id"]
+                account_amounts["currency_name"] = account_data["currency_name"]
         trial_balance_grouped = False
         total_amount_grouped = False
         if grouped_by:
             trial_balance_grouped, total_amount_grouped = self._get_data_grouped(
                 total_amount, accounts_data, foreign_currency
             )
-        trial_balance = []
-        if not show_partner_details:
-            for account_id in accounts_data.keys():
-                accounts_data[account_id].update(
-                    {
-                        "initial_balance": total_amount[account_id]["initial_balance"],
-                        "credit": total_amount[account_id]["credit"],
-                        "debit": total_amount[account_id]["debit"],
-                        "balance": total_amount[account_id]["balance"],
-                        "ending_balance": total_amount[account_id]["ending_balance"],
-                        "group_by": (
-                            total_amount[account_id]["group_by"]
-                            if "group_by" in total_amount[account_id]
-                            else False
-                        ),
-                        "group_by_data": (
-                            total_amount[account_id]["group_by_data"]
-                            if "group_by_data" in total_amount[account_id]
-                            else False
-                        ),
-                        "type": "account_type",
-                    }
+        if show_hierarchy:
+            groups_data = self._get_groups_data(
+                accounts_data, total_amount, foreign_currency
+            )
+            for group_data in groups_data.values():
+                group_data.update(
+                    aml_domain=[("account_id", "in", group_data["account_ids"])],
+                    pl_domain=[],
                 )
-                if foreign_currency:
-                    accounts_data[account_id].update(
-                        {
-                            "ending_currency_balance": total_amount[account_id][
-                                "ending_currency_balance"
-                            ],
-                            "initial_currency_balance": total_amount[account_id][
-                                "initial_currency_balance"
-                            ],
-                        }
-                    )
-            if show_hierarchy:
-                groups_data = self._get_groups_data(
-                    accounts_data, total_amount, foreign_currency
-                )
-                trial_balance = list(groups_data.values())
-                trial_balance += list(accounts_data.values())
-                trial_balance = sorted(trial_balance, key=lambda k: k["complete_code"])
-                for trial in trial_balance:
-                    counter = trial["complete_code"].count("/")
-                    trial["level"] = counter
-            else:
-                trial_balance = list(accounts_data.values())
-                trial_balance = sorted(trial_balance, key=lambda k: k["code"])
+            trial_balance = list(groups_data.values())
+            trial_balance += list(accounts_data.values())
+            trial_balance = sorted(trial_balance, key=lambda k: k["complete_code"])
+            for trial in trial_balance:
+                counter = trial["complete_code"].count("/")
+                trial["level"] = counter
         else:
-            if foreign_currency:
-                for account_id in accounts_data.keys():
-                    total_amount[account_id]["currency_id"] = accounts_data[account_id][
-                        "currency_id"
-                    ]
-                    total_amount[account_id]["currency_name"] = accounts_data[
-                        account_id
-                    ]["currency_name"]
+            trial_balance = sorted(accounts_data.values(), key=lambda k: k["code"])
+        if show_partner_details:
+            lines = []
+            for line in trial_balance:
+                lines.append(line)
+                if line["type"] == "account_type" and line["has_partners"]:
+                    lines += self._get_partner_lines(line, total_amount, partners_data)
+            trial_balance = lines
+        total_line = {
+            "type": "total",
+            "name": _("Total"),
+            "code": "",
+            "currency_id": False,
+            "currency_name": False,
+            "initial_currency_balance": 0.0,
+            "ending_currency_balance": 0.0,
+        }
+        for key in amount_keys:
+            total_line[key] = sum(
+                account_data[key] for account_data in accounts_data.values()
+            )
         res.update(
             {
                 "doc_ids": [wizard_id],
@@ -998,6 +951,7 @@ class TrialBalanceReport(models.AbstractModel):
                 "hide_parent_hierarchy_level": data["hide_parent_hierarchy_level"],
                 "trial_balance": trial_balance,
                 "trial_balance_grouped": trial_balance_grouped,
+                "total_line": total_line,
                 "total_amount": total_amount,
                 "total_amount_grouped": total_amount_grouped,
                 "accounts_data": accounts_data,
@@ -1005,6 +959,7 @@ class TrialBalanceReport(models.AbstractModel):
                 "show_hierarchy_level": show_hierarchy_level,
                 "currency_model": self.env["res.currency"],
                 "grouped_by": grouped_by,
+                "aml_domain_common": self._get_aml_domain_common(data),
             }
         )
         return res
