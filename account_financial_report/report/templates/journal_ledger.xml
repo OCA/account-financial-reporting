@@ -119,7 +119,7 @@
         </t>
         <div class="act_as_thead">
             <div class="act_as_row labels">
-                <t t-if="with_auto_sequence">
+                <t t-if="with_auto_sequence and sequence_visible">
                     <div
                         class="act_as_cell first_column"
                         name="entry"
@@ -129,6 +129,7 @@
                     </div>
                 </t>
                 <div
+                    t-if="entry_visible"
                     t-att-class="'act_as_cell' if with_auto_sequence else 'act_as_cell first_column'"
                     class="act_as_cell"
                     name="entry"
@@ -136,26 +137,57 @@
                 >
                     Entry
                 </div>
-                <div class="act_as_cell" name="date" style="width: 5.41%;">Date</div>
                 <div
+                    t-if="date_visible"
+                    class="act_as_cell"
+                    name="date"
+                    style="width: 5.41%;"
+                >Date</div>
+                <div
+                    t-if="account_code_visible or account_name_visible"
                     class="act_as_cell"
                     name="account"
                     t-att-style="account_column_style"
                 >
                     Account
                 </div>
-                <div class="act_as_cell" name="partner" style="width: 15.14%;">
+                <div
+                    t-if="partner_visible"
+                    class="act_as_cell"
+                    name="partner"
+                    style="width: 15.14%;"
+                >
                     Partner
                 </div>
-                <div class="act_as_cell" name="label" t-att-style="label_column_style">
+                <div
+                    t-if="label_visible"
+                    class="act_as_cell"
+                    name="label"
+                    t-att-style="label_column_style"
+                >
                     Ref - Label
                 </div>
-                <div class="act_as_cell" name="taxes" style="width: 7.57%;">Taxes</div>
-                <div class="act_as_cell" name="debit" style="width: 8.65%;">Debit</div>
-                <div class="act_as_cell" name="credit" style="width: 8.65%;">
+                <div
+                    t-if="taxes_visible"
+                    class="act_as_cell"
+                    name="taxes"
+                    style="width: 7.57%;"
+                >Taxes</div>
+                <div
+                    t-if="debit_visible"
+                    class="act_as_cell"
+                    name="debit"
+                    style="width: 8.65%;"
+                >Debit</div>
+                <div
+                    t-if="credit_visible"
+                    class="act_as_cell"
+                    name="credit"
+                    style="width: 8.65%;"
+                >
                     Credit
                 </div>
-                <t t-if="display_currency">
+                <t t-if="display_currency and foreign_currency_visible">
                     <div class="act_as_cell" name="currency_name" style="width: 2.16%;">
                         Cur.
                     </div>
@@ -172,16 +204,20 @@
     </template>
     <template id="account_financial_report.report_journal_ledger_journal_first_line">
         <div class="act_as_row lines">
-            <t t-if="with_auto_sequence">
+            <t t-if="with_auto_sequence and sequence_visible">
                 <div class="act_as_cell" name="Sequence" />
             </t>
-            <div class="act_as_cell" name="entry" />
-            <div class="act_as_cell" name="date" />
-            <div class="act_as_cell" name="account" />
-            <div class="act_as_cell" name="partner" />
-            <div class="act_as_cell" name="label" />
-            <div class="act_as_cell" name="taxes" />
-            <div class="act_as_cell amount" name="debit">
+            <div t-if="entry_visible" class="act_as_cell" name="entry" />
+            <div t-if="date_visible" class="act_as_cell" name="date" />
+            <div
+                t-if="account_code_visible or account_name_visible"
+                class="act_as_cell"
+                name="account"
+            />
+            <div t-if="partner_visible" class="act_as_cell" name="partner" />
+            <div t-if="label_visible" class="act_as_cell" name="label" />
+            <div t-if="taxes_visible" class="act_as_cell" name="taxes" />
+            <div t-if="debit_visible" class="act_as_cell amount" name="debit">
                 <b>
                     <span
                         t-esc="journal['debit']"
@@ -189,7 +225,7 @@
                     />
                 </b>
             </div>
-            <div class="act_as_cell amount" name="credit">
+            <div t-if="credit_visible" class="act_as_cell amount" name="credit">
                 <b>
                     <span
                         t-esc="journal['credit']"
@@ -197,7 +233,7 @@
                     />
                 </b>
             </div>
-            <t t-if="display_currency">
+            <t t-if="display_currency and foreign_currency_visible">
                 <div class="act_as_cell" name="currency_name" />
                 <div class="act_as_cell amount" name="amount_currency" />
             </t>
@@ -222,10 +258,14 @@
         </t>
     </template>
     <template id="account_financial_report.report_journal_move_line">
-        <div class="act_as_cell left" name="auto_sequence" t-if="with_auto_sequence">
+        <div
+            class="act_as_cell left"
+            name="auto_sequence"
+            t-if="with_auto_sequence and sequence_visible"
+        >
             <span t-if="display_move_info" t-esc="move_line['auto_sequence']" />
         </div>
-        <div class="act_as_cell left" name="entry">
+        <div t-if="entry_visible" class="act_as_cell left" name="entry">
             <t t-if="display_move_info">
                 <span
                     t-att-res-id="move_line['move_id']"
@@ -238,38 +278,43 @@
                 </span>
             </t>
         </div>
-        <div class="act_as_cell left" name="date">
+        <div t-if="date_visible" class="act_as_cell left" name="date">
             <span
                 t-if="display_move_info"
                 t-esc="move_line['date']"
                 t-options="{'widget': 'date'}"
             />
         </div>
-        <div class="act_as_cell left" name="account">
+        <div
+            t-if="account_code_visible or account_name_visible"
+            class="act_as_cell left"
+            name="account"
+        >
             <span
+                t-if="account_code_visible"
                 t-esc="o._get_atr_from_dict(move_line['account_id'], account_ids_data, 'code')"
             />
-            <span t-if="display_account_name">
+            <span t-if="display_account_name and account_name_visible">
                 -
                 <span
-                t-esc="o._get_atr_from_dict(move_line['account_id'], account_ids_data, 'name')"
+                t-esc="limit_text(o._get_atr_from_dict(move_line['account_id'], account_ids_data, 'name'), account_name_limit)"
             />
             </span>
         </div>
-        <div class="act_as_cell left" name="partner">
+        <div t-if="partner_visible" class="act_as_cell left" name="partner">
             <span
                 t-if="display_partner"
                 t-esc="o._get_partner_name(move_line['partner_id'], partner_ids_data)"
             />
         </div>
-        <div class="act_as_cell left" name="label">
+        <div t-if="label_visible" class="act_as_cell left" name="label">
             <span
                 t-if="move_line['label']"
-                t-esc="limit_text(move_line['label'], 'label_text_limit')"
+                t-esc="limit_text(move_line['label'], label_limit)"
             />
             <span t-if="not move_line['label']">/</span>
         </div>
-        <div class="act_as_cell left" name="taxes">
+        <div t-if="taxes_visible" class="act_as_cell left" name="taxes">
             <t
                 t-set="tax_line_dat"
                 t-value="o._get_data_from_dict(move_line['tax_line_id'], tax_line_data)"
@@ -279,10 +324,10 @@
                 t-value="o._get_data_from_dict(move_line['move_line_id'], move_line_ids_taxes_data)"
             />
             <span
-                t-esc="limit_text(o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat), 'label_text_limit')"
+                t-esc="limit_text(o._get_ml_tax_description(move_line, tax_line_dat, move_line_ids_taxes_dat), taxes_limit)"
             />
         </div>
-        <div class="act_as_cell amount" name="debit">
+        <div t-if="debit_visible" class="act_as_cell amount" name="debit">
             <t t-if="move_line['debit']">
                 <span
                     t-esc="move_line['debit']"
@@ -290,7 +335,7 @@
                 />
             </t>
         </div>
-        <div class="act_as_cell amount" name="credit">
+        <div t-if="credit_visible" class="act_as_cell amount" name="credit">
             <t t-if="move_line['credit']">
                 <span
                     t-esc="move_line['credit']"
@@ -298,7 +343,7 @@
                 />
             </t>
         </div>
-        <t t-if="display_currency">
+        <t t-if="display_currency and foreign_currency_visible">
             <div class="act_as_cell" name="currency_name">
                 <t t-if="move_line['currency_id']">
                     <span
