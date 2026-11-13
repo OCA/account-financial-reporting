@@ -5,7 +5,8 @@
 
 import re
 
-from odoo.tests import tagged
+from odoo import Command
+from odoo.tests import Form, tagged
 
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
@@ -819,3 +820,219 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             self.env["account.group"].search(
                 [("account_ids", "child_of", self.account100.id)]
             )
+
+    def _post_move(self, date, lines_vals):
+        journal = self.env["account.journal"].search(
+            [("company_id", "=", self.env.user.company_id.id)], limit=1
+        )
+        move = self.env["account.move"].create(
+            {
+                "journal_id": journal.id,
+                "date": date,
+                "line_ids": [Command.create(vals) for vals in lines_vals],
+            }
+        )
+        move.action_post()
+        return move
+
+    def _get_wizard_report_values(self, wizard):
+        data = wizard._prepare_report_data()
+        return data, self.env[
+            "report.account_financial_report.trial_balance"
+        ]._get_report_values(wizard, data)
+
+    def test_08_partner_details_all_accounts(self):
+        """Partner details keep every account, ordered by code, and break down
+        only receivable and payable accounts, partners alphabetically."""
+        partner_b = self.env["res.partner"].create({"name": "Beta"})
+        partner_a = self.env["res.partner"].create({"name": "Álvaro"})
+        # Partners are shown and sorted by their name, not their display
+        # name ("Zeta Corp, Bob")
+        partner_c = self.env["res.partner"].create(
+            {
+                "name": "Bob",
+                "parent_id": self.env["res.partner"]
+                .create({"name": "Zeta Corp", "is_company": True})
+                .id,
+            }
+        )
+        self._post_move(
+            self.date_start,
+            [
+                {
+                    "account_id": self.account100.id,
+                    "partner_id": partner_b.id,
+                    "debit": 100,
+                },
+                {
+                    "account_id": self.account100.id,
+                    "partner_id": partner_a.id,
+                    "debit": 50,
+                },
+                {"account_id": self.account100.id, "debit": 25},
+                {
+                    "account_id": self.account100.id,
+                    "partner_id": partner_c.id,
+                    "debit": 10,
+                },
+                {
+                    "account_id": self.account200.id,
+                    "partner_id": partner_a.id,
+                    "credit": 185,
+                },
+            ],
+        )
+        with Form(self.env["trial.balance.report.wizard"]) as form:
+            form.date_from = self.date_start
+            form.date_to = self.date_end
+            form.show_partner_details = True
+            # The account filters are left as the user set them
+            self.assertFalse(form.receivable_accounts_only)
+            self.assertFalse(form.payable_accounts_only)
+            wizard = form.save()
+        data, res = self._get_wizard_report_values(wizard)
+        lines = res["trial_balance"]
+        account_lines = [line for line in lines if line["type"] == "account_type"]
+        codes = [line["code"] for line in account_lines]
+        self.assertEqual(codes, sorted(codes))
+        self.assertIn(self.account200.code, codes)
+        self.assertIn(self.unaffected_account.code, codes)
+        index = lines.index(
+            next(line for line in account_lines if line["id"] == self.account100.id)
+        )
+        partner_lines = lines[index + 1 : index + 5]
+        self.assertEqual(
+            [(line["type"], line["name"]) for line in partner_lines],
+            [
+                ("partner_type", "Álvaro"),
+                ("partner_type", "Beta"),
+                ("partner_type", "Bob"),
+                ("partner_type", "Missing Partner"),
+            ],
+        )
+        self.assertEqual(
+            [line["ending_balance"] for line in partner_lines], [50, 100, 10, 25]
+        )
+        index200 = lines.index(
+            next(line for line in account_lines if line["id"] == self.account200.id)
+        )
+        self.assertNotEqual(lines[index200 + 1]["type"], "partner_type")
+        self.assertEqual(res["total_line"]["debit"], 185)
+        self.assertEqual(res["total_line"]["credit"], 185)
+        html = self.env["ir.actions.report"]._render_qweb_html(
+            "account_financial_report.trial_balance", wizard.ids, data
+        )[0]
+        self.assertRegex(html.decode(), "(?s)Álvaro.*Beta.*Bob.*Missing Partner")
+        self.env["ir.actions.report"]._render_xlsx(
+            "a_f_r.report_trial_balance_xlsx", wizard.ids, data
+        )
+        # Hierarchy and foreign currency together with partner details
+        wizard.write({"show_hierarchy": True, "foreign_currency": True})
+        data, res = self._get_wizard_report_values(wizard)
+        lines = res["trial_balance"]
+        account100_line = next(
+            line
+            for line in lines
+            if line["type"] == "account_type" and line["id"] == self.account100.id
+        )
+        partner_line = lines[lines.index(account100_line) + 1]
+        self.assertEqual(partner_line["level"], account100_line["level"] + 1)
+        self.env["ir.actions.report"]._render_qweb_html(
+            "account_financial_report.trial_balance", wizard.ids, data
+        )
+        self.env["ir.actions.report"]._render_xlsx(
+            "a_f_r.report_trial_balance_xlsx", wizard.ids, data
+        )
+
+    def test_09_account_at_zero_with_partner_balances(self):
+        """An account at 0 stays when some of its partners are not."""
+        self._post_move(
+            self.date_start,
+            [
+                {
+                    "account_id": self.account100.id,
+                    "partner_id": self.partner.id,
+                    "debit": 30,
+                },
+                {"account_id": self.account100.id, "credit": 30},
+            ],
+        )
+        res = self._get_report_lines(with_partners=True)
+        total_amount = res["total_amount"]
+        self.assertIn(self.account100.id, total_amount)
+        self.assertEqual(total_amount[self.account100.id]["ending_balance"], 0)
+        self.assertEqual(
+            total_amount[self.account100.id][self.partner.id]["ending_balance"], 30
+        )
+        self.assertEqual(total_amount[self.account100.id][0]["ending_balance"], -30)
+
+    def test_11_partner_details_without_partners(self):
+        """A receivable or payable account whose lines have no partner is
+        shown like any other account, without a "Missing Partner" row."""
+        payable = self.company_data["default_account_payable"]
+        self._post_move(
+            self.date_start,
+            [
+                {"account_id": payable.id, "credit": 40},
+                {"account_id": self.account200.id, "debit": 40},
+            ],
+        )
+        res = self._get_report_lines(with_partners=True)
+        self.assertFalse(
+            [key for key in res["total_amount"][payable.id] if isinstance(key, int)]
+        )
+        lines = res["trial_balance"]
+        payable_line = next(
+            line
+            for line in lines
+            if line["type"] == "account_type" and line["id"] == payable.id
+        )
+        self.assertFalse(payable_line["has_partners"])
+        self.assertEqual(payable_line["ending_balance"], -40)
+        next_line = lines[lines.index(payable_line) + 1]
+        self.assertNotEqual(next_line["type"], "partner_type")
+
+    def test_10_grouped_by_analytic_account(self):
+        plan = self.env["account.analytic.plan"].create({"name": "Plan"})
+        analytic = self.env["account.analytic.account"].create(
+            {"name": "Shop", "plan_id": plan.id}
+        )
+        self._post_move(
+            self.date_start,
+            [
+                {
+                    "account_id": self.account200.id,
+                    "credit": 100,
+                    "analytic_distribution": {str(analytic.id): 100},
+                },
+                {
+                    "account_id": self.account100.id,
+                    "partner_id": self.partner.id,
+                    "debit": 100,
+                },
+            ],
+        )
+        wizard = self.env["trial.balance.report.wizard"].create(
+            {
+                "date_from": self.date_start,
+                "date_to": self.date_end,
+                "grouped_by": "analytic_account",
+            }
+        )
+        data, res = self._get_wizard_report_values(wizard)
+        groups = {group["name"]: group for group in res["trial_balance_grouped"]}
+        self.assertEqual(set(groups), {"Shop", "Without analytic account"})
+        self.assertEqual(
+            [(line["code"], line["credit"]) for line in groups["Shop"]["account_data"]],
+            [(self.account200.code, 100)],
+        )
+        self.assertIn(
+            self.account100.code,
+            [
+                line["code"]
+                for line in groups["Without analytic account"]["account_data"]
+            ],
+        )
+        self.env["ir.actions.report"]._render_xlsx(
+            "a_f_r.report_trial_balance_xlsx", wizard.ids, data
+        )

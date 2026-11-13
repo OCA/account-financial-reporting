@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =========================
 Account Financial Reports
 =========================
@@ -17,7 +13,7 @@ Account Financial Reports
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Faccount--financial--reporting-lightgray.png?logo=github
@@ -104,6 +100,14 @@ Known issues / Roadmap
 Changelog
 =========
 
+18.0.1.5.0 (2026-11-13)
+-----------------------
+
+- Trial Balance: "Show partner details" keeps every account and only
+  adds the balance of each partner below the receivable and payable
+  accounts, sorted by partner name. The amounts are read with a fixed
+  number of queries instead of one per account.
+
 11.0.2.5.0 (2019-04-26)
 -----------------------
 
@@ -176,6 +180,7 @@ Contributors
   - V??ctor Mart??nez
   - Carolina Fernandez
   - Eduardo Ezerouali
+  - Carlos Dauden
 
 - `Sygel <https://www.sygel.es>`__:
 
