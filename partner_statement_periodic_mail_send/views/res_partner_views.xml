@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_partner_view_form_periodic_statement" model="ir.ui.view">
+        <field
+            name="name"
+        >res.partner.form - partner_statement_periodic_mail_send</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="inside">
+                <group string="Periodic Statement" name="periodic_statement">
+                    <field name="exclude_periodic_statement" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
