@@ -64,7 +64,9 @@ class WizardOpenTaxBalances(models.TransientModel):
         date_format = lang and lang.date_format or "%m/%d/%Y"
         infos = {
             "name": vals["name"],
-            "target": self.env._(self.target_move),
+            "target": dict(
+                self._fields["target_move"]._description_selection(self.env)
+            )[self.target_move],
             "from": self.from_date.strftime(date_format),
             "to": self.to_date.strftime(date_format),
         }
