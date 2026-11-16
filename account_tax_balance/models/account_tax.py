@@ -78,15 +78,10 @@ class AccountTax(models.Model):
             tax.has_moves = tax.id in ids_with_moves
 
     @api.model
-    def _is_unsupported_search_operator(self, operator):
-        return operator != "=" and operator != "in"
-
-    @api.model
     def _search_has_moves(self, operator, value):
-        if self._is_unsupported_search_operator(operator) or not value:
-            raise ValueError(self.env._("Unsupported search operator"))
-        ids_with_moves = self._account_tax_ids_with_moves()
-        return Domain("id", "in", ids_with_moves)
+        if operator != "in":
+            return NotImplemented
+        return Domain("id", "in", self._account_tax_ids_with_moves())
 
     @api.depends_context(
         "from_date",

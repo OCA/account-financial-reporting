@@ -30,7 +30,7 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_account_move_filter" />
         <field name="arch" type="xml">
-            <xpath expr="//filter[@name='by_company']" position="inside">
+            <xpath expr="//filter[@name='by_company']" position="after">
                 <filter
                     name="financial_type"
                     string="Financial type"
