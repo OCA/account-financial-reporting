@@ -71,6 +71,7 @@ class AccountTax(models.Model):
         self.env.cr.execute(query, params)
         return [r[0] for r in self.env.cr.fetchall()]
 
+    @api.depends_context("from_date", "to_date", "company_ids")
     def _compute_has_moves(self):
         ids_with_moves = set(self._account_tax_ids_with_moves())
         for tax in self:
