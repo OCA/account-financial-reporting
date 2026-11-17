@@ -45,6 +45,12 @@ class TrialBalanceReportWizard(models.TransientModel):
         "not display accounts that have initial balance = "
         "debit = credit = end balance = 0",
     )
+    hide_account_without_moves = fields.Boolean(
+        string="Hide accounts without moves",
+        help="When this option is enabled, the trial balance will "
+        "not display accounts without debit or credit in the selected "
+        "period, even if they have an initial balance",
+    )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
     show_partner_details = fields.Boolean()
@@ -261,6 +267,7 @@ class TrialBalanceReportWizard(models.TransientModel):
             "date_to": self.date_to,
             "only_posted_moves": self.target_move == "posted",
             "hide_account_at_0": self.hide_account_at_0,
+            "hide_account_without_moves": self.hide_account_without_moves,
             "foreign_currency": self.foreign_currency,
             "company_id": self.company_id.id,
             "account_ids": self.account_ids.ids or [],
