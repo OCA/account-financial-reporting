@@ -51,6 +51,12 @@ class TestCashFlow(TransactionCase):
             }
         )
         self.partner = self.env["res.partner"].create({"name": "Partner"})
+        self.category_parent = self.env["mis.cash.flow.forecast.category"].create(
+            {"name": "Parent"}
+        )
+        self.category_child = self.env["mis.cash.flow.forecast.category"].create(
+            {"name": "Child", "parent_id": self.category_parent.id}
+        )
         self.plan_monthly = self.env["mis.cash.flow.plan"].create(
             {
                 "name": "Plan Monthly",
@@ -92,6 +98,7 @@ class TestCashFlow(TransactionCase):
                 "balance": 100,
                 "company_id": self.company.id,
                 "partner_id": self.partner.id,
+                "category_id": self.category_child.id,
                 "date_start": Date.to_date("2024-01-01"),
                 "date_end": Date.to_date("2024-01-01"),
                 "periodicity": "months",
@@ -196,6 +203,23 @@ class TestCashFlow(TransactionCase):
             ],
             ignore_rows=["balance", "period_balance", "in_total"],
         )
+
+    def test_category_complete_name(self):
+        self.category_parent.name = "Root"
+        self.assertEqual(self.category_child.complete_name, "Root / Child")
+
+    def test_category_unlink_sets_forecast_line_category_null(self):
+        line_with_category = self.env["mis.cash_flow.forecast_line"].create(
+            {
+                "account_id": self.account.id,
+                "date": Date.today(),
+                "balance": 100,
+                "company_id": self.company.id,
+                "category_id": self.category_child.id,
+            }
+        )
+        self.category_child.unlink()
+        self.assertFalse(line_with_category.category_id)
 
     def test_plan_date_constrain(self):
         with self.assertRaises(ValidationError):

@@ -10,6 +10,11 @@ To use this module, you need to:
 4.  Selecting "All Entries", draft invoices/entries are also included.
 5.  In any case, cancelled invoices/entries are not included.
 
+To manage forecast categories, you need to:
+
+1.  Go to Accounting \> Configuration \> MIS Reporting \> Forecast Line Categories.
+2.  Create a category and, optionally, assign it a parent category.
+
 To create a recurring cash flow plan, you need to:
 
 1.  Go to Accounting \> Reporting \> MIS Reporting \> Forecast Planner.
