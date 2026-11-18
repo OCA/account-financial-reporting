@@ -1,0 +1,6 @@
+id,name,model_id,group_id/id,operation,domain
+access_liquidity_forecast_planning_group_user,access_liquidity_forecast_planning_group_user,account.liquidity.forecast.planning.group,account.group_account_user,r,
+access_liquidity_forecast_planning_group_manager,access_liquidity_forecast_planning_group_manager,account.liquidity.forecast.planning.group,account.group_account_manager,crud,
+access_liquidity_forecast_planning_item,access_liquidity_forecast_planning_item,account.liquidity.forecast.planning.item,account.group_account_user,crud,
+account_liquidity_forecast_planning_item_comp_rule,Liquidity Forecast Planning Item,account.liquidity.forecast.planning.item,,crud,"['|',('company_id','=',False),('company_id', 'in', company_ids)]"
+access_liquidity_forecast_report_wizard,access_liquidity_forecast_report_wizard,account.liquidity.forecast.report.wizard,account.group_account_user,crud,
