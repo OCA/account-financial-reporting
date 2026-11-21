@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 PopSolutions
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="analytic_cash_basis_line_company_rule" model="ir.rule">
+        <field name="name">Analytic Cash Basis Line: multi-company</field>
+        <field name="model_id" ref="model_analytic_cash_basis_line" />
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
