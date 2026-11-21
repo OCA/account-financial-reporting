@@ -306,9 +306,10 @@ class JournalLedgerReport(models.AbstractModel):
         res = super()._get_report_values(docids, data)
         wizard_id = data["wizard_id"]
         wizard = self.env["journal.ledger.report.wizard"].browse(wizard_id)
-        company = self.env["res.company"].browse(data["company_id"])
-        journal_ids = data["journal_ids"]
-        journal_ledgers_data = self._get_journal_ledgers(wizard, journal_ids, company)
+        journal_ledgers_data = self._get_journal_ledgers(
+            wizard, wizard.journal_ids.ids, wizard.company_id
+        )
+        journal_ids = [journal["id"] for journal in journal_ledgers_data]
         move_ids, moves_data, move_ids_data = self._get_moves(wizard, journal_ids)
         journal_moves_data = {}
         for key, items in itertools.groupby(
@@ -361,16 +362,16 @@ class JournalLedgerReport(models.AbstractModel):
             {
                 "doc_ids": [wizard_id],
                 "doc_model": "journal.ledger.report.wizard",
-                "docs": self.env["journal.ledger.report.wizard"].browse(wizard_id),
-                "group_option": data["group_option"],
-                "foreign_currency": data["foreign_currency"],
-                "with_account_name": data["with_account_name"],
-                "company_name": company.display_name,
-                "currency_name": company.currency_id.name,
-                "date_from": data["date_from"],
-                "date_to": data["date_to"],
-                "move_target": data["move_target"],
-                "with_auto_sequence": data["with_auto_sequence"],
+                "docs": wizard,
+                "group_option": wizard.group_option,
+                "foreign_currency": wizard.foreign_currency,
+                "with_account_name": wizard.with_account_name,
+                "company_name": wizard.company_id.display_name,
+                "currency_name": wizard.company_id.currency_id.name,
+                "date_from": wizard.date_from,
+                "date_to": wizard.date_to,
+                "move_target": wizard.move_target,
+                "with_auto_sequence": wizard.with_auto_sequence,
                 "account_ids_data": account_ids_data,
                 "partner_ids_data": partner_ids_data,
                 "currency_ids_data": currency_ids_data,

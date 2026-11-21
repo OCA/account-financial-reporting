@@ -252,33 +252,6 @@ class TrialBalanceReportWizard(models.TransientModel):
             .report_action(self, data=data)
         )
 
-    def _prepare_report_data(self):
-        res = super()._prepare_report_data()
-        res.update(
-            {
-                "date_from": self.date_from,
-                "date_to": self.date_to,
-                "only_posted_moves": self.target_move == "posted",
-                "hide_account_at_0": self.hide_account_at_0,
-                "hide_account_at_end_0": self.hide_account_at_end_0,
-                "foreign_currency": self.foreign_currency,
-                "company_id": self.company_id.id,
-                "account_ids": self.account_ids.ids or [],
-                "partner_ids": self.partner_ids.ids or [],
-                "journal_ids": self.journal_ids.ids or [],
-                "fy_start_date": self.fy_start_date,
-                "show_hierarchy": self.show_hierarchy,
-                "limit_hierarchy_level": self.limit_hierarchy_level,
-                "show_hierarchy_level": self.show_hierarchy_level,
-                "hide_parent_hierarchy_level": self.hide_parent_hierarchy_level,
-                "show_partner_details": self.show_partner_details,
-                "unaffected_earnings_account": self.unaffected_earnings_account.id,
-                "account_financial_report_lang": self.env.lang,
-                "grouped_by": self.grouped_by,
-            }
-        )
-        return res
-
     def _export(self, report_type):
         """Default export is PDF."""
         return self._print_report(report_type)
