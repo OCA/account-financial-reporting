@@ -80,17 +80,25 @@ class JournalLedgerReportWizard(models.TransientModel):
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_data()
-        if report_type == "xlsx":
-            report_name = "a_f_r.report_journal_ledger_xlsx"
-        else:
-            report_name = "account_financial_report.journal_ledger"
-        return (
-            self.env["ir.actions.report"]
-            .search(
-                [("report_name", "=", report_name), ("report_type", "=", report_type)],
-                limit=1,
+        if report_type in ("qweb-pdf", "xlsx"):
+            report_name = (
+                "a_f_r.report_journal_ledger_xlsx"
+                if report_type == "xlsx"
+                else "account_financial_report.journal_ledger"
             )
-            .report_action(self, data=data)
+            return (
+                self.env["ir.actions.report"]
+                .search(
+                    [
+                        ("report_name", "=", report_name),
+                        ("report_type", "=", report_type),
+                    ],
+                    limit=1,
+                )
+                .report_action(self, data=data)
+            )
+        return self._get_report_view_action(
+            "journal_ledger", self.env._("Journal Ledger"), data
         )
 
     def _prepare_report_journal_ledger(self):

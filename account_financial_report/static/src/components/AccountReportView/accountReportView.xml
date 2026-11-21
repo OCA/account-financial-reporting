@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportView">
+        <Layout className="'position-relative h-100 overflow-hidden'">
+            <div
+                class="container-fluid bg-body-tertiary position-absolute top-0 bottom-0 start-0 end-0 overflow-hidden pb-4"
+            >
+                <div class="row h-100">
+                    <main class="col-12 col-md-12 col-xl-12 h-100">
+                        <div class="d-flex flex-column gap-3 h-100 overflow-hidden">
+                            <div class="flex-shrink-0">
+                                <AccountReportHeader env="env" />
+                            </div>
+                            <AccountReportContent env="env" />
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </Layout>
+    </t>
+</templates>
