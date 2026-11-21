@@ -1,0 +1,11 @@
+.oe_mis_builder_content.horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.oe_mis_builder_content.horizontal .oe_mis_builder_cp {
+    width: 100%;
+}
+.oe_mis_builder_content.horizontal .o_list_renderer {
+    flex-grow: 1;
+}
