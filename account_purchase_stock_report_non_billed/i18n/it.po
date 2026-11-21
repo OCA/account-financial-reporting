@@ -1,0 +1,29 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_purchase_stock_report_non_billed
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-07 10:06+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
+"Language-Team: none\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6.2\n"
+
+#. module: account_purchase_stock_report_non_billed
+#: model:ir.model,name:account_purchase_stock_report_non_billed.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di magazzino"
+
+#. module: account_purchase_stock_report_non_billed
+#: model:ir.model,name:account_purchase_stock_report_non_billed.model_account_sale_stock_report_non_billed_wiz
+msgid "Wizard to open stock moves that have not been invoiced at that time"
+msgstr ""
+"Procedura guidata per aprire movimenti di magazzino che non sono stati "
+"fatturati nello stesso momento"

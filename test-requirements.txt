@@ -1,0 +1,1 @@
+odoo-addon-account_sale_stock_report_non_billed @ git+https://github.com/OCA/account-financial-reporting@refs/pull/1558/head#subdirectory=account_sale_stock_report_non_billed
