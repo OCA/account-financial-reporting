@@ -33,6 +33,9 @@
                         placeholder="Filtered partners (empty for all)"
                     />
                 </group>
+                <group name="account_filter_prefix">
+                    <field colspan="2" name="account_prefix" />
+                </group>
                 <group name="account_filter" col="4">
                     <label for="age_partner_config_id" />
                     <field name="age_partner_config_id" nolabel="1" />
@@ -55,6 +58,8 @@
                             />
                         </div>
                     </div>
+                </group>
+                <group>
                     <field
                         name="account_ids"
                         nolabel="1"
