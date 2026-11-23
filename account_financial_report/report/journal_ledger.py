@@ -259,6 +259,21 @@ class JournalLedgerReport(models.AbstractModel):
 
     def _get_journal_tax_lines(self, wizard, moves_data):
         journals_taxes_data = {}
+        # Read all the taxes at once: searching them for every journal item
+        # issues one query per line, which is very slow on large periods.
+        all_tax_ids = set()
+        for move_data in moves_data:
+            for ml_data in move_data["report_move_lines"]:
+                if ml_data["tax_line_id"]:
+                    all_tax_ids.add(ml_data["tax_line_id"])
+                all_tax_ids.update(ml_data["tax_ids"] or [])
+        all_taxes = (
+            self.env["account.tax"]
+            .with_context(active_test=False)
+            .search_fetch([("id", "in", list(all_tax_ids))], ["name", "description"])
+        )
+        taxes_by_id = {tax.id: tax for tax in all_taxes}
+        tax_position = {tax.id: position for position, tax in enumerate(all_taxes)}
         for move_data in moves_data:
             report_move_lines = move_data["report_move_lines"]
             for report_move_line in report_move_lines:
@@ -272,11 +287,12 @@ class JournalLedgerReport(models.AbstractModel):
                 journal_id = ml_data["journal_id"]
                 if journal_id not in journals_taxes_data.keys():
                     journals_taxes_data[journal_id] = {}
-                taxes = (
-                    self.env["account.tax"]
-                    .with_context(active_test=False)
-                    .search_fetch([("id", "in", tax_ids)], ["name", "description"])
-                )
+                taxes = [
+                    taxes_by_id[tax_id]
+                    for tax_id in sorted(
+                        set(tax_ids) & tax_position.keys(), key=tax_position.get
+                    )
+                ]
                 for tax in taxes:
                     if tax.id not in journals_taxes_data[journal_id]:
                         journals_taxes_data[journal_id][tax.id] = {
