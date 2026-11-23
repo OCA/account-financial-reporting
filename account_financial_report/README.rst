@@ -176,6 +176,7 @@ Contributors
   - V??ctor Mart??nez
   - Carolina Fernandez
   - Eduardo Ezerouali
+  - Adasat Torres
 
 - `Sygel <https://www.sygel.es>`__:
 

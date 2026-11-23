@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+ <t t-name="account_financial_report.AccountReportLines">
+        <t t-foreach="columns" t-as="column" t-key="column.key">
+            <t
+                t-set="cell"
+                t-value="row.values.find((val) => (val.key === column.key))"
+            />
+            <td
+                t-if="column.show"
+                t-att-style="column.key === 'account' and row.level !== undefined
+                ? 'padding-left: ' + (12 + row.level * 16) + 'px;'
+                : ''"
+            >
+                <div t-if="column.type === 'tags'" class="d-flex flex-wrap gap-1">
+                    <span
+                        t-foreach="cell?.value || []"
+                        t-as="tag"
+                        t-key="tag_index"
+                        class="badge rounded-pill text-bg-secondary"
+                    >
+                        <button
+                            t-if="tag.model and tag.resId"
+                            type="button"
+                            class="btn btn-link p-0 border-0 text-reset"
+                            t-on-click="() => this.openRecord(tag.model, tag.resId)"
+                            t-out="tag.value"
+                        />
+                        <t t-else="" t-out="tag.value ?? tag" />
+                    </span>
+                </div>
+                <Dropdown
+                    t-elif="cell and cell.clickable and cell.openType == 'dropdown'"
+                >
+                    <button type="button" class="btn btn-link p-0 border-0">
+                        <t
+                            t-out="formatValue(cell?.value, column.type, cell?.currencyId ?? row.currencyId)"
+                        />
+                    </button>
+
+                    <t t-set-slot="content">
+                        <AccountReportMoveLines
+                            row="row"
+                            key="column.key"
+                            title="column.label"
+                        />
+                    </t>
+                </Dropdown>
+                <t t-elif="cell and cell.clickable and cell.openType == 'record'">
+                    <button
+                        type="button"
+                        class="btn btn-link p-0 border-0"
+                        t-on-click="() => this.openRecord(cell?.model, cell?.resId)"
+                        t-out="formatValue(cell?.value, column.type, cell?.currencyId ?? row.currencyId)"
+                    />
+                </t>
+                <span
+                    t-else=""
+                    t-out="formatValue(cell?.value, column.type, cell?.currencyId ?? row.currencyId)"
+                />
+            </td>
+        </t>
+    </t>
+</templates>

@@ -1210,8 +1210,10 @@ msgid "Missing Partner"
 msgstr ""
 
 #. module: account_financial_report
+#. odoo-javascript
 #. odoo-python
 #: code:addons/account_financial_report/report/open_items.py:0
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/openItemsController.esm.js:0
 msgid "Missing Salesperson"
 msgstr ""
 
@@ -1988,3 +1990,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "10"
 #~ msgstr "10"
+
+
+#. module: account_financial_report
+#. odoo-javascript
+#: code:addons/account_financial_report/static/src/components/AccountReportView/AccountReportController/openItemsController.esm.js:0
+msgid "Salesperson ending balance"
+msgstr "Saldo final del comercial"

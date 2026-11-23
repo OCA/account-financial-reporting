@@ -95,7 +95,7 @@ class VATReport(models.AbstractModel):
         tax_ids = list(map(operator.itemgetter("tax_line_id"), vat_data))
         tax_ids = list(set(tax_ids))
         tax_data = self._get_tax_data(tax_ids)
-        return vat_data, tax_data
+        return vat_data, tax_data, net_domain
 
     def _get_tax_group_data(self, tax_group_ids):
         tax_groups = self.env["account.tax.group"].search_fetch(
@@ -211,7 +211,7 @@ class VATReport(models.AbstractModel):
         based_on = data["based_on"]
         tax_detail = data["tax_detail"]
         only_posted_moves = data["only_posted_moves"]
-        vat_report_data, tax_data = self._get_vat_report_data(
+        vat_report_data, tax_data, net_domain = self._get_vat_report_data(
             company_id, date_from, date_to, only_posted_moves
         )
         if based_on == "taxgroups":
@@ -234,6 +234,7 @@ class VATReport(models.AbstractModel):
                 "based_on": data["based_on"],
                 "tax_detail": data["tax_detail"],
                 "vat_report": vat_report,
+                "move_line_domain": list(net_domain),
             }
         )
         return res

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="account_financial_report.AccountReportVATReport">
+        <div
+            t-if="rows.length"
+            class="table-responsive m-1 bg-white rounded shadow-sm p-3"
+        >
+            <table class="table table-hover align-middle text-nowrap mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th t-foreach="columns" t-as="column" t-key="column.key">
+                            <t t-out="column.label" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody t-foreach="rows" t-as="group" t-key="group.key">
+                    <tr class="table-light fw-bold">
+                        <AccountReportLines columns="columns" row="group" />
+                    </tr>
+                    <tr t-foreach="group.taxes" t-as="tax" t-key="tax.key">
+                        <AccountReportLines columns="columns" row="tax" />
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p t-else="" class="text-muted">No records found.</p>
+    </t>
+</templates>
