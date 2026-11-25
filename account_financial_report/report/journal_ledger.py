@@ -372,6 +372,9 @@ class JournalLedgerReport(models.AbstractModel):
                 "date_from": data["date_from"],
                 "date_to": data["date_to"],
                 "move_target": data["move_target"],
+                "move_target_label": dict(wizard._get_move_targets())[
+                    data["move_target"]
+                ],
                 "with_auto_sequence": data["with_auto_sequence"],
                 "account_ids_data": account_ids_data,
                 "partner_ids_data": partner_ids_data,

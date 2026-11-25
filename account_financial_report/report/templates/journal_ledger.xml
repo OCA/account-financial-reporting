@@ -75,7 +75,7 @@
             to
             <span t-esc="date_to" t-options="{'widget': 'date'}" />
             -
-            <span t-esc="move_target" />
+            <span t-esc="move_target_label" />
             Moves
         </div>
         <div class="act_as_table data_table" style="width: 100%;">
