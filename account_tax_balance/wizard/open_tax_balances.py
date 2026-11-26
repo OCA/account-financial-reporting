@@ -62,9 +62,12 @@ class WizardOpenTaxBalances(models.TransientModel):
             [("code", "=", self.env.user.lang or "en_US")]
         )
         date_format = lang and lang.date_format or "%m/%d/%Y"
+        target_labels = dict(
+            self._fields["target_move"]._description_selection(self.env)
+        )
         infos = {
             "name": vals["name"],
-            "target": self.env._(self.target_move),
+            "target": target_labels[self.target_move],
             "from": self.from_date.strftime(date_format),
             "to": self.to_date.strftime(date_format),
         }
