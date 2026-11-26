@@ -174,7 +174,11 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
         move.action_post()
 
     def _get_report_lines(
-        self, with_partners=False, account_ids=False, show_hierarchy=False
+        self,
+        with_partners=False,
+        account_ids=False,
+        show_hierarchy=False,
+        hide_account_without_moves=False,
     ):
         company = self.env.user.company_id
         trial_balance = self.env["trial.balance.report.wizard"].create(
@@ -183,6 +187,7 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
                 "date_to": self.date_end,
                 "target_move": "posted",
                 "hide_account_at_0": True,
+                "hide_account_without_moves": hide_account_without_moves,
                 "show_hierarchy": show_hierarchy,
                 "company_id": company.id,
                 "account_ids": account_ids,
@@ -819,3 +824,49 @@ class TestTrialBalanceReport(AccountTestInvoicingCommon):
             self.env["account.group"].search(
                 [("account_ids", "child_of", self.account100.id)]
             )
+
+    def test_08_hide_account_without_moves(self):
+        # Initial balance in the receivable account, no moves in the period
+        self._add_move(
+            date=self.previous_fy_date_end,
+            receivable_debit=1000,
+            receivable_credit=0,
+            income_debit=0,
+            income_credit=1000,
+        )
+        # Moves in the period only in the income and unaffected earnings accounts
+        self._add_move(
+            date=self.date_start,
+            receivable_debit=0,
+            receivable_credit=0,
+            income_debit=500,
+            income_credit=0,
+            unaffected_debit=0,
+            unaffected_credit=500,
+        )
+        trial_balance = self._get_report_lines()["trial_balance"]
+        self.assertTrue(self.check_account_in_report(self.account100.id, trial_balance))
+        self.assertTrue(self.check_account_in_report(self.account200.id, trial_balance))
+
+        trial_balance = self._get_report_lines(hide_account_without_moves=True)[
+            "trial_balance"
+        ]
+        self.assertFalse(
+            self.check_account_in_report(self.account100.id, trial_balance)
+        )
+        self.assertTrue(self.check_account_in_report(self.account200.id, trial_balance))
+        self.assertTrue(
+            self.check_account_in_report(self.unaffected_account.id, trial_balance)
+        )
+
+        # Same behaviour with partner details (only receivable/payable accounts)
+        total_amount = self._get_report_lines(with_partners=True)["total_amount"]
+        self.assertTrue(
+            self.check_partner_in_report(
+                self.account100.id, self.partner.id, total_amount
+            )
+        )
+        total_amount = self._get_report_lines(
+            with_partners=True, hide_account_without_moves=True
+        )["total_amount"]
+        self.assertNotIn(self.account100.id, total_amount)

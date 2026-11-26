@@ -420,6 +420,31 @@ class TrialBalanceReport(models.AbstractModel):
         for account_id in accounts_to_remove:
             del total_amount[account_id]
 
+    def _remove_accounts_without_moves(
+        self, total_amount, accounts_data, show_partner_details, company
+    ):
+        rounding = company.currency_id.rounding
+
+        def has_no_moves(values):
+            return float_is_zero(
+                values["debit"], precision_rounding=rounding
+            ) and float_is_zero(values["credit"], precision_rounding=rounding)
+
+        for account_id in list(total_amount.keys()):
+            account_values = total_amount[account_id]
+            if has_no_moves(account_values):
+                del total_amount[account_id]
+                accounts_data.pop(account_id, None)
+            elif show_partner_details:
+                # Partner data is stored in the account dict with the partner id as key
+                partner_ids = [
+                    key
+                    for key, value in account_values.items()
+                    if isinstance(key, int) and has_no_moves(value)
+                ]
+                for partner_id in partner_ids:
+                    del account_values[partner_id]
+
     # flake8: noqa: C901
     @api.model
     def _get_data(
@@ -917,6 +942,10 @@ class TrialBalanceReport(models.AbstractModel):
             fy_start_date,
             grouped_by,
         )
+        if data.get("hide_account_without_moves"):
+            self._remove_accounts_without_moves(
+                total_amount, accounts_data, show_partner_details, company
+            )
         trial_balance_grouped = False
         total_amount_grouped = False
         if grouped_by:
