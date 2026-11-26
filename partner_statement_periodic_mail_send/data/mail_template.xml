@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="periodic_statement_mail_template" model="mail.template">
+        <field name="name">Monthly Account Statement</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="auto_delete" eval="False" />
+        <field name="lang">{{ object.lang }}</field>
+        <field name="email_from">{{ object.company_id.email or user.email }}</field>
+        <field name="email_to">{{ object.email }}</field>
+        <field
+            name="subject"
+        >{{ object.company_id.name }} - Account Statement - {{ object.name }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                <p>Dear <t t-out="object.name" />,</p>
+                <p>
+                    Your account statement will be found attached to this email.
+                    This statement includes all invoices issued, payments received,
+                    and your current outstanding balance during this period.
+                </p>
+                <p>
+                    If you have any questions regarding this statement, please do not
+                    hesitate to contact us.
+                </p>
+                <p>Regards,</p>
+                <t t-if="user.signature">
+                    <p><t t-out="user.signature or ''" /></p>
+                </t>
+            </div>
+        </field>
+    </record>
+</odoo>
