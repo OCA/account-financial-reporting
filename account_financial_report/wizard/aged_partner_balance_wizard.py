@@ -31,6 +31,11 @@ class AgedPartnerBalanceWizard(models.TransientModel):
     payable_accounts_only = fields.Boolean()
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     show_move_line_details = fields.Boolean()
+    show_analytic_distribution = fields.Boolean(
+        default=True,
+        help="Show the analytic distribution on each move line "
+        "(only visible when 'Show Move Line Details' is enabled).",
+    )
 
     account_code_from = fields.Many2one(
         comodel_name="account.account",
@@ -142,6 +147,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
             "account_ids": self.account_ids.ids,
             "partner_ids": self.partner_ids.ids,
             "show_move_line_details": self.show_move_line_details,
+            "show_analytic_distribution": self.show_analytic_distribution,
             "account_financial_report_lang": self.env.lang,
             "age_partner_config_id": self.age_partner_config_id.id,
         }

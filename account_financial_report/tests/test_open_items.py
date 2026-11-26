@@ -69,3 +69,26 @@ class TestOpenItems(AccountTestInvoicingCommon):
         wizard.on_change_account_range()
         res = wizard._prepare_report_data()
         self.assertEqual(res["grouped_by"], wizard.grouped_by)
+
+    def test_show_analytic_distribution_flag(self):
+        """Verify show_analytic_distribution is passed through to report values."""
+        wizard = self.env["open.items.report.wizard"].create(
+            {
+                "date_at": Date.today(),
+                "account_ids": [(6, 0, self.account001.ids)],
+                "show_analytic_distribution": True,
+            }
+        )
+        data = wizard._prepare_report_data()
+        self.assertTrue(data["show_analytic_distribution"])
+
+        report = self.env["report.account_financial_report.open_items"]
+        res = report._get_report_values(wizard, data)
+        self.assertIn("show_analytic_distribution", res)
+        self.assertIn("analytic_data", res)
+        self.assertTrue(res["show_analytic_distribution"])
+
+        # Disabling should be reflected in the data dict
+        wizard.show_analytic_distribution = False
+        data = wizard._prepare_report_data()
+        self.assertFalse(data["show_analytic_distribution"])
