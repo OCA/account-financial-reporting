@@ -17,8 +17,10 @@ class TrialBalanceReportWizard(models.TransientModel):
     _inherit = "account_financial_report_abstract_wizard"
 
     date_range_id = fields.Many2one(comodel_name="date.range", string="Date range")
-    date_from = fields.Date(required=True)
-    date_to = fields.Date(required=True)
+    date_from = fields.Date(
+        required=True, default=lambda self: self._default_date_from()
+    )
+    date_to = fields.Date(required=True, default=fields.Date.context_today)
     fy_start_date = fields.Date(compute="_compute_fy_start_date")
     target_move = fields.Selection(
         [("posted", "All Posted Entries"), ("all", "All Entries")],
@@ -47,7 +49,10 @@ class TrialBalanceReportWizard(models.TransientModel):
     )
     receivable_accounts_only = fields.Boolean()
     payable_accounts_only = fields.Boolean()
-    show_partner_details = fields.Boolean()
+    show_partner_details = fields.Boolean(
+        help="Show the balance of each partner below its receivable or payable "
+        "account. The other accounts are shown as usual.",
+    )
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Filter partners")
     journal_ids = fields.Many2many(comodel_name="account.journal")
     only_one_unaffected_earnings_account = fields.Boolean(
@@ -71,6 +76,16 @@ class TrialBalanceReportWizard(models.TransientModel):
     grouped_by = fields.Selection(
         selection=[("analytic_account", "Analytic Account")], default=False
     )
+
+    def _default_date_from(self):
+        """Start of the current fiscal year."""
+        company = self.company_id or self.env.company
+        date_from, _date_to = date_utils.get_fiscal_year(
+            fields.Date.context_today(self),
+            day=company.fiscalyear_last_day,
+            month=int(company.fiscalyear_last_month),
+        )
+        return date_from
 
     @api.onchange("grouped_by")
     def onchange_grouped_by(self):
@@ -176,8 +191,9 @@ class TrialBalanceReportWizard(models.TransientModel):
     @api.onchange("date_range_id")
     def onchange_date_range_id(self):
         """Handle date range change."""
-        self.date_from = self.date_range_id.date_start
-        self.date_to = self.date_range_id.date_end
+        if self.date_range_id:
+            self.date_from = self.date_range_id.date_start
+            self.date_to = self.date_range_id.date_end
 
     @api.constrains("company_id", "date_range_id")
     def _check_company_id_date_range_id(self):
@@ -213,12 +229,13 @@ class TrialBalanceReportWizard(models.TransientModel):
 
     @api.onchange("show_partner_details")
     def onchange_show_partner_details(self):
-        """Handle partners change."""
+        """Partner details are not available when grouping by analytic account.
+
+        They only break down receivable and payable accounts, so the account
+        filters are left as the user set them.
+        """
         if self.show_partner_details:
-            self.receivable_accounts_only = self.payable_accounts_only = True
             self.grouped_by = False
-        else:
-            self.receivable_accounts_only = self.payable_accounts_only = False
 
     @api.depends("company_id")
     def _compute_unaffected_earnings_account(self):

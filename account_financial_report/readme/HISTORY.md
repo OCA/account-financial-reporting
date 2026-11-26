@@ -1,3 +1,9 @@
+## 18.0.1.5.0 (2026-11-13)
+
+- Trial Balance: "Show partner details" keeps every account and only adds the balance of
+  each partner below the receivable and payable accounts, sorted by partner name. The
+  amounts are read with a fixed number of queries instead of one per account.
+
 ## 11.0.2.5.0 (2019-04-26)
 
 - In the Trial Balance you have an option to hide parent hierarchy

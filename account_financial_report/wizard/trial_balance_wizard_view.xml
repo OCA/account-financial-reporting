@@ -32,9 +32,9 @@
                             />
                             <field name="date_to" invisible="1" />
                             <field name="fy_start_date" invisible="1" />
+                            <field name="target_move" widget="radio" />
                         </group>
                         <group name="other_filters">
-                            <field name="target_move" widget="radio" />
                             <field name="grouped_by" invisible="1" />
                             <field
                                 name="grouped_by"
@@ -42,77 +42,80 @@
                             />
                             <field name="hide_account_at_0" />
                             <field name="show_partner_details" invisible="grouped_by" />
-                            <field
-                                name="show_hierarchy"
-                                invisible="show_partner_details == True or grouped_by"
-                            />
+                            <field name="show_hierarchy" invisible="grouped_by" />
                             <field
                                 name="limit_hierarchy_level"
-                                invisible="show_hierarchy == False or show_partner_details == True"
+                                invisible="not show_hierarchy or grouped_by"
                             />
                             <field
                                 name="show_hierarchy_level"
-                                invisible="limit_hierarchy_level == False"
+                                invisible="not show_hierarchy or not limit_hierarchy_level or grouped_by"
                             />
                             <field
                                 name="hide_parent_hierarchy_level"
-                                invisible="limit_hierarchy_level == False"
+                                invisible="not show_hierarchy or not limit_hierarchy_level or grouped_by"
                             />
                             <field name="foreign_currency" />
                         </group>
                     </group>
-                    <group
-                        name="partner_filter"
-                        invisible="show_partner_details == True"
-                        col="1"
-                    >
-                        <label for="partner_ids" />
-                        <field
-                            name="partner_ids"
-                            nolabel="1"
-                            widget="many2many_tags"
-                            options="{'no_create': True}"
-                            placeholder="Filtered partners (empty for all)"
-                        />
-                    </group>
-                    <label for="journal_ids" />
-                    <field
-                        name="journal_ids"
-                        widget="many2many_tags"
-                        nolabel="1"
-                        options="{'no_create': True}"
-                    />
-                    <group invisible="show_partner_details == True" />
-                    <div />
-                    <group name="account_filter" col="4">
-                        <label for="account_ids" colspan="4" />
-                        <field name="receivable_accounts_only" />
-                        <field name="payable_accounts_only" />
-                        <label for="account_code_from" string="From Code" />
-                        <div>
-                            <div class="o_row">
+                    <notebook>
+                        <page name="accounts" string="Filter accounts">
+                            <group name="account_filter">
+                                <group>
+                                    <field name="receivable_accounts_only" />
+                                    <field name="payable_accounts_only" />
+                                </group>
+                                <group>
+                                    <label for="account_code_from" string="From Code" />
+                                    <div class="o_row">
+                                        <field
+                                            name="account_code_from"
+                                            options="{'no_create': True}"
+                                        />
+                                        <span>To</span>
+                                        <field
+                                            name="account_code_to"
+                                            options="{'no_create': True}"
+                                        />
+                                    </div>
+                                </group>
+                            </group>
+                            <group>
                                 <field
-                                    name="account_code_from"
-                                    class="oe_inline"
+                                    name="account_ids"
+                                    colspan="2"
+                                    nolabel="1"
+                                    placeholder="Filtered accounts (empty for all)"
+                                    widget="many2many_tags"
                                     options="{'no_create': True}"
                                 />
-                                <span class="oe_inline">To</span>
+                            </group>
+                        </page>
+                        <page name="partners" string="Filter partners">
+                            <group>
                                 <field
-                                    name="account_code_to"
-                                    class="oe_inline"
+                                    name="partner_ids"
+                                    colspan="2"
+                                    nolabel="1"
+                                    widget="many2many_tags"
                                     options="{'no_create': True}"
+                                    placeholder="Filtered partners (empty for all)"
                                 />
-                            </div>
-                        </div>
-                        <field
-                            name="account_ids"
-                            nolabel="1"
-                            placeholder="Filtered accounts (empty for all)"
-                            widget="many2many_tags"
-                            options="{'no_create': True}"
-                            colspan="4"
-                        />
-                    </group>
+                            </group>
+                        </page>
+                        <page name="journals" string="Journals">
+                            <group>
+                                <field
+                                    name="journal_ids"
+                                    colspan="2"
+                                    widget="many2many_tags"
+                                    nolabel="1"
+                                    options="{'no_create': True}"
+                                    placeholder="Filtered journals (empty for all)"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
                 </div>
                 <div invisible="only_one_unaffected_earnings_account">
                     <field name="only_one_unaffected_earnings_account" invisible="1" />
@@ -124,32 +127,29 @@
                     <group />
                 </div>
                 <footer>
-                    <div invisible="not only_one_unaffected_earnings_account">
-                        <button
+                    <button
                         name="button_export_html"
                         string="View"
                         type="object"
                         default_focus="1"
-                        class="oe_highlight"
+                        class="btn-primary"
+                        invisible="not only_one_unaffected_earnings_account"
                     />
-                        or
-                        <button
+                    <button
                         name="button_export_pdf"
                         string="Export PDF"
                         type="object"
+                        class="btn-secondary"
+                        invisible="not only_one_unaffected_earnings_account"
                     />
-                        or
-                        <button
+                    <button
                         name="button_export_xlsx"
                         string="Export XLSX"
                         type="object"
+                        class="btn-secondary"
+                        invisible="not only_one_unaffected_earnings_account"
                     />
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </div>
-                    <div invisible="only_one_unaffected_earnings_account">
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </div>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
                 </footer>
             </form>
         </field>
