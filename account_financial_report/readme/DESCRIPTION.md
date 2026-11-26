@@ -8,6 +8,9 @@ Invoicing / Reporting / OCA accounting reports.
 - VAT Report
 - Journal Ledger
 
+It is possible to select the columns to show and limit the size of some of
+them from the columns page.
+
 Currently General ledger, Trial Balance and Open Items are fully
 compatible with a foreign currency set up in account in order to display
 balances. Moreover, any foreign currency used in account move lines is

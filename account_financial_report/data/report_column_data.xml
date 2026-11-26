@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 Tecnativa - Carlos Dauden
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- GENERAL LEDGER columns -->
+    <record
+        id="general_ledger_report_wizard_column_date"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">10</field>
+        <field name="name">Date</field>
+        <field name="expression_label">date</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_entry"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">20</field>
+        <field name="name">Entry</field>
+        <field name="expression_label">entry</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_journal"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">30</field>
+        <field name="name">Journal</field>
+        <field name="expression_label">journal</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_account_code"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">40</field>
+        <field name="name">Account code</field>
+        <field name="expression_label">account_code</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_taxes"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">50</field>
+        <field name="name">Taxes</field>
+        <field name="expression_label">taxes</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_partner"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">60</field>
+        <field name="name">Partner</field>
+        <field name="expression_label">partner</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_ref_label"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">70</field>
+        <field name="name">Ref - Label</field>
+        <field name="expression_label">ref_label</field>
+        <field name="is_visible" eval="True" />
+        <field name="field_type">string</field>
+        <field name="limit">40</field>
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_cost_center"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">80</field>
+        <field name="name">Analytic Distribution</field>
+        <field name="expression_label">cost_center</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_matching_number"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">90</field>
+        <field name="name">Matching number</field>
+        <field name="expression_label">matching_number</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_debit"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">100</field>
+        <field name="name">Debit</field>
+        <field name="expression_label">debit</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_credit"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">110</field>
+        <field name="name">Credit</field>
+        <field name="expression_label">credit</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_balance"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">120</field>
+        <field name="name">Balance</field>
+        <field name="expression_label">balance</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="general_ledger_report_wizard_column_foreign_currency"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">general.ledger.report.wizard</field>
+        <field name="sequence">130</field>
+        <field name="name">Foreign currency</field>
+        <field name="expression_label">foreign_currency</field>
+        <field name="is_visible" eval="True" />
+    </record>
+
+    <!-- OPEN ITEMS columns -->
+    <record
+        id="open_items_report_wizard_column_date"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">10</field>
+        <field name="name">Date</field>
+        <field name="expression_label">date</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_entry"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">20</field>
+        <field name="name">Entry</field>
+        <field name="expression_label">entry</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_journal"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">30</field>
+        <field name="name">Journal</field>
+        <field name="expression_label">journal</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_account_code"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">40</field>
+        <field name="name">Account code</field>
+        <field name="expression_label">account_code</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_partner"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">50</field>
+        <field name="name">Partner</field>
+        <field name="expression_label">partner</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_ref_label"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">60</field>
+        <field name="name">Ref - Label</field>
+        <field name="expression_label">ref_label</field>
+        <field name="is_visible" eval="True" />
+        <field name="field_type">string</field>
+        <field name="limit">40</field>
+    </record>
+    <record
+        id="open_items_report_wizard_column_date_due"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">70</field>
+        <field name="name">Date due</field>
+        <field name="expression_label">date_due</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_original"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">80</field>
+        <field name="name">Original</field>
+        <field name="expression_label">original</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_residual"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">90</field>
+        <field name="name">Residual</field>
+        <field name="expression_label">residual</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="open_items_report_wizard_column_foreign_currency"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">open.items.report.wizard</field>
+        <field name="sequence">100</field>
+        <field name="name">Foreign currency</field>
+        <field name="expression_label">foreign_currency</field>
+        <field name="is_visible" eval="True" />
+    </record>
+
+    <!-- JOURNAL LEDGER columns -->
+    <record
+        id="journal_ledger_report_wizard_column_sequence"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">5</field>
+        <field name="name">Sequence</field>
+        <field name="expression_label">sequence</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_entry"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">10</field>
+        <field name="name">Entry</field>
+        <field name="expression_label">entry</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_date"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">20</field>
+        <field name="name">Date</field>
+        <field name="expression_label">date</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_account_code"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">30</field>
+        <field name="name">Account code</field>
+        <field name="expression_label">account_code</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_account_name"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">40</field>
+        <field name="name">Account name</field>
+        <field name="expression_label">account_name</field>
+        <field name="is_visible" eval="True" />
+        <field name="field_type">string</field>
+        <field name="limit">20</field>
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_partner"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">50</field>
+        <field name="name">Partner</field>
+        <field name="expression_label">partner</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_ref_label"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">60</field>
+        <field name="name">Label</field>
+        <field name="expression_label">label</field>
+        <field name="is_visible" eval="True" />
+        <field name="field_type">string</field>
+        <field name="limit">40</field>
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_taxes"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">65</field>
+        <field name="name">Taxes</field>
+        <field name="expression_label">taxes</field>
+        <field name="is_visible" eval="False" />
+        <field name="field_type">string</field>
+        <field name="limit">20</field>
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_debit"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">70</field>
+        <field name="name">Debit</field>
+        <field name="expression_label">debit</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_credit"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">80</field>
+        <field name="name">Credit</field>
+        <field name="expression_label">credit</field>
+        <field name="is_visible" eval="True" />
+    </record>
+    <record
+        id="journal_ledger_report_wizard_column_foreign_currency"
+        model="account.financial.report.column"
+    >
+        <field name="res_model">journal.ledger.report.wizard</field>
+        <field name="sequence">100</field>
+        <field name="name">Foreign currency</field>
+        <field name="expression_label">foreign_currency</field>
+        <field name="is_visible" eval="True" />
+    </record>
+</odoo>

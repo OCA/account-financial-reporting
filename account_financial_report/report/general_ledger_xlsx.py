@@ -24,13 +24,48 @@ class GeneralLedgerXslx(models.AbstractModel):
 
     def _get_report_columns(self, report):
         res = [
-            {"header": _("Date"), "field": "date", "width": 11},
-            {"header": _("Entry"), "field": "entry", "width": 18},
-            {"header": _("Journal"), "field": "journal", "width": 8},
-            {"header": _("Account"), "field": "account", "width": 9},
-            {"header": _("Taxes"), "field": "taxes_description", "width": 15},
-            {"header": _("Partner"), "field": "partner_name", "width": 25},
-            {"header": _("Ref - Label"), "field": "ref_label", "width": 40},
+            {
+                "header": _("Date"),
+                "field": "date",
+                "width": 11,
+                "expression_label": "date",
+            },
+            {
+                "header": _("Entry"),
+                "field": "entry",
+                "width": 18,
+                "expression_label": "entry",
+            },
+            {
+                "header": _("Journal"),
+                "field": "journal",
+                "width": 8,
+                "expression_label": "journal",
+            },
+            {
+                "header": _("Account"),
+                "field": "account",
+                "width": 9,
+                "expression_label": "account_code",
+            },
+            {
+                "header": _("Taxes"),
+                "field": "taxes_description",
+                "width": 15,
+                "expression_label": "taxes",
+            },
+            {
+                "header": _("Partner"),
+                "field": "partner_name",
+                "width": 25,
+                "expression_label": "partner",
+            },
+            {
+                "header": _("Ref - Label"),
+                "field": "ref_label",
+                "width": 40,
+                "expression_label": "ref_label",
+            },
         ]
         if report.show_cost_center:
             res += [
@@ -38,10 +73,16 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "header": _("Analytic Distribution"),
                     "field": "analytic_distribution",
                     "width": 20,
+                    "expression_label": "cost_center",
                 },
             ]
         res += [
-            {"header": _("Rec."), "field": "rec_name", "width": 15},
+            {
+                "header": _("Rec."),
+                "field": "rec_name",
+                "width": 15,
+                "expression_label": "matching_number",
+            },
             {
                 "header": _("Debit"),
                 "field": "debit",
@@ -49,6 +90,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "field_final_balance": "final_debit",
                 "type": "amount",
                 "width": 14,
+                "expression_label": "debit",
             },
             {
                 "header": _("Credit"),
@@ -57,6 +99,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "field_final_balance": "final_credit",
                 "type": "amount",
                 "width": 14,
+                "expression_label": "credit",
             },
             {
                 "header": _("Cumul. Bal."),
@@ -65,6 +108,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 "field_final_balance": "final_balance",
                 "type": "amount",
                 "width": 14,
+                "expression_label": "balance",
             },
         ]
         if report.foreign_currency:
@@ -76,6 +120,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "field_final_balance": "final_bal_curr",
                     "type": "amount_currency",
                     "width": 10,
+                    "expression_label": "foreign_currency",
                 },
                 {
                     "header": _("Cumul cur."),
@@ -84,6 +129,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                     "field_final_balance": "final_bal_curr",
                     "type": "amount_currency",
                     "width": 10,
+                    "expression_label": "foreign_currency",
                 },
             ]
         res_as_dict = {}
