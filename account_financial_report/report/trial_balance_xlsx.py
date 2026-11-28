@@ -211,6 +211,7 @@ class TrialBalanceXslx(models.AbstractModel):
                             self.write_line_from_dict(balance, report_data)
                     else:
                         self.write_line_from_dict(balance, report_data)
+                self._write_trial_balance_totals(trial_balance, report_data)
         else:
             for account_id in total_amount:
                 # Write account title
@@ -264,6 +265,40 @@ class TrialBalanceXslx(models.AbstractModel):
 
                 # Line break
                 report_data["row_pos"] += 2
+
+    def _write_trial_balance_totals(self, trial_balance, report_data):
+        """Write the totals footer row for non-grouped trial balance."""
+        total_columns_dict = {
+            "initial_balance": 0,
+            "debit": 0,
+            "credit": 0,
+            "balance": 0,
+            "ending_balance": 0,
+            "initial_currency_balance": 0,
+            "ending_currency_balance": 0,
+        }
+        for balance in trial_balance:
+            for total_column_name in total_columns_dict:
+                total_columns_dict[total_column_name] += balance.get(
+                    total_column_name, 0
+                )
+        for col_pos, column in report_data["columns"].items():
+            if column["field"] == "code":
+                report_data["sheet"].merge_range(
+                    report_data["row_pos"],
+                    0,
+                    report_data["row_pos"],
+                    col_pos + 1,
+                    "TOTAL",
+                    report_data["formats"]["format_header_center"],
+                )
+            elif column["field"] in total_columns_dict:
+                report_data["sheet"].write_number(
+                    report_data["row_pos"],
+                    col_pos,
+                    float(total_columns_dict.get(column["field"], 0)),
+                    report_data["formats"]["format_header_amount"],
+                )
 
     def write_line_from_dict_order(self, total_amount, partner_data, report_data):
         total_amount.update({"name": str(partner_data["name"])})
